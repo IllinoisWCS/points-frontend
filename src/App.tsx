@@ -6,6 +6,7 @@ import CheckIn from './pages/CheckIn';
 import Points from './pages/Points';
 import Events from './pages/Events';
 import './App.css';
+import 'semantic-ui-css/semantic.min.css';
 
 const App = (): React.ReactElement => {
   return (
