@@ -4,14 +4,12 @@
   height: 100vh;
 }
 
-/* TODO: check that this is if all = descendants */
-.navbar-container > a, a:visited, a:hover {
+.navbar-container a, a:visited, a:hover {
     text-decoration: none;
     color: black;
 }
 
-/* TODO: check that this is if img = descendant */
-.navbar-container > img { 
+.navbar-container img { 
     width: 100%;
 }
 

@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
+import logo from '../../assets/logo.png';
 import './style.css';
 
 const Navbar = (): React.ReactElement => (
   <div className="navbar-container">
     <a href="http://wcs.illinois.edu">
-      <img src="../../assets/logo.png" alt="wcs logo" />
+      <img src={logo} alt="wcs logo" />
     </a>
     <div className="navbar">
       <Link className="navbar-element" to="/">
