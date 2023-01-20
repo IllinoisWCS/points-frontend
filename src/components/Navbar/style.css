@@ -1,0 +1,28 @@
+.navbar-container {
+  background-color: white;
+  flex-basis: 270px;
+  height: 100vh;
+}
+
+/* TODO: check that this is if all = descendants */
+.navbar-container > a, a:visited, a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+/* TODO: check that this is if img = descendant */
+.navbar-container > img { 
+    width: 100%;
+}
+
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.navbar-element {
+  flex-basis: 100%;
+  padding: 1.5em;
+  text-align: center;
+  border-bottom: 1px solid black;
+}
