@@ -9,7 +9,8 @@ import {
   useDisclosure
 } from '@chakra-ui/react';
 
-import Navbar, { MobileNavbar } from '../../components/Navbar';
+import Navbar from '../../components/Navbar';
+import MobileNavbar from '../../components/Navbar/MobileNavbar';
 
 const NavbarLayout = ({
   children
@@ -18,7 +19,7 @@ const NavbarLayout = ({
 }): React.ReactElement => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box minH="100vh" bg={useColorModeValue('gray.50', 'gray.900')}>
       <Navbar onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         autoFocus={false}

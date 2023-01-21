@@ -12,16 +12,16 @@ import NavbarLayout from './layouts/NavbarLayout';
 
 const App = (): React.ReactElement => {
   return (
-    <NavbarLayout>
+    <BrowserRouter>
       <ToastContainer />
-      <BrowserRouter>
+      <NavbarLayout>
         <Routes>
           <Route path="/" element={<CheckIn />} />
           <Route path="/points" element={<Points />} />
           <Route path="/events" element={<Events />} />
         </Routes>
-      </BrowserRouter>
-    </NavbarLayout>
+      </NavbarLayout>
+    </BrowserRouter>
   );
 };
 

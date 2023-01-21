@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Segment, Card } from 'semantic-ui-react';
+import { Heading } from '@chakra-ui/react';
 
 import axiosInstance from '../../api';
 import { Event } from '../../types/event';
@@ -22,7 +23,7 @@ const Points = (): React.ReactElement => {
 
   return (
     <div>
-      <h1>Points</h1>
+      <Heading>Points</Heading>
       <Card fluid className="Points">
         <Card.Content>
           <div className="points-message">

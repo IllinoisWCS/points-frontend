@@ -1,49 +1,23 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
+import { Link as RouteLink } from 'react-router-dom';
 import {
-  IconButton,
   Box,
   CloseButton,
   Flex,
   Icon,
   useColorModeValue,
-  Link,
   Text
 } from '@chakra-ui/react';
-import { FiHome, FiTrendingUp, FiCompass, FiMenu } from 'react-icons/fi';
+import { FiHome, FiTrendingUp, FiCalendar } from 'react-icons/fi';
 
-import logo from '../../assets/logo.png';
+import { LinkItemProps, NavbarProps, NavItemProps } from './types';
+import Logo from '../Logo';
 import './style.css';
-import {
-  LinkItemProps,
-  MobileNavbarProps,
-  NavbarProps,
-  NavItemProps
-} from './types';
-
-// const Navbar = (): React.ReactElement => (
-//   <div className="navbar-container">
-//     <a href="http://wcs.illinois.edu">
-//       <img src={logo} alt="wcs logo" />
-//     </a>
-//     <div className="navbar">
-//       <Link className="navbar-element" to="/">
-//         Check-in
-//       </Link>
-//       <Link className="navbar-element" to="/points">
-//         Points
-//       </Link>
-//       <Link className="navbar-element" to="/events">
-//         Events
-//       </Link>
-//     </div>
-//   </div>
-// );
 
 const LinkItems: LinkItemProps[] = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Points', icon: FiTrendingUp },
-  { name: 'Events', icon: FiCompass }
+  { name: 'Home', icon: FiHome, to: '/' },
+  { name: 'Points', icon: FiTrendingUp, to: '/points' },
+  { name: 'Events', icon: FiCalendar, to: '/events' }
 ];
 
 const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
@@ -59,14 +33,12 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          <a href="http://wcs.illinois.edu">
-            <img src={logo} alt="wcs logo" />
-          </a>
+          <Logo />
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} icon={link.icon} to={link.to}>
           {link.name}
         </NavItem>
       ))}
@@ -75,16 +47,13 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
 };
 
 const NavItem = ({
+  to,
   icon,
   children,
   ...rest
 }: NavItemProps): React.ReactElement => {
   return (
-    <Link
-      href="#"
-      style={{ textDecoration: 'none' }}
-      _focus={{ boxShadow: 'none' }}
-    >
+    <RouteLink to={to}>
       <Flex
         align="center"
         p="4"
@@ -93,7 +62,7 @@ const NavItem = ({
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: 'wcs.pink',
           color: 'white'
         }}
         {...rest}
@@ -110,37 +79,7 @@ const NavItem = ({
         )}
         {children}
       </Flex>
-    </Link>
-  );
-};
-
-export const MobileNavbar = ({
-  onOpen,
-  ...rest
-}: MobileNavbarProps): React.ReactElement => {
-  return (
-    <Flex
-      ml={{ base: 0, md: 60 }}
-      px={{ base: 4, md: 24 }}
-      height="20"
-      alignItems="center"
-      bg={useColorModeValue('white', 'gray.900')}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
-      justifyContent="flex-start"
-      {...rest}
-    >
-      <IconButton
-        variant="outline"
-        onClick={onOpen}
-        aria-label="open menu"
-        icon={<FiMenu />}
-      />
-
-      <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Logo
-      </Text>
-    </Flex>
+    </RouteLink>
   );
 };
 
