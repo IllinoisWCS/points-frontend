@@ -1,10 +1,8 @@
 import React, { useState, useEffect, BaseSyntheticEvent } from 'react';
-import { Tab, Input, Button } from 'semantic-ui-react';
+import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
-
-import './style.css';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -12,12 +10,6 @@ const CheckIn = (): React.ReactElement => {
 
   const handleChangeKey = (event: BaseSyntheticEvent): void => {
     setEventKey(event.target.value);
-  };
-
-  const handleEnter = async (tgt: React.KeyboardEvent): Promise<void> => {
-    if (tgt.key === 'enter') {
-      await handleSubmit();
-    }
   };
 
   const handleSubmit = async (): Promise<void> => {
@@ -44,24 +36,32 @@ const CheckIn = (): React.ReactElement => {
   }, []);
 
   return (
-    <div className="check-in">
-      <h1>Check-in</h1>
-      <Tab.Pane>
-        <h3>Event Key</h3>
+    <Box>
+      <Heading size="lg" pb="25px">
+        Check-in
+      </Heading>
+      <VStack
+        align="unset"
+        spacing="5"
+        bg="white"
+        p="5"
+        borderRadius="10"
+        border="1px"
+        borderColor="gray.100"
+      >
+        <Text fontSize="lg" fontWeight="medium">
+          Event Key
+        </Text>
         <Input
-          fluid
-          error={eventKeyError}
+          isInvalid={eventKeyError}
           placeholder="Enter the event key..."
           value={eventKey}
           onChange={handleChangeKey}
-          onKeyPress={handleEnter}
         />
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <Button fluid onClick={handleSubmit}>
-          Check-in
-        </Button>
-      </Tab.Pane>
-    </div>
+        <Button onClick={handleSubmit}>Check-in</Button>
+      </VStack>
+    </Box>
   );
 };
 

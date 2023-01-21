@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Segment, Button } from 'semantic-ui-react';
+import { Button, Box, Text, StackDivider, Stack } from '@chakra-ui/react';
 
 import EventModal from './EventModal';
 import axiosInstance from '../../api';
 import { getEventDate } from '../../utils/eventDate';
 import { Event } from '../../types/event';
-
-import './style.css';
 
 const Events = (): React.ReactElement => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -32,26 +30,32 @@ const Events = (): React.ReactElement => {
   };
 
   return (
-    <div>
+    <Box>
       <EventModal
         open={modal}
         toggleModal={handleToggleModal}
         reloadOnClose={handleReloadOnClose}
       />
-      <Button onClick={handleToggleModal}>Create New Event</Button>
-      <Segment.Group>
+      <Button onClick={handleToggleModal} mb="5">
+        Create New Event
+      </Button>
+      <Stack
+        divider={<StackDivider />}
+        bg="white"
+        border="1px"
+        borderColor="gray.100"
+        borderRadius="10"
+      >
         {events.map((event, idx) => (
-          <Segment padded key={idx}>
-            <div className="flex">
-              <div>
-                <h3>{event.name}</h3>
-                <h5 className="muted">{getEventDate(event)}</h5>
-              </div>
-            </div>
-          </Segment>
+          <Box key={idx} p="5">
+            <Text fontSize="lg" fontWeight="medium">
+              {event.name}
+            </Text>
+            <Text className="muted">{getEventDate(event)}</Text>
+          </Box>
         ))}
-      </Segment.Group>
-    </div>
+      </Stack>
+    </Box>
   );
 };
 

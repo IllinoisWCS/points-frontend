@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 import {
-  Input,
+  FormControl,
+  FormLabel,
+  NumberInput,
+  NumberInputField,
+  Alert,
+  AlertIcon,
+  HStack,
   Button,
   Modal,
-  Form,
+  ModalCloseButton,
+  ModalHeader,
+  ModalOverlay,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  Checkbox,
+  Stack,
   Select,
-  Message,
-  Checkbox
-} from 'semantic-ui-react';
-import './style.css';
+  Input
+} from '@chakra-ui/react';
+
 import axiosInstance from '../../../api';
 import { EventCategoryType, NewEvent } from '../../../types/event';
-import {
-  EventModalProps,
-  StringFieldProps,
-  CategoryFieldProps,
-  NumberFieldProps,
-  SameDayFieldProps,
-  DropdownProps
-} from './types';
+import { EventModalProps, StringFieldProps, SameDayFieldProps } from './types';
 
 const EventModal = (props: EventModalProps): React.ReactElement => {
   const { open, toggleModal, reloadOnClose } = props;
@@ -42,22 +47,20 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   const [error, setError] = useState(false);
   const [msg, setMsg] = useState('');
 
-  const handleNameChange = (_: any, data: StringFieldProps): void => {
-    setName(data.value);
+  const handleNameChange = (props: StringFieldProps): void => {
+    setName(props.target.value);
   };
 
-  const handleCategoryChange = (_: any, data: CategoryFieldProps): void => {
-    setCategory(data.value);
+  const handleCategoryChange = (props: any): void => {
+    setCategory(props.target.value);
   };
 
-  const handlePointsChange = (_: any, data: NumberFieldProps): void => {
-    if (!(data.value > 0 && data.value <= 5)) setPointsErr(true);
-    else setPointsErr(false);
-    setPoints(data.value);
+  const handlePointsChange = (_: string, valueAsNumber: number): void => {
+    setPoints(valueAsNumber);
   };
 
-  const handleStartDateChange = (_: any, data: StringFieldProps): void => {
-    const newStartDate = data.value;
+  const handleStartDateChange = (props: StringFieldProps): void => {
+    const newStartDate = props.target.value;
     if (
       new Date(newStartDate).getTime() > new Date(endDate).getTime() ||
       (new Date(newStartDate).getTime() === new Date(endDate).getTime() &&
@@ -75,8 +78,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setStartDate(newStartDate);
   };
 
-  const handleEndDateChange = (_: any, data: StringFieldProps): void => {
-    const newEndDate = data.value;
+  const handleEndDateChange = (props: StringFieldProps): void => {
+    const newEndDate = props.target.value;
     if (
       new Date(newEndDate).getTime() < new Date(startDate).getTime() ||
       (new Date(newEndDate).getTime() === new Date(startDate).getTime() &&
@@ -94,8 +97,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setEndDate(newEndDate);
   };
 
-  const handleStartTimeChange = (_: any, data: StringFieldProps): void => {
-    const newStartTime = data.value;
+  const handleStartTimeChange = (props: StringFieldProps): void => {
+    const newStartTime = props.target.value;
     if (sameDay && endTime && newStartTime >= endTime) setStartTimeErr(true);
     else if (
       new Date(startDate).getTime() === new Date(endDate).getTime() &&
@@ -110,8 +113,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setStartTime(newStartTime);
   };
 
-  const handleEndTimeChange = (_: any, data: StringFieldProps): void => {
-    const newEndTime = data.value;
+  const handleEndTimeChange = (props: StringFieldProps): void => {
+    const newEndTime = props.target.value;
     if (sameDay && newEndTime && startTime >= newEndTime) setEndTimeErr(true);
     else if (
       new Date(startDate).getTime() === new Date(endDate).getTime() &&
@@ -126,15 +129,12 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setEndTime(newEndTime);
   };
 
-  const handleVisibilityChange = (
-    _: React.SyntheticEvent<HTMLElement, Event>,
-    data: DropdownProps
-  ): void => {
-    if (data && typeof data.value === 'string') setVisibility(data.value);
+  const handleVisibilityChange = (props: StringFieldProps): void => {
+    setVisibility(props.target.value);
   };
 
-  const handleSameDayChange = (_: any, data: SameDayFieldProps): void => {
-    if (data.checked !== undefined) setSameDay(data.checked);
+  const handleSameDayChange = (props: SameDayFieldProps): void => {
+    if (props.target.checked !== undefined) setSameDay(props.target.checked);
     if (endTime && startTime && startTime >= endTime) setEndTimeErr(true);
     else {
       setStartDateErr(false);
@@ -198,124 +198,121 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   };
 
   const categories = [
-    { key: 'c', text: 'Corporate', value: 'corporate' },
-    { key: 's', text: 'Social', value: 'social' },
-    { key: 'o', text: 'Outreach', value: 'outreach' },
-    { key: 'm', text: 'Mentoring', value: 'mentoring' },
-    { key: 't', text: 'Explorations', value: 'explorations' },
-    { key: 'g', text: 'General Meeting', value: 'generalMeeting' },
-    { key: 'x', text: 'Other', value: 'other' }
+    { value: 'corporate', label: 'Corporate' },
+    { value: 'social', label: 'Social' },
+    { value: 'outreach', label: 'Outreach' },
+    { value: 'mentoring', label: 'Mentoring' },
+    { value: 'explorations', label: 'Explorations' },
+    { value: 'generalMeeting', label: 'General Meeting' },
+    { value: 'other', label: 'Other' }
   ];
 
   return (
-    <Modal open={open} onClose={clearAndToggle} closeIcon>
-      <Modal.Content>
-        <h3>All fields are required.</h3>
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <Form onSubmit={validateEvent} success={success} error={error}>
-          <Form.Field
-            required
-            id="name"
-            control={Input}
-            label="Name"
-            placeholder="i.e. October General Meeting"
-            onChange={handleNameChange}
-            value={name}
-          />
-          <Form.Group widths="equal">
-            <Form.Field
-              required
-              id="category"
-              control={Select}
-              label="Category"
-              placeholder="Category"
-              options={categories}
-              search
-              searchInput={{ id: 'category' }}
-              onChange={handleCategoryChange}
-            />
-            <Form.Select
-              required
-              fluid
-              id="visibility"
-              label="Visibility"
-              options={[
-                { key: 'public', text: 'Public', value: 'public' },
-                { key: 'private', text: 'Private', value: 'private' }
-              ]}
-              defaultValue="public"
-              onChange={handleVisibilityChange}
-            />
-          </Form.Group>
-          <Form.Field
-            required
-            id="points"
-            control={Input}
-            label="Points"
-            onChange={handlePointsChange}
-            error={pointsErr}
-            value={points}
-          />
-          <Form.Group widths="equal">
-            <Form.Field
-              required
-              id="startDate"
-              control={Input}
-              label="Start Date"
-              type="date"
-              onChange={handleStartDateChange}
-              error={startDateErr}
-              value={startDate}
-            />
-            <Form.Field
-              required
-              id="startTime"
-              control={Input}
-              label="Start Time"
-              type="time"
-              onChange={handleStartTimeChange}
-              error={startTimeErr}
-              value={startTime}
-            />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field
-              required={!sameDay}
-              id="endDate"
-              control={Input}
-              label="End Date"
-              type="date"
-              onChange={handleEndDateChange}
-              error={endDateErr}
-              value={sameDay ? startDate : endDate}
-              disabled={sameDay}
-              className={sameDay ? 'inactive' : ''}
-            />
-            <Form.Field
-              required
-              id="endTime"
-              control={Input}
-              label="End Time"
-              type="time"
-              onChange={handleEndTimeChange}
-              error={endTimeErr}
-              value={endTime}
-            />
-          </Form.Group>
-          <Form.Field>
-            <Checkbox
-              required
-              id="sameDay"
-              label="Same day"
-              onChange={handleSameDayChange}
-              checked={sameDay}
-            />
-          </Form.Field>
-          <Message success content={msg} />
-          <Message error content={msg} />
-          <Button type="submit">Submit</Button>
-        </Form>
-      </Modal.Content>
+    <Modal isOpen={open} onClose={clearAndToggle} isCentered>
+      <ModalOverlay />
+      <ModalCloseButton />
+      <ModalContent p="10" minW="50%">
+        <ModalHeader>Create a New Event</ModalHeader>
+        <ModalBody>
+          <Stack spacing="3">
+            <FormControl isRequired width="100%">
+              <FormLabel>Name</FormLabel>
+              <Input
+                placeholder="i.e. October General Meeting"
+                onChange={handleNameChange}
+                value={name}
+              />
+            </FormControl>
+            <HStack>
+              <FormControl isRequired>
+                <FormLabel>Category</FormLabel>
+                <Select onChange={handleCategoryChange} value={category}>
+                  {categories.map((category, id) => (
+                    <option value={category.value} key={id}>
+                      {category.label}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Visibility</FormLabel>
+                <Select onChange={handleVisibilityChange} value={visibility}>
+                  <option value="public">Public</option>
+                  <option value="private">Private</option>
+                </Select>
+              </FormControl>
+            </HStack>
+            <FormControl isInvalid={pointsErr} isRequired>
+              <FormLabel>Points</FormLabel>
+              <NumberInput min={0.5} max={4} onChange={handlePointsChange}>
+                <NumberInputField />
+              </NumberInput>
+            </FormControl>
+            <HStack>
+              <FormControl isRequired isInvalid={startDateErr}>
+                <FormLabel>Start Date</FormLabel>
+                <Input
+                  onChange={handleStartDateChange}
+                  value={startDate}
+                  type="date"
+                />
+              </FormControl>
+              <FormControl isRequired isInvalid={startTimeErr}>
+                <FormLabel>Start Time</FormLabel>
+                <Input
+                  onChange={handleStartTimeChange}
+                  value={startTime}
+                  type="time"
+                />
+              </FormControl>
+            </HStack>
+            <HStack>
+              <FormControl isRequired={!sameDay} isInvalid={endDateErr}>
+                <FormLabel>End Date</FormLabel>
+                <Input
+                  type="date"
+                  onChange={handleEndDateChange}
+                  value={sameDay ? startDate : endDate}
+                  disabled={sameDay}
+                />
+              </FormControl>
+              <FormControl isRequired isInvalid={endTimeErr}>
+                <FormLabel>End Time</FormLabel>
+                <Input
+                  type="time"
+                  onChange={handleEndTimeChange}
+                  value={endTime}
+                />
+              </FormControl>
+            </HStack>
+            <FormControl>
+              <HStack>
+                <Checkbox onChange={handleSameDayChange} isChecked={sameDay} />
+                <FormLabel>Same day</FormLabel>
+              </HStack>
+            </FormControl>
+            {success && (
+              <Alert status="success" variant="left-accent">
+                <AlertIcon />
+                {msg}
+              </Alert>
+            )}
+            {error && (
+              <Alert status="error" variant="left-accent">
+                <AlertIcon />
+                {msg}
+              </Alert>
+            )}
+          </Stack>
+        </ModalBody>
+        <ModalFooter>
+          {/* eslint-disable-next-line 
+          @typescript-eslint/no-misused-promises */}
+          <Button type="submit" onClick={validateEvent}>
+            Submit
+          </Button>
+        </ModalFooter>
+      </ModalContent>
     </Modal>
   );
 };
