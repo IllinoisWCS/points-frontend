@@ -26,7 +26,7 @@ const Points = (): React.ReactElement => {
     // eslint-disable-next-line react/no-array-index-key
     <Segment className="event-detail" padded key={id}>
       <div>
-        <h4>{event.name}</h4>
+        <h3>{event.name}</h3>
         <h5 className="muted">{getEventDate(event)}</h5>
       </div>
       <div className="event-point">
@@ -38,7 +38,7 @@ const Points = (): React.ReactElement => {
 
   return (
     <div>
-      <h2>Points</h2>
+      <h1>Points</h1>
       <Card fluid className="Points">
         <Card.Content>
           <div className="points-message">

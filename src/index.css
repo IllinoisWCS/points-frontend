@@ -1,6 +1,6 @@
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  /* font-size: 16px; */
   line-height: 24px;
   font-weight: 400;
 
@@ -13,7 +13,6 @@
 
 body {
   margin: 0;
-
 }
 
 Button {
@@ -32,6 +31,10 @@ h4,
 h5,
 h6 {
   margin: 0;
+}
+
+h1, h3 {
+  padding-bottom: 0.5em;
 }
 
 #root {

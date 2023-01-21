@@ -199,7 +199,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   return (
     <Modal open={open} onClose={clearAndToggle} closeIcon>
       <Modal.Content>
-        <h4 className="modal-heading">All fields are required.</h4>
+        <h3 className="modal-heading">All fields are required.</h3>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <Form onSubmit={validateEvent} success={success} error={error}>
           <Form.Field
