@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Segment, Card } from 'semantic-ui-react';
-import { Heading } from '@chakra-ui/react';
+import {
+  Heading,
+  Box,
+  Text,
+  StackDivider,
+  Center,
+  Stack,
+  VStack,
+  HStack
+} from '@chakra-ui/react';
 
 import axiosInstance from '../../api';
 import { Event } from '../../types/event';
@@ -22,32 +30,40 @@ const Points = (): React.ReactElement => {
   }, []);
 
   return (
-    <div>
+    <Box>
       <Heading>Points</Heading>
-      <Card fluid className="Points">
-        <Card.Content>
-          <div className="points-message">
-            <h2>
-              {`You have ${points} ${points === 1 ? 'point' : 'points'}.`}
-            </h2>
-          </div>
-          {events.map((event, id) => (
-            <Segment className="event-detail" padded key={id}>
-              <div>
-                <h3>{event.name}</h3>
-                <h5 className="muted">{getEventDate(event)}</h5>
-              </div>
-              <div className="event-point">
-                <h3>{event.points}</h3>
-                <h5 className="muted">
-                  {event.points === 1 ? 'point' : 'points'}
-                </h5>
-              </div>
-            </Segment>
-          ))}
-        </Card.Content>
-      </Card>
-    </div>
+      <Center mb="5">
+        <Text fontSize="xl">
+          {`You have ${points} ${points === 1 ? 'point' : 'points'}.`}
+        </Text>
+      </Center>
+      <Stack
+        bg="white"
+        divider={<StackDivider />}
+        borderRadius="10"
+        border="1px"
+        borderColor="gray.100"
+      >
+        {events.map((event, id) => (
+          <HStack className="event-detail" key={id} p="5">
+            <Stack>
+              <Text fontSize="xl" fontWeight="medium">
+                {event.name}
+              </Text>
+              <Text className="muted">{getEventDate(event)}</Text>
+            </Stack>
+            <VStack>
+              <Text fontSize="xl" fontWeight="medium">
+                {event.points}
+              </Text>
+              <Text className="muted">
+                {event.points === 1 ? 'point' : 'points'}
+              </Text>
+            </VStack>
+          </HStack>
+        ))}
+      </Stack>
+    </Box>
   );
 };
 

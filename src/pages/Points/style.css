@@ -1,9 +1,3 @@
-.points-message {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .event-detail {
   display: flex;
   justify-content: space-between;

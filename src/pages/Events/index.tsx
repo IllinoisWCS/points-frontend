@@ -32,7 +32,7 @@ const Events = (): React.ReactElement => {
   };
 
   return (
-    <div>
+    <Box>
       <EventModal
         open={modal}
         toggleModal={handleToggleModal}
@@ -57,7 +57,7 @@ const Events = (): React.ReactElement => {
           </Box>
         ))}
       </Stack>
-    </div>
+    </Box>
   );
 };
 

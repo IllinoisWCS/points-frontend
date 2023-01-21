@@ -1,5 +1,5 @@
 import React, { useState, useEffect, BaseSyntheticEvent } from 'react';
-import { VStack, Heading, Text, Button, Input } from '@chakra-ui/react';
+import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
@@ -38,7 +38,7 @@ const CheckIn = (): React.ReactElement => {
   }, []);
 
   return (
-    <div className="check-in">
+    <Box>
       <Heading>Check-in</Heading>
       <VStack
         align="unset"
@@ -59,7 +59,7 @@ const CheckIn = (): React.ReactElement => {
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <Button onClick={handleSubmit}>Check-in</Button>
       </VStack>
-    </div>
+    </Box>
   );
 };
 
