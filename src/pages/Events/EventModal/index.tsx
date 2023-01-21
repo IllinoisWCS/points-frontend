@@ -199,7 +199,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   return (
     <Modal open={open} onClose={clearAndToggle} closeIcon>
       <Modal.Content>
-        <h3 className="modal-heading">All fields are required.</h3>
+        <h3>All fields are required.</h3>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <Form onSubmit={validateEvent} success={success} error={error}>
           <Form.Field
@@ -245,7 +245,6 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
             error={pointsErr}
             value={points}
           />
-
           <Form.Group widths="equal">
             <Form.Field
               required
@@ -268,7 +267,6 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               value={startTime}
             />
           </Form.Group>
-
           <Form.Group widths="equal">
             <Form.Field
               required={!sameDay}
@@ -282,7 +280,6 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               disabled={sameDay}
               className={sameDay ? 'inactive' : ''}
             />
-
             <Form.Field
               required
               id="endTime"
@@ -294,7 +291,6 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               value={endTime}
             />
           </Form.Group>
-
           <Form.Field>
             <Checkbox
               required
@@ -304,7 +300,6 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               checked={sameDay}
             />
           </Form.Field>
-
           <Message success content={msg} />
           <Message error content={msg} />
           <Button type="submit">Submit</Button>
