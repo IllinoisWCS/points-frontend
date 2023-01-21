@@ -39,7 +39,9 @@ const CheckIn = (): React.ReactElement => {
 
   return (
     <Box>
-      <Heading>Check-in</Heading>
+      <Heading size="lg" pb="25px">
+        Check-in
+      </Heading>
       <VStack
         align="unset"
         spacing="5"
@@ -49,7 +51,9 @@ const CheckIn = (): React.ReactElement => {
         border="1px"
         borderColor="gray.100"
       >
-        <Text fontSize="xl">Event Key</Text>
+        <Text fontSize="lg" fontWeight="medium">
+          Event Key
+        </Text>
         <Input
           isInvalid={eventKeyError}
           placeholder="Enter the event key..."

@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import 'semantic-ui-css/semantic.min.css';
 
 import CheckIn from './pages/CheckIn';
 import Points from './pages/Points';

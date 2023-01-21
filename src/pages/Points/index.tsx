@@ -31,7 +31,7 @@ const Points = (): React.ReactElement => {
 
   return (
     <Box>
-      <Heading>Points</Heading>
+      <Heading size="lg">Points</Heading>
       <Center mb="5">
         <Text fontSize="xl">
           {`You have ${points} ${points === 1 ? 'point' : 'points'}.`}
@@ -47,13 +47,13 @@ const Points = (): React.ReactElement => {
         {events.map((event, id) => (
           <HStack justify="space-between" key={id} p="5">
             <Stack>
-              <Text fontSize="xl" fontWeight="medium">
+              <Text fontSize="lg" fontWeight="medium">
                 {event.name}
               </Text>
               <Text className="muted">{getEventDate(event)}</Text>
             </Stack>
             <VStack>
-              <Text fontSize="xl" fontWeight="medium">
+              <Text fontSize="l" fontWeight="medium">
                 {event.points}
               </Text>
               <Text className="muted">

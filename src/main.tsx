@@ -15,9 +15,7 @@ const colors = {
 const theme = extendTheme({
   components: {
     Heading: {
-      baseStyle: {
-        paddingBottom: '10px'
-      }
+      baseStyle: {}
     }
   },
   colors

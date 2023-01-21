@@ -50,7 +50,7 @@ const Events = (): React.ReactElement => {
       >
         {events.map((event, idx) => (
           <Box key={idx} p="5">
-            <Text fontSize="xl" fontWeight="medium">
+            <Text fontSize="lg" fontWeight="medium">
               {event.name}
             </Text>
             <Text className="muted">{getEventDate(event)}</Text>
