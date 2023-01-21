@@ -7,6 +7,7 @@ import { getEventDate } from '../../utils';
 
 import './style.css';
 
+// TOOD: migrate to react query
 const Points = (): React.ReactElement => {
   const [events, setEvents] = useState([]);
   const [points, setPoints] = useState(0);
