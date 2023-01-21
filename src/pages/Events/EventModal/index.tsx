@@ -23,14 +23,7 @@ import {
 
 import axiosInstance from '../../../api';
 import { EventCategoryType, NewEvent } from '../../../types/event';
-import {
-  EventModalProps
-  // StringFieldProps,
-  // CategoryFieldProps,
-  // NumberFieldProps,
-  // SameDayFieldProps,
-  // DropdownProps
-} from './types';
+import { EventModalProps, StringFieldProps, SameDayFieldProps } from './types';
 
 const EventModal = (props: EventModalProps): React.ReactElement => {
   const { open, toggleModal, reloadOnClose } = props;
@@ -54,8 +47,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   const [error, setError] = useState(false);
   const [msg, setMsg] = useState('');
 
-  // TODO: get rid of any types
-  const handleNameChange = (props: any): void => {
+  const handleNameChange = (props: StringFieldProps): void => {
     setName(props.target.value);
   };
 
@@ -63,11 +55,11 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setCategory(props.target.value);
   };
 
-  const handlePointsChange = (_: any, value: number): void => {
-    setPoints(value);
+  const handlePointsChange = (_: string, valueAsNumber: number): void => {
+    setPoints(valueAsNumber);
   };
 
-  const handleStartDateChange = (props: any): void => {
+  const handleStartDateChange = (props: StringFieldProps): void => {
     const newStartDate = props.target.value;
     if (
       new Date(newStartDate).getTime() > new Date(endDate).getTime() ||
@@ -86,7 +78,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setStartDate(newStartDate);
   };
 
-  const handleEndDateChange = (props: any): void => {
+  const handleEndDateChange = (props: StringFieldProps): void => {
     const newEndDate = props.target.value;
     if (
       new Date(newEndDate).getTime() < new Date(startDate).getTime() ||
@@ -105,7 +97,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setEndDate(newEndDate);
   };
 
-  const handleStartTimeChange = (props: any): void => {
+  const handleStartTimeChange = (props: StringFieldProps): void => {
     const newStartTime = props.target.value;
     if (sameDay && endTime && newStartTime >= endTime) setStartTimeErr(true);
     else if (
@@ -121,7 +113,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setStartTime(newStartTime);
   };
 
-  const handleEndTimeChange = (props: any): void => {
+  const handleEndTimeChange = (props: StringFieldProps): void => {
     const newEndTime = props.target.value;
     if (sameDay && newEndTime && startTime >= newEndTime) setEndTimeErr(true);
     else if (
@@ -137,11 +129,11 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setEndTime(newEndTime);
   };
 
-  const handleVisibilityChange = (props: any): void => {
+  const handleVisibilityChange = (props: StringFieldProps): void => {
     setVisibility(props.target.value);
   };
 
-  const handleSameDayChange = (props: any): void => {
+  const handleSameDayChange = (props: SameDayFieldProps): void => {
     if (props.target.checked !== undefined) setSameDay(props.target.checked);
     if (endTime && startTime && startTime >= endTime) setEndTimeErr(true);
     else {
@@ -205,7 +197,16 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     }
   };
 
-  // TODO: add isInvalid to form controls
+  const categories = [
+    { value: 'corporate', label: 'Corporate' },
+    { value: 'social', label: 'Social' },
+    { value: 'outreach', label: 'Outreach' },
+    { value: 'mentoring', label: 'Mentoring' },
+    { value: 'explorations', label: 'Explorations' },
+    { value: 'generalMeeting', label: 'General Meeting' },
+    { value: 'other', label: 'Other' }
+  ];
+
   return (
     <Modal isOpen={open} onClose={clearAndToggle} isCentered>
       <ModalOverlay />
@@ -213,7 +214,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
       <ModalContent p="10" minW="50%">
         <ModalHeader>Create a New Event</ModalHeader>
         <ModalBody>
-          <Stack spacing="4">
+          <Stack spacing="3">
             <FormControl isRequired width="100%">
               <FormLabel>Name</FormLabel>
               <Input
@@ -224,20 +225,16 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
             </FormControl>
             <HStack>
               <FormControl isRequired>
-                {/* TODO: extract into list */}
                 <FormLabel>Category</FormLabel>
                 <Select onChange={handleCategoryChange} value={category}>
-                  <option value="corporate">Corporate</option>
-                  <option value="social">Social</option>
-                  <option value="outreach">Outreach</option>
-                  <option value="mentoring">Mentoring</option>
-                  <option value="explorations">Explorations</option>
-                  <option value="generalMeeting">General Meeting</option>
-                  <option value="other">Other</option>
+                  {categories.map((category, id) => (
+                    <option value={category.value} key={id}>
+                      {category.label}
+                    </option>
+                  ))}
                 </Select>
               </FormControl>
               <FormControl isRequired>
-                {/* TODO: default is public */}
                 <FormLabel>Visibility</FormLabel>
                 <Select onChange={handleVisibilityChange} value={visibility}>
                   <option value="public">Public</option>
@@ -252,7 +249,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               </NumberInput>
             </FormControl>
             <HStack>
-              <FormControl isRequired>
+              <FormControl isRequired isInvalid={startDateErr}>
                 <FormLabel>Start Date</FormLabel>
                 <Input
                   onChange={handleStartDateChange}
@@ -260,7 +257,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
                   type="date"
                 />
               </FormControl>
-              <FormControl isRequired>
+              <FormControl isRequired isInvalid={startTimeErr}>
                 <FormLabel>Start Time</FormLabel>
                 <Input
                   onChange={handleStartTimeChange}
@@ -270,7 +267,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               </FormControl>
             </HStack>
             <HStack>
-              <FormControl isRequired={!sameDay}>
+              <FormControl isRequired={!sameDay} isInvalid={endDateErr}>
                 <FormLabel>End Date</FormLabel>
                 <Input
                   type="date"
@@ -279,7 +276,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
                   disabled={sameDay}
                 />
               </FormControl>
-              <FormControl isRequired>
+              <FormControl isRequired isInvalid={endTimeErr}>
                 <FormLabel>End Time</FormLabel>
                 <Input
                   type="time"
