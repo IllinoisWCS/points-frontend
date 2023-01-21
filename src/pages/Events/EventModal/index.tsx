@@ -8,7 +8,7 @@ import {
   Message,
   Checkbox
 } from 'semantic-ui-react';
-import './eventModal.scss';
+import './style.css';
 import axiosInstance from '../../../api';
 import { NewEvent } from '../../../types/event';
 
