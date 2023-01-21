@@ -12,7 +12,16 @@ const colors = {
   }
 };
 
-const theme = extendTheme({ colors });
+const theme = extendTheme({
+  components: {
+    Heading: {
+      baseStyle: {
+        paddingBottom: '10px'
+      }
+    }
+  },
+  colors
+});
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
