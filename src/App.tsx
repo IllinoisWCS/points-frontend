@@ -1,16 +1,19 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import 'semantic-ui-css/semantic.min.css';
 
 import Navbar from './components/Navbar';
 import CheckIn from './pages/CheckIn';
 import Points from './pages/Points';
 import Events from './pages/Events';
 import './App.css';
-import 'semantic-ui-css/semantic.min.css';
 
 const App = (): React.ReactElement => {
   return (
     <BrowserRouter>
+    <ToastContainer/>
       <div className="home-container">
         <Navbar />
         <div className="content-container">

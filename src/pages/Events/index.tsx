@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Segment, Button } from 'semantic-ui-react';
-// import Notifications from 'react-notify-toast';
 import EventModal from './EventModal';
 import axiosInstance from '../../api';
-import { getEventDate } from '../../utils';
+import { getEventDate } from '../../utils/eventDate';
 import { Event } from '../../types/event';
 import './style.css';
 
@@ -32,7 +31,6 @@ const Events = (): React.ReactElement => {
 
   return (
     <div>
-      {/* <Notifications /> */}
       <EventModal
         open={modal}
         toggleModal={handleToggleModal}

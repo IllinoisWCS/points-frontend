@@ -3,7 +3,7 @@ import { Segment, Card } from 'semantic-ui-react';
 
 import axiosInstance from '../../api';
 import { Event } from '../../types/event';
-import { getEventDate } from '../../utils';
+import { getEventDate } from '../../utils/eventDate';
 
 import './style.css';
 

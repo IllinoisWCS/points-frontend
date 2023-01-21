@@ -1,6 +1,8 @@
+export type EventCategoryType = 'corporate' | 'social' | 'outreach' | 'mentoring' | 'explorations' | 'generalMeeting' | 'other';
+
 export interface NewEvent {
   name: string;
-  category: 'corporate' | 'social' | 'outreach' | 'mentoring' | 'explorations' | 'generalMeeting' | 'other'; // TODO
+  category: EventCategoryType;
   points: number;
   start: Date;
   end: Date;
@@ -11,7 +13,7 @@ export interface Event {
   _id: string;
   key: string;
   name: string;
-  category: 'corporate' | 'social' | 'outreach' | 'mentoring' | 'explorations' | 'generalMeeting' | 'other'; // TODO
+  category: EventCategoryType;
   points: number;
   start: Date;
   end: Date;
