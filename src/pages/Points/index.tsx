@@ -14,8 +14,6 @@ import axiosInstance from '../../api';
 import { Event } from '../../types/event';
 import { getEventDate } from '../../utils/eventDate';
 
-import './style.css';
-
 // TOOD: migrate to react query
 const Points = (): React.ReactElement => {
   const [events, setEvents] = useState<Event[]>([]);

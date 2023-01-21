@@ -12,7 +12,6 @@ import { FiHome, FiTrendingUp, FiCalendar } from 'react-icons/fi';
 
 import { LinkItemProps, NavbarProps, NavItemProps } from './types';
 import Logo from '../Logo';
-import './style.css';
 
 const LinkItems: LinkItemProps[] = [
   { name: 'Home', icon: FiHome, to: '/' },

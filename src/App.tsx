@@ -6,7 +6,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import CheckIn from './pages/CheckIn';
 import Points from './pages/Points';
 import Events from './pages/Events';
-import './App.css';
 import NavbarLayout from './layouts/NavbarLayout';
 
 const App = (): React.ReactElement => {

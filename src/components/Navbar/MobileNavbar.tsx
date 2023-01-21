@@ -2,7 +2,6 @@ import React from 'react';
 import { IconButton, Flex, useColorModeValue, Text } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 
-import './style.css';
 import { MobileNavbarProps } from './types';
 import Logo from '../Logo';
 

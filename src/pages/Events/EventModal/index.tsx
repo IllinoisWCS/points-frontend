@@ -32,8 +32,6 @@ import {
   // DropdownProps
 } from './types';
 
-import './style.css';
-
 const EventModal = (props: EventModalProps): React.ReactElement => {
   const { open, toggleModal, reloadOnClose } = props;
   const [name, setName] = useState('');

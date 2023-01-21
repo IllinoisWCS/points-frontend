@@ -6,8 +6,6 @@ import axiosInstance from '../../api';
 import { getEventDate } from '../../utils/eventDate';
 import { Event } from '../../types/event';
 
-import './style.css';
-
 const Events = (): React.ReactElement => {
   const [events, setEvents] = useState<Event[]>([]);
   const [modal, setModal] = useState(false);

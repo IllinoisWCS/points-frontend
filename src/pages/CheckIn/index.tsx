@@ -4,8 +4,6 @@ import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
 
-import './style.css';
-
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
   const [eventKeyError, setEventKeyError] = useState(false);
