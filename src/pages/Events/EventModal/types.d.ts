@@ -1,3 +1,5 @@
+import { EventCategoryType } from '../../../types/event';
+
 export interface EventModalProps {
   open: boolean;
   toggleModal: () => void;
@@ -9,7 +11,7 @@ export interface StringFieldProps {
 }
 
 export interface CategoryFieldProps {
-  value: 'corporate' | 'social' | 'outreach' | 'mentoring' | 'explorations' | 'generalMeeting' | 'other';
+  value: EventCategoryType;
 }
 
 export interface NumberFieldProps {

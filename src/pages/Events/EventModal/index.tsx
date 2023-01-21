@@ -10,13 +10,13 @@ import {
 } from 'semantic-ui-react';
 import './style.css';
 import axiosInstance from '../../../api';
-import { NewEvent } from '../../../types/event';
+import { EventCategoryType, NewEvent } from '../../../types/event';
 import { EventModalProps, StringFieldProps, CategoryFieldProps, NumberFieldProps, SameDayFieldProps, DropdownProps } from './types';
 
 const EventModal = (props: EventModalProps): React.ReactElement => {
   const { open, toggleModal, reloadOnClose } = props;
   const [name, setName] = useState('');
-  const [category, setCategory] = useState<'corporate' | 'social' | 'outreach' | 'mentoring' | 'explorations' | 'generalMeeting' | 'other'>('explorations');
+  const [category, setCategory] = useState<EventCategoryType>('explorations');
   const [points, setPoints] = useState(1);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');

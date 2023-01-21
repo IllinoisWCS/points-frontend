@@ -1,8 +1,8 @@
 import React, { useState, useEffect, BaseSyntheticEvent } from 'react';
 import { Tab, Input, Button } from 'semantic-ui-react';
-// import Notifications, { notify } from 'react-notify-toast';
 
 import axiosInstance from '../../api';
+import { toastError, toastSuccess } from '../../utils/toast';
 import './style.css';
 
 const CheckIn = (): React.ReactElement => {
@@ -26,10 +26,10 @@ const CheckIn = (): React.ReactElement => {
     axiosInstance
       .patch('/profile', { eventKey })
       .then((res) => {
-        // notify.show(res.data.message, 'success'); // TODO
+        toastSuccess(res.data.message);
       })
       .catch((err) => {
-        // notify.show(err.response.data.message, 'error'); // TODO
+        toastError(err.response.data.message);
         console.log(err);
       });
   };

@@ -1,4 +1,4 @@
-import { Event } from './types/event';
+import { Event } from '../types/event';
 
 export const getEventDate = (event: Event): string => {
   const start = new Date(event.start).toLocaleDateString('en-US');
