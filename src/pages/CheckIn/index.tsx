@@ -1,5 +1,6 @@
 import React, { useState, useEffect, BaseSyntheticEvent } from 'react';
 import { Tab, Input, Button } from 'semantic-ui-react';
+import { Heading } from '@chakra-ui/react';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
@@ -45,7 +46,7 @@ const CheckIn = (): React.ReactElement => {
 
   return (
     <div className="check-in">
-      <h1>Check-in</h1>
+      <Heading>Check-in</Heading>
       <Tab.Pane>
         <h3>Event Key</h3>
         <Input
