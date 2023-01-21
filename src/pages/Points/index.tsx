@@ -45,7 +45,7 @@ const Points = (): React.ReactElement => {
         borderColor="gray.100"
       >
         {events.map((event, id) => (
-          <HStack className="event-detail" key={id} p="5">
+          <HStack justify="space-between" key={id} p="5">
             <Stack>
               <Text fontSize="xl" fontWeight="medium">
                 {event.name}
