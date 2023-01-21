@@ -1,24 +1,32 @@
 import React, { useState } from 'react';
+import { Modal, Form, Select, Message } from 'semantic-ui-react';
 import {
-  Input,
+  FormControl,
+  FormLabel,
+  NumberInput,
+  NumberInputField,
+  // FormErrorMessage,
+  // FormHelperText,
   Button,
-  Modal,
-  Form,
-  Select,
-  Message,
-  Checkbox
-} from 'semantic-ui-react';
-import './style.css';
+  // Box,
+  Text,
+  Checkbox,
+  // Stack,
+  Input
+} from '@chakra-ui/react';
+
 import axiosInstance from '../../../api';
 import { EventCategoryType, NewEvent } from '../../../types/event';
 import {
   EventModalProps,
   StringFieldProps,
   CategoryFieldProps,
-  NumberFieldProps,
-  SameDayFieldProps,
+  // NumberFieldProps,
+  // SameDayFieldProps,
   DropdownProps
 } from './types';
+
+import './style.css';
 
 const EventModal = (props: EventModalProps): React.ReactElement => {
   const { open, toggleModal, reloadOnClose } = props;
@@ -42,18 +50,17 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   const [error, setError] = useState(false);
   const [msg, setMsg] = useState('');
 
-  const handleNameChange = (_: any, data: StringFieldProps): void => {
-    setName(data.value);
+  // TODO: get rid of any types
+  const handleNameChange = (props: any): void => {
+    setName(props.target.value);
   };
 
   const handleCategoryChange = (_: any, data: CategoryFieldProps): void => {
     setCategory(data.value);
   };
 
-  const handlePointsChange = (_: any, data: NumberFieldProps): void => {
-    if (!(data.value > 0 && data.value <= 5)) setPointsErr(true);
-    else setPointsErr(false);
-    setPoints(data.value);
+  const handlePointsChange = (_: any, value: number): void => {
+    setPoints(value);
   };
 
   const handleStartDateChange = (_: any, data: StringFieldProps): void => {
@@ -133,8 +140,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     if (data && typeof data.value === 'string') setVisibility(data.value);
   };
 
-  const handleSameDayChange = (_: any, data: SameDayFieldProps): void => {
-    if (data.checked !== undefined) setSameDay(data.checked);
+  const handleSameDayChange = (props: any): void => {
+    if (props.target.checked !== undefined) setSameDay(props.target.checked);
     if (endTime && startTime && startTime >= endTime) setEndTimeErr(true);
     else {
       setStartDateErr(false);
@@ -207,21 +214,23 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     { key: 'x', text: 'Other', value: 'other' }
   ];
 
+  // TODO: add isInvalid to form controls
   return (
     <Modal open={open} onClose={clearAndToggle} closeIcon>
       <Modal.Content>
-        <h3>All fields are required.</h3>
+        <Text fontSize="xl" fontWeight="medium">
+          All fields are required.
+        </Text>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <Form onSubmit={validateEvent} success={success} error={error}>
-          <Form.Field
-            required
-            id="name"
-            control={Input}
-            label="Name"
-            placeholder="i.e. October General Meeting"
-            onChange={handleNameChange}
-            value={name}
-          />
+          <FormControl isRequired width="100%">
+            <FormLabel>Name</FormLabel>
+            <Input
+              placeholder="i.e. October General Meeting"
+              onChange={handleNameChange}
+              value={name}
+            />
+          </FormControl>
           <Form.Group widths="equal">
             <Form.Field
               required
@@ -247,15 +256,12 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               onChange={handleVisibilityChange}
             />
           </Form.Group>
-          <Form.Field
-            required
-            id="points"
-            control={Input}
-            label="Points"
-            onChange={handlePointsChange}
-            error={pointsErr}
-            value={points}
-          />
+          <FormControl isInvalid={pointsErr} isRequired>
+            <FormLabel>Points</FormLabel>
+            <NumberInput min={0.5} max={4} onChange={handlePointsChange}>
+              <NumberInputField />
+            </NumberInput>
+          </FormControl>
           <Form.Group widths="equal">
             <Form.Field
               required
@@ -302,15 +308,10 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               value={endTime}
             />
           </Form.Group>
-          <Form.Field>
-            <Checkbox
-              required
-              id="sameDay"
-              label="Same day"
-              onChange={handleSameDayChange}
-              checked={sameDay}
-            />
-          </Form.Field>
+          <FormControl>
+            <FormLabel>Same day</FormLabel>
+            <Checkbox onChange={handleSameDayChange} isChecked={sameDay} />
+          </FormControl>
           <Message success content={msg} />
           <Message error content={msg} />
           <Button type="submit">Submit</Button>
