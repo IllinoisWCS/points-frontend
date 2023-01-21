@@ -1,4 +1,11 @@
-export type EventCategoryType = 'corporate' | 'social' | 'outreach' | 'mentoring' | 'explorations' | 'generalMeeting' | 'other';
+export type EventCategoryType =
+  | 'corporate'
+  | 'social'
+  | 'outreach'
+  | 'mentoring'
+  | 'explorations'
+  | 'generalMeeting'
+  | 'other';
 
 export interface NewEvent {
   name: string;

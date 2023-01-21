@@ -13,7 +13,7 @@ import './App.css';
 const App = (): React.ReactElement => {
   return (
     <BrowserRouter>
-    <ToastContainer/>
+      <ToastContainer />
       <div className="home-container">
         <Navbar />
         <div className="content-container">

@@ -1,16 +1,4 @@
-.modal-heading {
-  padding-bottom: 20px;
-}
-
 .inactive #endDate {
   background-color: #e0e0e0;
   color: #616161;
-}
-
-.disabled {
-  opacity: 1 !important;
-}
-
-.field.disabled > label {
-  opacity: 1 !important;
 }

@@ -23,5 +23,10 @@ export interface SameDayFieldProps {
 }
 
 export interface DropdownProps {
-  value?: string | number | boolean | Array<string | number | boolean> | undefined;
+  value?:
+    | string
+    | number
+    | boolean
+    | Array<string | number | boolean>
+    | undefined;
 }
