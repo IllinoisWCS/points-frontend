@@ -5,10 +5,12 @@
   },
   "extends": [
     "plugin:react/recommended",
-    "standard-with-typescript"
+    "standard-with-typescript",
+    "prettier"
   ],
   "plugins": [
-    "react"
+    "react",
+    "prettier"
   ],
   "rules": {
     "semi": [
@@ -19,6 +21,7 @@
       2,
       "single"
     ],
+    "max-len": ["error", { "code": 80 }],
     "no-unused-vars": 1,
     "multiline-ternary": 0,
     "@typescript-eslint/no-unused-vars": 1,

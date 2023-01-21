@@ -20,20 +20,22 @@ const Points = (): React.ReactElement => {
     });
   }, []);
 
-  const renderAttendedEvents = (attendedEvents: Event[]): React.ReactElement[] =>
-    (attendedEvents.map((event, id) => (
-    // TODO: change key
-    // eslint-disable-next-line react/no-array-index-key
-    <Segment className="event-detail" padded key={id}>
-      <div>
-        <h3>{event.name}</h3>
-        <h5 className="muted">{getEventDate(event)}</h5>
-      </div>
-      <div className="event-point">
-        <h3>{event.points}</h3>
-        <h5 className="muted">{event.points === 1 ? 'point' : 'points'}</h5>
-      </div>
-    </Segment>)
+  const renderAttendedEvents = (
+    attendedEvents: Event[]
+  ): React.ReactElement[] =>
+    attendedEvents.map((event, id) => (
+      // TODO: change key
+      // eslint-disable-next-line react/no-array-index-key
+      <Segment className="event-detail" padded key={id}>
+        <div>
+          <h3>{event.name}</h3>
+          <h5 className="muted">{getEventDate(event)}</h5>
+        </div>
+        <div className="event-point">
+          <h3>{event.points}</h3>
+          <h5 className="muted">{event.points === 1 ? 'point' : 'points'}</h5>
+        </div>
+      </Segment>
     ));
 
   return (
@@ -43,9 +45,7 @@ const Points = (): React.ReactElement => {
         <Card.Content>
           <div className="points-message">
             <h2>
-              {`You have ${points} ${
-                points === 1 ? 'point' : 'points'
-              }.`}
+              {`You have ${points} ${points === 1 ? 'point' : 'points'}.`}
             </h2>
           </div>
           {renderAttendedEvents(events)}

@@ -11,7 +11,14 @@ import {
 import './style.css';
 import axiosInstance from '../../../api';
 import { EventCategoryType, NewEvent } from '../../../types/event';
-import { EventModalProps, StringFieldProps, CategoryFieldProps, NumberFieldProps, SameDayFieldProps, DropdownProps } from './types';
+import {
+  EventModalProps,
+  StringFieldProps,
+  CategoryFieldProps,
+  NumberFieldProps,
+  SameDayFieldProps,
+  DropdownProps
+} from './types';
 
 const EventModal = (props: EventModalProps): React.ReactElement => {
   const { open, toggleModal, reloadOnClose } = props;
@@ -57,7 +64,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
         startTime &&
         endTime &&
         startTime >= endTime)
-    ) setStartDateErr(true);
+    )
+      setStartDateErr(true);
     else {
       setStartDateErr(false);
       setEndDateErr(false);
@@ -75,7 +83,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
         startTime &&
         endTime &&
         startTime >= endTime)
-    ) setEndDateErr(true);
+    )
+      setEndDateErr(true);
     else {
       setStartDateErr(false);
       setEndDateErr(false);
@@ -92,7 +101,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
       new Date(startDate).getTime() === new Date(endDate).getTime() &&
       endTime &&
       newStartTime >= endTime
-    ) setStartTimeErr(true);
+    )
+      setStartTimeErr(true);
     else {
       setStartTimeErr(false);
       setEndTimeErr(false);
@@ -107,7 +117,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
       new Date(startDate).getTime() === new Date(endDate).getTime() &&
       startTime &&
       startTime >= newEndTime
-    ) setEndTimeErr(true);
+    )
+      setEndTimeErr(true);
     else {
       setStartTimeErr(false);
       setEndTimeErr(false);
@@ -115,7 +126,10 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setEndTime(newEndTime);
   };
 
-  const handleVisibilityChange = (_: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps): void => {
+  const handleVisibilityChange = (
+    _: React.SyntheticEvent<HTMLElement, Event>,
+    data: DropdownProps
+  ): void => {
     if (data && typeof data.value === 'string') setVisibility(data.value);
   };
 
@@ -141,11 +155,9 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
 
   const validateFields = (): boolean => {
     if (success) setSuccess(false);
-    if (pointsErr) return false;
-    if (startDateErr) return false;
-    if (endDateErr) return false;
-    if (startTimeErr) return false;
-    if (endTimeErr) return false;
+    if (pointsErr || startDateErr || endDateErr || startTimeErr || endTimeErr) {
+      return false;
+    }
     return true;
   };
 
@@ -162,7 +174,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
         setSuccess(false);
         setError(true);
         setMsg(
-          'Internal Error: event creation was unsuccessful. Please contact the current WCS infra chair for help.'
+          'Internal Error: event creation was unsuccessful.' +
+            'Please contact the current WCS infra chair for help.'
         );
       });
   };
@@ -170,9 +183,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   const validateEvent = async (): Promise<void> => {
     if (validateFields()) {
       const start = new Date(`${startDate} ${startTime}`);
-      const end = new Date(
-        `${sameDay ? startDate : endDate} ${endTime}`
-      );
+      const end = new Date(`${sameDay ? startDate : endDate} ${endTime}`);
 
       const event = {
         name,
@@ -216,7 +227,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               required
               id="category"
               control={Select}
-              label='Category'
+              label="Category"
               placeholder="Category"
               options={categories}
               search
