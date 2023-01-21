@@ -1,29 +1,35 @@
 import React, { useState } from 'react';
-import { Modal, Form, Select, Message } from 'semantic-ui-react';
 import {
   FormControl,
   FormLabel,
   NumberInput,
   NumberInputField,
-  // FormErrorMessage,
-  // FormHelperText,
+  Alert,
+  AlertIcon,
+  HStack,
   Button,
-  // Box,
-  Text,
+  Modal,
+  ModalCloseButton,
+  ModalHeader,
+  ModalOverlay,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
   Checkbox,
-  // Stack,
+  Stack,
+  Select,
   Input
 } from '@chakra-ui/react';
 
 import axiosInstance from '../../../api';
 import { EventCategoryType, NewEvent } from '../../../types/event';
 import {
-  EventModalProps,
-  StringFieldProps,
-  CategoryFieldProps,
+  EventModalProps
+  // StringFieldProps,
+  // CategoryFieldProps,
   // NumberFieldProps,
   // SameDayFieldProps,
-  DropdownProps
+  // DropdownProps
 } from './types';
 
 import './style.css';
@@ -55,16 +61,16 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setName(props.target.value);
   };
 
-  const handleCategoryChange = (_: any, data: CategoryFieldProps): void => {
-    setCategory(data.value);
+  const handleCategoryChange = (props: any): void => {
+    setCategory(props.target.value);
   };
 
   const handlePointsChange = (_: any, value: number): void => {
     setPoints(value);
   };
 
-  const handleStartDateChange = (_: any, data: StringFieldProps): void => {
-    const newStartDate = data.value;
+  const handleStartDateChange = (props: any): void => {
+    const newStartDate = props.target.value;
     if (
       new Date(newStartDate).getTime() > new Date(endDate).getTime() ||
       (new Date(newStartDate).getTime() === new Date(endDate).getTime() &&
@@ -82,8 +88,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setStartDate(newStartDate);
   };
 
-  const handleEndDateChange = (_: any, data: StringFieldProps): void => {
-    const newEndDate = data.value;
+  const handleEndDateChange = (props: any): void => {
+    const newEndDate = props.target.value;
     if (
       new Date(newEndDate).getTime() < new Date(startDate).getTime() ||
       (new Date(newEndDate).getTime() === new Date(startDate).getTime() &&
@@ -101,8 +107,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setEndDate(newEndDate);
   };
 
-  const handleStartTimeChange = (_: any, data: StringFieldProps): void => {
-    const newStartTime = data.value;
+  const handleStartTimeChange = (props: any): void => {
+    const newStartTime = props.target.value;
     if (sameDay && endTime && newStartTime >= endTime) setStartTimeErr(true);
     else if (
       new Date(startDate).getTime() === new Date(endDate).getTime() &&
@@ -117,8 +123,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setStartTime(newStartTime);
   };
 
-  const handleEndTimeChange = (_: any, data: StringFieldProps): void => {
-    const newEndTime = data.value;
+  const handleEndTimeChange = (props: any): void => {
+    const newEndTime = props.target.value;
     if (sameDay && newEndTime && startTime >= newEndTime) setEndTimeErr(true);
     else if (
       new Date(startDate).getTime() === new Date(endDate).getTime() &&
@@ -133,11 +139,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     setEndTime(newEndTime);
   };
 
-  const handleVisibilityChange = (
-    _: React.SyntheticEvent<HTMLElement, Event>,
-    data: DropdownProps
-  ): void => {
-    if (data && typeof data.value === 'string') setVisibility(data.value);
+  const handleVisibilityChange = (props: any): void => {
+    setVisibility(props.target.value);
   };
 
   const handleSameDayChange = (props: any): void => {
@@ -204,119 +207,117 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     }
   };
 
-  const categories = [
-    { key: 'c', text: 'Corporate', value: 'corporate' },
-    { key: 's', text: 'Social', value: 'social' },
-    { key: 'o', text: 'Outreach', value: 'outreach' },
-    { key: 'm', text: 'Mentoring', value: 'mentoring' },
-    { key: 't', text: 'Explorations', value: 'explorations' },
-    { key: 'g', text: 'General Meeting', value: 'generalMeeting' },
-    { key: 'x', text: 'Other', value: 'other' }
-  ];
-
   // TODO: add isInvalid to form controls
   return (
-    <Modal open={open} onClose={clearAndToggle} closeIcon>
-      <Modal.Content>
-        <Text fontSize="xl" fontWeight="medium">
-          All fields are required.
-        </Text>
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <Form onSubmit={validateEvent} success={success} error={error}>
-          <FormControl isRequired width="100%">
-            <FormLabel>Name</FormLabel>
-            <Input
-              placeholder="i.e. October General Meeting"
-              onChange={handleNameChange}
-              value={name}
-            />
-          </FormControl>
-          <Form.Group widths="equal">
-            <Form.Field
-              required
-              id="category"
-              control={Select}
-              label="Category"
-              placeholder="Category"
-              options={categories}
-              search
-              searchInput={{ id: 'category' }}
-              onChange={handleCategoryChange}
-            />
-            <Form.Select
-              required
-              fluid
-              id="visibility"
-              label="Visibility"
-              options={[
-                { key: 'public', text: 'Public', value: 'public' },
-                { key: 'private', text: 'Private', value: 'private' }
-              ]}
-              defaultValue="public"
-              onChange={handleVisibilityChange}
-            />
-          </Form.Group>
-          <FormControl isInvalid={pointsErr} isRequired>
-            <FormLabel>Points</FormLabel>
-            <NumberInput min={0.5} max={4} onChange={handlePointsChange}>
-              <NumberInputField />
-            </NumberInput>
-          </FormControl>
-          <Form.Group widths="equal">
-            <Form.Field
-              required
-              id="startDate"
-              control={Input}
-              label="Start Date"
-              type="date"
-              onChange={handleStartDateChange}
-              error={startDateErr}
-              value={startDate}
-            />
-            <Form.Field
-              required
-              id="startTime"
-              control={Input}
-              label="Start Time"
-              type="time"
-              onChange={handleStartTimeChange}
-              error={startTimeErr}
-              value={startTime}
-            />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field
-              required={!sameDay}
-              id="endDate"
-              control={Input}
-              label="End Date"
-              type="date"
-              onChange={handleEndDateChange}
-              error={endDateErr}
-              value={sameDay ? startDate : endDate}
-              disabled={sameDay}
-              className={sameDay ? 'inactive' : ''}
-            />
-            <Form.Field
-              required
-              id="endTime"
-              control={Input}
-              label="End Time"
-              type="time"
-              onChange={handleEndTimeChange}
-              error={endTimeErr}
-              value={endTime}
-            />
-          </Form.Group>
-          <FormControl>
-            <FormLabel>Same day</FormLabel>
-            <Checkbox onChange={handleSameDayChange} isChecked={sameDay} />
-          </FormControl>
-          <Message success content={msg} />
-          <Message error content={msg} />
-          <Button type="submit">Submit</Button>
-        </Form>
-      </Modal.Content>
+    <Modal isOpen={open} onClose={clearAndToggle} isCentered>
+      <ModalOverlay />
+      <ModalCloseButton />
+      <ModalContent p="10" minW="50%">
+        <ModalHeader>Create a New Event</ModalHeader>
+        <ModalBody>
+          <Stack spacing="4">
+            <FormControl isRequired width="100%">
+              <FormLabel>Name</FormLabel>
+              <Input
+                placeholder="i.e. October General Meeting"
+                onChange={handleNameChange}
+                value={name}
+              />
+            </FormControl>
+            <HStack>
+              <FormControl isRequired>
+                {/* TODO: extract into list */}
+                <FormLabel>Category</FormLabel>
+                <Select onChange={handleCategoryChange} value={category}>
+                  <option value="corporate">Corporate</option>
+                  <option value="social">Social</option>
+                  <option value="outreach">Outreach</option>
+                  <option value="mentoring">Mentoring</option>
+                  <option value="explorations">Explorations</option>
+                  <option value="generalMeeting">General Meeting</option>
+                  <option value="other">Other</option>
+                </Select>
+              </FormControl>
+              <FormControl isRequired>
+                {/* TODO: default is public */}
+                <FormLabel>Visibility</FormLabel>
+                <Select onChange={handleVisibilityChange} value={visibility}>
+                  <option value="public">Public</option>
+                  <option value="private">Private</option>
+                </Select>
+              </FormControl>
+            </HStack>
+            <FormControl isInvalid={pointsErr} isRequired>
+              <FormLabel>Points</FormLabel>
+              <NumberInput min={0.5} max={4} onChange={handlePointsChange}>
+                <NumberInputField />
+              </NumberInput>
+            </FormControl>
+            <HStack>
+              <FormControl isRequired>
+                <FormLabel>Start Date</FormLabel>
+                <Input
+                  onChange={handleStartDateChange}
+                  value={startDate}
+                  type="date"
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Start Time</FormLabel>
+                <Input
+                  onChange={handleStartTimeChange}
+                  value={startTime}
+                  type="time"
+                />
+              </FormControl>
+            </HStack>
+            <HStack>
+              <FormControl isRequired={!sameDay}>
+                <FormLabel>End Date</FormLabel>
+                <Input
+                  type="date"
+                  onChange={handleEndDateChange}
+                  value={sameDay ? startDate : endDate}
+                  disabled={sameDay}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>End Time</FormLabel>
+                <Input
+                  type="time"
+                  onChange={handleEndTimeChange}
+                  value={endTime}
+                />
+              </FormControl>
+            </HStack>
+            <FormControl>
+              <HStack>
+                <Checkbox onChange={handleSameDayChange} isChecked={sameDay} />
+                <FormLabel>Same day</FormLabel>
+              </HStack>
+            </FormControl>
+            {success && (
+              <Alert status="success" variant="left-accent">
+                <AlertIcon />
+                {msg}
+              </Alert>
+            )}
+            {error && (
+              <Alert status="error" variant="left-accent">
+                <AlertIcon />
+                {msg}
+              </Alert>
+            )}
+          </Stack>
+        </ModalBody>
+        <ModalFooter>
+          {/* eslint-disable-next-line 
+          @typescript-eslint/no-misused-promises */}
+          <Button type="submit" onClick={validateEvent}>
+            Submit
+          </Button>
+        </ModalFooter>
+      </ModalContent>
     </Modal>
   );
 };
