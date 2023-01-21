@@ -46,7 +46,7 @@ const CheckIn = (): React.ReactElement => {
 
   return (
     <div className="check-in">
-      <h1>Check-in</h1>
+      <h2>Check-in</h2>
       <br />
       {/* <Notifications /> */}
       <Tab.Pane>

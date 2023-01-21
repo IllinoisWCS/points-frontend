@@ -44,7 +44,7 @@ const Events = (): React.ReactElement => {
           <Segment padded key={idx}>
             <div className="flex">
               <div>
-                <h3>{event.name}</h3>
+                <h4>{event.name}</h4>
                 <h5 className="muted">{getEventDate(event)}</h5>
               </div>
               <div />

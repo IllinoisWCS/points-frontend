@@ -11,32 +11,7 @@ import {
 import './style.css';
 import axiosInstance from '../../../api';
 import { NewEvent } from '../../../types/event';
-
-interface EventModalProps {
-  open: boolean;
-  toggleModal: () => void;
-  reloadOnClose: () => void;
-}
-
-interface StringFieldProps {
-  value: string;
-}
-
-interface CategoryFieldProps {
-  value: 'corporate' | 'social' | 'outreach' | 'mentoring' | 'explorations' | 'generalMeeting' | 'other';
-}
-
-interface NumberFieldProps {
-  value: number;
-}
-
-interface SameDayFieldProps {
-  checked?: boolean | undefined;
-}
-
-interface DropdownProps {
-  value?: string | number | boolean | Array<string | number | boolean> | undefined;
-}
+import { EventModalProps, StringFieldProps, CategoryFieldProps, NumberFieldProps, SameDayFieldProps, DropdownProps } from './types';
 
 const EventModal = (props: EventModalProps): React.ReactElement => {
   const { open, toggleModal, reloadOnClose } = props;
