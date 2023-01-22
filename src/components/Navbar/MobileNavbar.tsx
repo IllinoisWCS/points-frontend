@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, Flex, useColorModeValue, Text } from '@chakra-ui/react';
+import { IconButton, Flex, useColorModeValue, Stack } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 
 import { MobileNavbarProps } from './types';
@@ -13,6 +13,7 @@ const MobileNavbar = ({
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
+      p="3"
       height="20"
       alignItems="center"
       bg={useColorModeValue('white', 'gray.900')}
@@ -28,10 +29,9 @@ const MobileNavbar = ({
         icon={<FiMenu />}
       />
 
-      <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        {/* TODO: nest logo in something else & add padding */}
+      <Stack maxH="100%" justify="center" overflow="hidden">
         <Logo />
-      </Text>
+      </Stack>
     </Flex>
   );
 };
