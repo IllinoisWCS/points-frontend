@@ -37,7 +37,12 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} to={link.to}>
+        <NavItem
+          key={link.name}
+          icon={link.icon}
+          to={link.to}
+          onClick={onClose}
+        >
           {link.name}
         </NavItem>
       ))}
@@ -47,12 +52,13 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
 
 const NavItem = ({
   to,
+  onClick,
   icon,
   children,
   ...rest
 }: NavItemProps): React.ReactElement => {
   return (
-    <RouteLink to={to}>
+    <RouteLink to={to} onClick={onClick}>
       <Flex
         align="center"
         p="4"

@@ -15,6 +15,7 @@ export interface NavbarProps extends BoxProps {
 }
 
 export interface NavItemProps extends FlexProps {
+  onClick: () => void;
   icon: IconType;
   children: ReactText;
   to: string;
