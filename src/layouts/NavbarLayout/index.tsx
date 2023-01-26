@@ -5,7 +5,8 @@ import {
   useColorModeValue,
   Drawer,
   DrawerContent,
-  useDisclosure
+  useDisclosure,
+  DrawerOverlay
 } from '@chakra-ui/react';
 
 import Navbar from '../../components/Navbar';
@@ -29,6 +30,7 @@ const NavbarLayout = ({
         onOverlayClick={onClose}
         size="full"
       >
+        <DrawerOverlay />
         <DrawerContent>
           <Navbar onClose={onClose} />
         </DrawerContent>
