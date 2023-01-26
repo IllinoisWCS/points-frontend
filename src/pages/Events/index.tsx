@@ -18,6 +18,15 @@ const Events = (): React.ReactElement => {
     });
   }, []);
 
+  //  const { isLoading, isError, error } = useQuery<Promise<void>, Error>(
+  //   ['get-events'],
+  //   async () => {
+  //     axiosInstance.get('/events').then((res) => {
+  //   setEvents(res.data);
+  // });
+  //   }
+  // );
+
   const handleToggleModal = (): void => {
     setModal(!modal);
     if (reloadOnClose) {
