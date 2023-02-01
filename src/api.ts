@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  // baseURL: 'https://points-api.illinoiswcs.org',
-  baseURL: 'http://127.0.0.1:3000/', // TODO
+  baseURL: import.meta.env.VITE_BASE_URL
+    ? import.meta.env.VITE_BASE_URL
+    : 'https://points-api.illinoiswcs.org',
   withCredentials: true
 });
 

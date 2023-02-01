@@ -20,6 +20,7 @@ const Points = (): React.ReactElement => {
   const [events, setEvents] = useState<Event[]>([]);
   const [points, setPoints] = useState(0);
 
+  // TODO: remove state
   const { isLoading, isError, error } = useQuery<Promise<void>, Error>(
     ['get-profile'],
     async () => {
