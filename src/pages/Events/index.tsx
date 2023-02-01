@@ -16,16 +16,14 @@ import { getEventDate } from '../../utils/eventDate';
 import { Event } from '../../types/event';
 
 const Events = (): React.ReactElement => {
-  const [events, setEvents] = useState<Event[]>([]);
   const [modal, setModal] = useState(false);
   const [reloadOnClose, setReloadOnClose] = useState(false);
 
-  const { isLoading, isError, error } = useQuery<Promise<void>, Error>(
+  const { isLoading, isError, error, data } = useQuery<Event[], Error>(
     ['get-events'],
     async () => {
-      await axiosInstance.get('/events').then((res) => {
-        setEvents(res.data);
-      });
+      const res = await axiosInstance.get('/events');
+      return res.data;
     }
   );
 
@@ -67,7 +65,7 @@ const Events = (): React.ReactElement => {
           borderColor="gray.100"
           borderRadius="10"
         >
-          {events.map((event, idx) => (
+          {data?.map((event, idx) => (
             <Box key={idx} p="5">
               <Text fontSize="lg" fontWeight="medium">
                 {event.name}
