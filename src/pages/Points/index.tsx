@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Heading,
   Box,
@@ -13,21 +13,15 @@ import {
 import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
-import { Event } from '../../types/event';
 import { getEventDate } from '../../utils/eventDate';
+import { Profile } from '../../types/profile';
 
 const Points = (): React.ReactElement => {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [points, setPoints] = useState(0);
-
-  // TODO: remove state
-  const { isLoading, isError, error } = useQuery<Promise<void>, Error>(
+  const { isLoading, isError, error, data } = useQuery<Profile, Error>(
     ['get-profile'],
     async () => {
-      await axiosInstance.get('/profile').then((res) => {
-        setEvents(res.data.events);
-        setPoints(res.data.points);
-      });
+      const res = await axiosInstance.get('/profile');
+      return res.data;
     }
   );
 
@@ -45,7 +39,9 @@ const Points = (): React.ReactElement => {
       <Heading size="lg">Points</Heading>
       <Center mb="5">
         <Text fontSize="xl">
-          {`You have ${points} ${points === 1 ? 'point' : 'points'}.`}
+          {`You have ${data?.points ?? 0} ${
+            data?.points === 1 ? 'point' : 'points'
+          }.`}
         </Text>
       </Center>
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
@@ -56,7 +52,7 @@ const Points = (): React.ReactElement => {
           border="1px"
           borderColor="gray.100"
         >
-          {events.map((event, id) => (
+          {data?.events?.map((event, id) => (
             <HStack justify="space-between" key={id} p="5">
               <Stack>
                 <Text fontSize="lg" fontWeight="medium">
