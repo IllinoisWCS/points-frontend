@@ -20,6 +20,7 @@ import {
   Select,
   Input
 } from '@chakra-ui/react';
+import { useMutation } from 'react-query';
 
 import axiosInstance from '../../../api';
 import { EventCategoryType, NewEvent } from '../../../types/event';
@@ -161,24 +162,26 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     return true;
   };
 
-  const createEvent = (event: NewEvent): void => {
-    axiosInstance
-      .post('/events', event)
-      .then((res) => {
-        setSuccess(true);
-        setError(false);
-        setMsg(`Success! Event key is ${String(res.data.key)}.`);
-        reloadOnClose();
-      })
-      .catch(() => {
-        setSuccess(false);
-        setError(true);
-        setMsg(
-          'Internal Error: event creation was unsuccessful.' +
-            'Please contact the current WCS infra chair for help.'
-        );
-      });
-  };
+  const createEvent = useMutation({
+    mutationFn: async (event: NewEvent): Promise<void> => {
+      await axiosInstance
+        .post('/events', event)
+        .then((res) => {
+          setSuccess(true);
+          setError(false);
+          setMsg(`Success! Event key is ${String(res.data.key)}.`);
+          reloadOnClose();
+        })
+        .catch(() => {
+          setSuccess(false);
+          setError(true);
+          setMsg(
+            'Internal Error: event creation was unsuccessful.' +
+              'Please contact the current WCS infra chair for help.'
+          );
+        });
+    }
+  });
 
   const validateEvent = async (): Promise<void> => {
     if (validateFields()) {
@@ -193,7 +196,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
         end,
         private: visibility === 'private'
       };
-      createEvent(event);
+      createEvent.mutate(event);
     }
   };
 

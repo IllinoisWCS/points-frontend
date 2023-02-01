@@ -1,5 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Box, Text, StackDivider, Stack } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import {
+  Button,
+  Box,
+  Text,
+  StackDivider,
+  Stack,
+  Heading,
+  Skeleton
+} from '@chakra-ui/react';
+import { useQuery } from 'react-query';
 
 import EventModal from './EventModal';
 import axiosInstance from '../../api';
@@ -7,16 +16,25 @@ import { getEventDate } from '../../utils/eventDate';
 import { Event } from '../../types/event';
 
 const Events = (): React.ReactElement => {
-  const [events, setEvents] = useState<Event[]>([]);
   const [modal, setModal] = useState(false);
   const [reloadOnClose, setReloadOnClose] = useState(false);
 
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    axiosInstance.get('/events').then((res) => {
-      setEvents(res.data);
-    });
-  }, []);
+  const { isLoading, isError, error, data } = useQuery<Event[], Error>(
+    ['get-events'],
+    async () => {
+      const res = await axiosInstance.get('/events');
+      return res.data;
+    }
+  );
+
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
 
   const handleToggleModal = (): void => {
     setModal(!modal);
@@ -39,22 +57,24 @@ const Events = (): React.ReactElement => {
       <Button onClick={handleToggleModal} mb="5">
         Create New Event
       </Button>
-      <Stack
-        divider={<StackDivider />}
-        bg="white"
-        border="1px"
-        borderColor="gray.100"
-        borderRadius="10"
-      >
-        {events.map((event, idx) => (
-          <Box key={idx} p="5">
-            <Text fontSize="lg" fontWeight="medium">
-              {event.name}
-            </Text>
-            <Text className="muted">{getEventDate(event)}</Text>
-          </Box>
-        ))}
-      </Stack>
+      <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
+        <Stack
+          divider={<StackDivider />}
+          bg="white"
+          border="1px"
+          borderColor="gray.100"
+          borderRadius="10"
+        >
+          {data?.map((event, idx) => (
+            <Box key={idx} p="5">
+              <Text fontSize="lg" fontWeight="medium">
+                {event.name}
+              </Text>
+              <Text className="muted">{getEventDate(event)}</Text>
+            </Box>
+          ))}
+        </Stack>
+      </Skeleton>
     </Box>
   );
 };

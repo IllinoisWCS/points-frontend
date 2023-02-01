@@ -1,5 +1,6 @@
-import React, { useState, useEffect, BaseSyntheticEvent } from 'react';
+import React, { useState, BaseSyntheticEvent } from 'react';
 import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
+import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
@@ -28,12 +29,21 @@ const CheckIn = (): React.ReactElement => {
       });
   };
 
-  useEffect(() => {
-    // Temporary patch to ensure users are authenticated before checking in
-    // TODO: Remove after implementing proper login flow
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    axiosInstance.get('/profile');
-  }, []);
+  const { isError, error } = useQuery<Promise<void>, Error>(
+    ['get-profile'],
+    async () => {
+      await axiosInstance.get('/profile');
+    }
+  );
+
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
 
   return (
     <Box>
