@@ -54,6 +54,7 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
         <DarkModeToggle
           onChange={toggleColorMode}
           isDarkMode={colorMode === 'light'}
+          key={colorMode}
         />
       </Flex>
     </Box>
