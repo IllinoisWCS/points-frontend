@@ -13,7 +13,7 @@ const CheckIn = (): React.ReactElement => {
     setEventKey(event.target.value);
   };
 
-  const handleSubmit = async (): Promise<void> => {
+  const handleSubmit = (): void => {
     const isEventKeyError = eventKey === '';
     setEventKeyError(isEventKeyError);
     if (isEventKeyError) return;
@@ -68,7 +68,6 @@ const CheckIn = (): React.ReactElement => {
           value={eventKey}
           onChange={handleChangeKey}
         />
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <Button onClick={handleSubmit}>Check-in</Button>
       </VStack>
     </Box>

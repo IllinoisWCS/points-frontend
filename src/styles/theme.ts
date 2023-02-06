@@ -9,6 +9,10 @@ const theme = extendTheme({
   colors: {
     pink: '#E46167',
     blue: '#64C7CC'
+  },
+  config: {
+    initialColorMode: 'dark',
+    useSystemColorMode: false
   }
 });
 
