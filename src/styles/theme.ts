@@ -11,8 +11,8 @@ const theme = extendTheme({
     blue: '#64C7CC'
   },
   config: {
-    initialColorMode: 'dark',
-    useSystemColorMode: false
+    initialColorMode: 'light',
+    useSystemColorMode: true
   }
 });
 
