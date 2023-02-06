@@ -46,7 +46,6 @@ const Points = (): React.ReactElement => {
       </Center>
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
         <Stack
-          bg="white"
           divider={<StackDivider />}
           borderRadius="10"
           border="1px"
