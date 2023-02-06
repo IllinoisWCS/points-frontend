@@ -53,7 +53,6 @@ const CheckIn = (): React.ReactElement => {
       <VStack
         align="unset"
         spacing="5"
-        bg="white"
         p="5"
         borderRadius="10"
         border="1px"
