@@ -6,9 +6,11 @@ import {
   Flex,
   Icon,
   useColorModeValue,
-  Text
+  Text,
+  useColorMode
 } from '@chakra-ui/react';
 import { FiHome, FiTrendingUp, FiCalendar } from 'react-icons/fi';
+import { DarkModeToggle } from 'react-dark-mode-toggle-2';
 
 import { LinkItemProps, NavbarProps, NavItemProps } from './types';
 import Logo from '../Logo';
@@ -20,9 +22,11 @@ const LinkItems: LinkItemProps[] = [
 ];
 
 const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
+  const { colorMode, toggleColorMode } = useColorMode();
+
   return (
     <Box
-      bg={useColorModeValue('white', 'gray.900')}
+      bg={useColorModeValue('white', 'gray.800')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
@@ -46,6 +50,13 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
           {link.name}
         </NavItem>
       ))}
+      <Flex align="center" p="4" mx="4">
+        <DarkModeToggle
+          onChange={toggleColorMode}
+          isDarkMode={colorMode === 'light'}
+          key={colorMode}
+        />
+      </Flex>
     </Box>
   );
 };

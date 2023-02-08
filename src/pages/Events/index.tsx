@@ -60,7 +60,6 @@ const Events = (): React.ReactElement => {
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
         <Stack
           divider={<StackDivider />}
-          bg="white"
           border="1px"
           borderColor="gray.100"
           borderRadius="10"

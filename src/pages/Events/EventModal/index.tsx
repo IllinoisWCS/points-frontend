@@ -183,7 +183,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     }
   });
 
-  const validateEvent = async (): Promise<void> => {
+  const validateEvent = (): void => {
     if (validateFields()) {
       const start = new Date(`${startDate} ${startTime}`);
       const end = new Date(`${sameDay ? startDate : endDate} ${endTime}`);
@@ -309,8 +309,6 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
           </Stack>
         </ModalBody>
         <ModalFooter>
-          {/* eslint-disable-next-line 
-          @typescript-eslint/no-misused-promises */}
           <Button type="submit" onClick={validateEvent}>
             Submit
           </Button>
