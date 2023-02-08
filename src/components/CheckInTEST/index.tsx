@@ -1,9 +1,22 @@
+// import React from 'react';
+
+// const CheckInTEST = (): React.ReactElement => {
+//   return (
+//     <h1>is this working</h1>
+//   );
+// };
+
+// export default CheckInTEST;
+
 import React, { useState, BaseSyntheticEvent } from 'react';
 import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
+
+// added by me
+// import CheckInTEST from '../../components/CheckInTEST';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -48,7 +61,7 @@ const CheckIn = (): React.ReactElement => {
   return (
     <Box>
       <Heading size="lg" pb="25px">
-        Check-in
+        Home
       </Heading>
       <VStack
         align="unset"
