@@ -4,9 +4,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import CheckIn from './pages/CheckIn';
-import Points from './pages/Points';
 import Events from './pages/Events';
 import NavbarLayout from './layouts/NavbarLayout';
+import Points from './pages/Points/points';
 
 const App = (): React.ReactElement => {
   return (
@@ -15,7 +15,7 @@ const App = (): React.ReactElement => {
       <NavbarLayout>
         <Routes>
           <Route path="/" element={<CheckIn />} />
-          <Route path="/points" element={<Points />} />
+          <Route path="/points" element={<Points/>}/>
           <Route path="/events" element={<Events />} />
         </Routes>
       </NavbarLayout>

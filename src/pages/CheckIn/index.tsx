@@ -6,7 +6,7 @@ import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
 
 // changes
-import Points from '../Points';
+import Points from '../Points/points';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');

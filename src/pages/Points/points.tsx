@@ -35,7 +35,8 @@ const Points = (): React.ReactElement => {
   }
 
   return (
-    <Box>
+    // tried adding css into box css property
+    <Box overflowY="auto" maxHeight="100px">
       <Heading size="lg">Points</Heading>
       <Center mb="5">
         <Text fontSize="xl">
