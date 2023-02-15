@@ -1,10 +1,19 @@
 import React, { useState, BaseSyntheticEvent } from 'react';
-import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+
+import {
+  VStack,
+  Heading,
+  Text,
+  Button,
+  Input,
+  Box,
+  Center
+} from '@chakra-ui/react';
+import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
-import { useQuery } from 'react-query';
 import { Profile } from '../../types/profile';
 
 const CheckIn = (): React.ReactElement => {
@@ -98,34 +107,52 @@ const CheckIn = (): React.ReactElement => {
 
   return (
     <Box>
+      <Box>
+        <Heading size="lg" pb="25px">
+          Check-in
+        </Heading>
+        <VStack
+          align="unset"
+          spacing="5"
+          bg="white"
+          p="5"
+          borderRadius="10"
+          border="1px"
+          borderColor="gray.100"
+        >
+          <Text fontSize="lg" fontWeight="medium">
+            Event Key
+          </Text>
+          <Input
+            isInvalid={eventKeyError}
+            placeholder="Enter the event key..."
+            value={eventKey}
+            onChange={handleChangeKey}
+          />
+          <Button onClick={handleSubmit}>Check-in</Button>
+        </VStack>
+      </Box>
+
       <Heading size="lg" pb="25px">
-        Check-in
+        <Center>Leaderboard</Center>
       </Heading>
       <VStack
         align="unset"
         spacing="5"
+        bg="white"
         p="5"
         borderRadius="10"
         border="1px"
         borderColor="gray.100"
       >
-        <Text fontSize="lg" fontWeight="medium">
-          Event Key
-        </Text>
-        <Input
-          isInvalid={eventKeyError}
-          placeholder="Enter the event key..."
-          value={eventKey}
-          onChange={handleChangeKey}
-        />
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            handleSubmit().catch(console.error);
-          }}
-        >
-          Check-in
-        </Button>
+        {data?.map((user, idx) => (
+          <Box key={idx} p="5">
+            <Text fontSize="lg" fontWeight="medium">
+              {user.name}
+            </Text>
+            <Text className="muted">{user.points}</Text>
+          </Box>
+        ))}
       </VStack>
     </Box>
   );
