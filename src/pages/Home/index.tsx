@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
+import Points from '../../components/Points';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -68,6 +69,17 @@ const CheckIn = (): React.ReactElement => {
           onChange={handleChangeKey}
         />
         <Button onClick={handleSubmit}>Check-in</Button>
+      </VStack>
+
+      <VStack
+        align="unset"
+        spacing="5"
+        p="5"
+        borderRadius="10"
+        border="1px"
+        borderColor="gray.100"
+      >
+        <Points></Points>
       </VStack>
     </Box>
   );
