@@ -1,9 +1,18 @@
 import React, { useState, BaseSyntheticEvent } from 'react';
-import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
+import {
+  VStack,
+  Heading,
+  Text,
+  Button,
+  Input,
+  Box,
+  Center
+} from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
+import { Profile } from '../../types/profile';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -29,45 +38,77 @@ const CheckIn = (): React.ReactElement => {
       });
   };
 
-  const { isError, error } = useQuery<Promise<void>, Error>(
-    ['get-profile'],
+  // const { isError, error } = useQuery<Promise<void>, Error>(
+  //   ['get-profile'],
+  //   async () => {
+  //     await axiosInstance.get('/profile');
+  //   }
+  // );
+  const { isLoading, isError, error, data } = useQuery<Profile[], Error>(
+    ['get-Users'],
     async () => {
-      await axiosInstance.get('/profile');
+      const res = await axiosInstance.get('/Users');
+      return res.data;
     }
   );
 
-  if (isError) {
-    console.log(error);
-    return (
-      <Box>
-        <Heading size="lg">Temporary Error</Heading>
-      </Box>
-    );
-  }
+  // if (isError) {
+  //   console.log(error);
+  //   return (
+  //     <Box>
+  //       <Heading size="lg">Temporary Error</Heading>
+  //     </Box>
+  //   );
+  // }
 
   return (
     <Box>
+      <Box>
+        <Heading size="lg" pb="25px">
+          Check-in
+        </Heading>
+        <VStack
+          align="unset"
+          spacing="5"
+          bg="white"
+          p="5"
+          borderRadius="10"
+          border="1px"
+          borderColor="gray.100"
+        >
+          <Text fontSize="lg" fontWeight="medium">
+            Event Key
+          </Text>
+          <Input
+            isInvalid={eventKeyError}
+            placeholder="Enter the event key..."
+            value={eventKey}
+            onChange={handleChangeKey}
+          />
+          <Button onClick={handleSubmit}>Check-in</Button>
+        </VStack>
+      </Box>
+
       <Heading size="lg" pb="25px">
-        Check-in
+        <Center>Leaderboard</Center>
       </Heading>
       <VStack
         align="unset"
         spacing="5"
+        bg="white"
         p="5"
         borderRadius="10"
         border="1px"
         borderColor="gray.100"
       >
-        <Text fontSize="lg" fontWeight="medium">
-          Event Key
-        </Text>
-        <Input
-          isInvalid={eventKeyError}
-          placeholder="Enter the event key..."
-          value={eventKey}
-          onChange={handleChangeKey}
-        />
-        <Button onClick={handleSubmit}>Check-in</Button>
+        {data?.map((user, idx) => (
+          <Box key={idx} p="5">
+            <Text fontSize="lg" fontWeight="medium">
+              {user.name}
+            </Text>
+            <Text className="muted">{user.points}</Text>
+          </Box>
+        ))}
       </VStack>
     </Box>
   );
