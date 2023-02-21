@@ -35,7 +35,7 @@ const Points = (): React.ReactElement => {
   }
 
   return (
-    <Box maxHeight="50px" overflowY="scroll">
+    <Box maxHeight="200px" overflowY="scroll" paddingTop="5px">
       <Heading size="lg">Points</Heading>
       <Center mb="5">
         <Text fontSize="xl">

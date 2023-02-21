@@ -28,6 +28,8 @@ const CheckIn = (): React.ReactElement => {
         toastError(err.response.data.message);
         console.log(err);
       });
+
+    window.location.reload();
   };
 
   const { isError, error } = useQuery<Promise<void>, Error>(
