@@ -21,7 +21,7 @@
 
 ## Background
 
-This is the repository that hosts the frontend of WCS UIUC's [points web app](https://points.illinoiswcs.org/) (the backend can be found [here](https://github.com/IllinoisWCS/points-api). The web app is used for members to sign into events, accumulate points, and exchange the points for merch at the end of the year. Please reach out to the current Infrastructure lead, Grace Zhang (@gracewz2@illinois.edu), or contact@illinoiswcs@gmail.com if you have any feedback or questions!
+This is the repository that hosts the frontend of WCS UIUC's [points web app](https://points.illinoiswcs.org/) (the backend can be found [here](https://github.com/IllinoisWCS/points-api)). The web app is used for members to sign into events, accumulate points, and exchange the points for merch at the end of the year. Please reach out to the current Infrastructure lead, Grace Zhang (@gracewz2@illinois.edu), or contact@illinoiswcs.org if you have any feedback or questions!
 
 ## Usage
 
