@@ -1,43 +1,26 @@
-import React, { useState, BaseSyntheticEvent } from 'react';
-import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
+import { Heading, Box, VStack } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
-
-import axiosInstance from '../../api';
-import { toastError, toastSuccess } from '../../utils/toast';
 import Points from '../../components/Points';
 
-const CheckIn = (): React.ReactElement => {
-  const [eventKey, setEventKey] = useState('');
-  const [eventKeyError, setEventKeyError] = useState(false);
+import axiosInstance from '../../api';
+import { Profile } from '../../types/profile';
+import CheckIn from '../../components/Check-In';
 
-  const handleChangeKey = (event: BaseSyntheticEvent): void => {
-    setEventKey(event.target.value);
-  };
-
-  const handleSubmit = (): void => {
-    const isEventKeyError = eventKey === '';
-    setEventKeyError(isEventKeyError);
-    if (isEventKeyError) return;
-
-    axiosInstance
-      .patch('/profile', { eventKey })
-      .then((res) => {
-        toastSuccess(res.data.message);
-      })
-      .catch((err) => {
-        toastError(err.response.data.message);
-        console.log(err);
-      });
-
-    window.location.reload();
-  };
-
-  const { isError, error } = useQuery<Promise<void>, Error>(
+const Home = (): React.ReactElement => {
+  const { isLoading, isError, error, data } = useQuery<Profile, Error>(
     ['get-profile'],
     async () => {
-      await axiosInstance.get('/profile');
+      const res = await axiosInstance.get('/profile');
+      console.log('RES.DATA', res.data);
+      return res.data;
     }
   );
+
+  useEffect(() => {
+    console.log('DATA IN USEEFFECT', data);
+    console.log('IS LOADING', isLoading);
+  }, [isLoading, data]);
 
   if (isError) {
     console.log(error);
@@ -47,12 +30,8 @@ const CheckIn = (): React.ReactElement => {
       </Box>
     );
   }
-
   return (
     <Box>
-      <Heading size="lg" pb="25px">
-        Check-in
-      </Heading>
       <VStack
         align="unset"
         spacing="5"
@@ -61,30 +40,17 @@ const CheckIn = (): React.ReactElement => {
         border="1px"
         borderColor="gray.100"
       >
-        <Text fontSize="lg" fontWeight="medium">
-          Event Key
-        </Text>
-        <Input
-          isInvalid={eventKeyError}
-          placeholder="Enter the event key..."
-          value={eventKey}
-          onChange={handleChangeKey}
+        <CheckIn />
+        <Points
+          key={String(isLoading)}
+          isLoading={isLoading}
+          isError={isError}
+          error={error}
+          data={data}
         />
-        <Button onClick={handleSubmit}>Check-in</Button>
-      </VStack>
-
-      <VStack
-        align="unset"
-        spacing="5"
-        p="5"
-        borderRadius="10"
-        border="1px"
-        borderColor="gray.100"
-      >
-        <Points></Points>
       </VStack>
     </Box>
   );
 };
 
-export default CheckIn;
+export default Home;
