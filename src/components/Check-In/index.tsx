@@ -1,12 +1,9 @@
 import React, { useState, BaseSyntheticEvent } from 'react';
-import { VStack, Heading, Text, Button, Input, Box} from '@chakra-ui/react';
+import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
-
-// changes
-import Points from '../Points/points';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -30,6 +27,8 @@ const CheckIn = (): React.ReactElement => {
         toastError(err.response.data.message);
         console.log(err);
       });
+
+    window.location.reload();
   };
 
   const { isError, error } = useQuery<Promise<void>, Error>(
@@ -51,7 +50,7 @@ const CheckIn = (): React.ReactElement => {
   return (
     <Box>
       <Heading size="lg" pb="25px">
-        Check-in
+        Home
       </Heading>
       <VStack
         align="unset"
@@ -72,7 +71,7 @@ const CheckIn = (): React.ReactElement => {
         />
         <Button onClick={handleSubmit}>Check-in</Button>
       </VStack>
-      <Points/>
+      {}
     </Box>
   );
 };

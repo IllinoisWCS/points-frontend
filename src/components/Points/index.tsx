@@ -10,20 +10,23 @@ import {
   HStack,
   Skeleton
 } from '@chakra-ui/react';
-import { useQuery } from 'react-query';
 
-import axiosInstance from '../../api';
 import { getEventDate } from '../../utils/eventDate';
-import { Profile } from '../../types/profile';
 
-const Points = (): React.ReactElement => {
-  const { isLoading, isError, error, data } = useQuery<Profile, Error>(
-    ['get-profile'],
-    async () => {
-      const res = await axiosInstance.get('/profile');
-      return res.data;
-    }
-  );
+import { PointsProps } from './types';
+
+const Points = (props: PointsProps): React.ReactElement => {
+  const { isLoading, isError, error, data } = props;
+
+  console.log(isLoading, data);
+
+  // const { isLoading, isError, error, data} = useQuery<Profile, Error>(
+  //   ['get-profile'],
+  //   async () => {
+  //     const res = await axiosInstance.get('/profile');
+  //     return res.data;
+  //   }
+  // );
 
   if (isError) {
     console.log(error);
@@ -35,7 +38,7 @@ const Points = (): React.ReactElement => {
   }
 
   return (
-    <Box maxHeight="200px" overflowY="scroll" paddingTop="5px">
+    <Box maxHeight="400px" overflowY="scroll" paddingTop="5px">
       <Heading size="lg">Points</Heading>
       <Center mb="5">
         <Text fontSize="xl">
