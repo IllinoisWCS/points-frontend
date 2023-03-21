@@ -26,7 +26,7 @@ const Points = (props: PointsProps): React.ReactElement => {
       </Box>
     );
   }
-
+  // scroll bar component is the maxHeight stuff
   return (
     <Box>
       <Heading size="lg">Points</Heading>

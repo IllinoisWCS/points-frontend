@@ -27,7 +27,7 @@ const CheckIn = (): React.ReactElement => {
         toastError(err.response.data.message);
         console.log(err);
       });
-
+      // reload the page after they check in for an event to update the page
     window.location.reload();
   };
 
