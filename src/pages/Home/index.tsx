@@ -9,7 +9,7 @@ import CheckIn from '../../components/Check-In';
 
 const Home = (): React.ReactElement => {
   const { isLoading, isError, error, data } = useQuery<Profile, Error>(
-    ['get-profile'],
+    ['get-profile-Points'],
     async () => {
       const res = await axiosInstance.get('/profile');
       console.log('RES.DATA', res.data);
