@@ -7,6 +7,7 @@ import CheckIn from './pages/Home';
 import Points from './pages/Points';
 import Events from './pages/Events';
 import NavbarLayout from './layouts/NavbarLayout';
+
 const App = (): React.ReactElement => {
   return (
     <BrowserRouter>
@@ -14,7 +15,7 @@ const App = (): React.ReactElement => {
       <NavbarLayout>
         <Routes>
           <Route path="/" element={<CheckIn />} />
-          <Route path="/points" element={<Points/>}/>
+          <Route path="/points" element={<Points />} />
           <Route path="/events" element={<Events />} />
         </Routes>
       </NavbarLayout>
