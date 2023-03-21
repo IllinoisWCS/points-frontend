@@ -5,4 +5,6 @@ export interface Profile {
   events: Event[];
   points: number;
   role: string;
+  netId : string;
+  num_events: number;
 }
