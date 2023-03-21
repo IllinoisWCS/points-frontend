@@ -1,18 +1,26 @@
 import React, { useState, BaseSyntheticEvent } from 'react';
 import {
+  Table,
+  TableContainer,
   VStack,
   Heading,
   Text,
   Button,
   Input,
   Box,
-  Center
+  Center,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td
 } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
 import { Profile } from '../../types/profile';
+import { FiColumns } from 'react-icons/fi';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -88,27 +96,47 @@ const CheckIn = (): React.ReactElement => {
           <Button onClick={handleSubmit}>Check-in</Button>
         </VStack>
       </Box>
-
+      <VStack
+          align="unset"
+          spacing="5"
+          bg="white"
+          p="5"
+          borderRadius="10"
+          border="1px"
+          borderColor="gray.100"
+        >
       <Heading size="lg" pb="25px">
         <Center>Leaderboard</Center>
       </Heading>
-      <VStack
-        align="unset"
-        spacing="5"
-        bg="white"
-        p="5"
-        borderRadius="10"
-        border="1px"
-        borderColor="gray.100"
-      >
-        {data?.map((user, idx) => (
-          <Box key={idx} p="5">
-            <Text fontSize="lg" fontWeight="medium">
-              {user.name}
-            </Text>
-            <Text className="muted">{user.points}</Text>
-          </Box>
-        ))}
+      <TableContainer>
+        <Table variant='simple'>
+          <Thead>
+            <Tr>
+              <Th>Rank</Th>
+              <Th>Name</Th>
+              <Th isNumeric>Points</Th>
+              <Th isNumeric>Events Attended</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data?.map((user, idx) => (
+            <Tr>
+              <Td>{idx + 1}</Td>
+              <Td>{user.name}</Td>
+              <Td isNumeric>{user.points}</Td>
+              <Td isNumeric>{user.events.length}</Td>
+            </Tr>
+          ))}
+          </Tbody>
+          {/* <Tfoot>
+            <Tr>
+              <Th>To convert</Th>
+              <Th>into</Th>
+              <Th isNumeric>multiply by</Th>
+            </Tr>
+          </Tfoot> */}
+        </Table>
+      </TableContainer>
       </VStack>
     </Box>
   );
