@@ -1,13 +1,23 @@
-import React, { useState, BaseSyntheticEvent } from 'react';
+import React, { useState, useEffect, BaseSyntheticEvent } from 'react';
 import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
+import Confetti from 'react-confetti';
 
 const CheckIn = (): React.ReactElement => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [eventKey, setEventKey] = useState('');
   const [eventKeyError, setEventKeyError] = useState(false);
+
+  useEffect(() => {
+    const storedIsSubmitted = localStorage.getItem('isSubmitted');
+    if (storedIsSubmitted === 'true') {
+      setIsSubmitted(true);
+      localStorage.removeItem('isSubmitted');
+    }
+  }, []);
 
   const handleChangeKey = (event: BaseSyntheticEvent): void => {
     setEventKey(event.target.value);
@@ -27,7 +37,10 @@ const CheckIn = (): React.ReactElement => {
         toastError(err.response.data.message);
         console.log(err);
       });
-      // reload the page after they check in for an event to update the page
+    // set and store the isSubmitted variable so it loads even after reload
+    setIsSubmitted(true);
+    localStorage.setItem('isSubmitted', 'true');
+    // reload the page after they check in for an event to update the page
     window.location.reload();
   };
 
@@ -70,8 +83,14 @@ const CheckIn = (): React.ReactElement => {
           onChange={handleChangeKey}
         />
         <Button onClick={handleSubmit}>Check-in</Button>
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          numberOfPieces={200}
+          recycle={false}
+          run={isSubmitted}
+        />
       </VStack>
-      {}
     </Box>
   );
 };
