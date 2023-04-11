@@ -29,8 +29,10 @@ const Points = (props: PointsProps): React.ReactElement => {
 
   return (
     <Box>
-      <Heading size="lg">Points</Heading>
-      <Box maxHeight="380px" overflowY="scroll" paddingTop="5px">
+      <Heading size="md" pb="5px">
+        Points
+      </Heading>
+      <Box maxHeight="320px" overflowY="scroll" paddingTop="5px">
         <Center mb="5">
           <Text fontSize="xl">
             {`You have ${data?.points ?? 0} ${
