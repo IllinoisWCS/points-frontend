@@ -10,14 +10,18 @@ const CheckIn = (): React.ReactElement => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [eventKey, setEventKey] = useState('');
   const [eventKeyError, setEventKeyError] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
-    const storedIsSubmitted = localStorage.getItem('isSubmitted');
-    if (storedIsSubmitted === 'true') {
-      setIsSubmitted(true);
-      localStorage.removeItem('isSubmitted');
+    if(isSubmitted) {
+      setShowConfetti(true);// show confetti
+      const timer = setTimeout(() => {// do after 3 seconds
+        setShowConfetti(false);
+        setIsSubmitted(false);
+      },3000);
+      return () => { clearTimeout(timer); };// clear timer
     }
-  }, []);
+  }, [isSubmitted]); // isSubmitted is a dependency!
 
   const handleChangeKey = (event: BaseSyntheticEvent): void => {
     setEventKey(event.target.value);
@@ -37,11 +41,7 @@ const CheckIn = (): React.ReactElement => {
         toastError(err.response.data.message);
         console.log(err);
       });
-    // set and store the isSubmitted variable so it loads even after reload
     setIsSubmitted(true);
-    localStorage.setItem('isSubmitted', 'true');
-    // reload the page after they check in for an event to update the page
-    window.location.reload();
   };
 
   const { isError, error } = useQuery<Promise<void>, Error>(
@@ -86,9 +86,9 @@ const CheckIn = (): React.ReactElement => {
         <Confetti
           width={window.innerWidth}
           height={window.innerHeight}
-          numberOfPieces={200}
+          numberOfPieces={100}
           recycle={false}
-          run={isSubmitted}
+          run={showConfetti}
         />
       </VStack>
     </Box>
