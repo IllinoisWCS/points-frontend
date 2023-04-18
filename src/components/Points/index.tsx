@@ -26,7 +26,6 @@ const Points = (props: PointsProps): React.ReactElement => {
       </Box>
     );
   }
-
   return (
     <Box>
       <Heading size="md" pb="5px">
