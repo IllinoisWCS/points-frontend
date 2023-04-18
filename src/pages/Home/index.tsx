@@ -5,7 +5,7 @@ import Points from '../../components/Points';
 
 import axiosInstance from '../../api';
 import { Profile } from '../../types/profile';
-import CheckIn from '../../components/Check-In';
+import CheckIn from '../../components/Check In';
 
 const Home = (): React.ReactElement => {
   const { isLoading, isError, error, data } = useQuery<Profile, Error>(
@@ -32,6 +32,10 @@ const Home = (): React.ReactElement => {
   }
   return (
     <Box>
+      <Heading size="lg" pb="25px">
+        Home
+      </Heading>
+
       <VStack
         align="unset"
         spacing="5"
@@ -41,6 +45,16 @@ const Home = (): React.ReactElement => {
         borderColor="gray.100"
       >
         <CheckIn />
+      </VStack>
+      <VStack align="unset" p="5"></VStack>
+      <VStack
+        align="unset"
+        spacing="5"
+        p="5"
+        borderRadius="10"
+        border="1px"
+        borderColor="white"
+      >
         <Points
           key={String(isLoading)}
           isLoading={isLoading}

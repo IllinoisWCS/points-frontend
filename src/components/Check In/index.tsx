@@ -27,6 +27,7 @@ const CheckIn = (): React.ReactElement => {
     setEventKey(event.target.value);
   };
 
+  // CORRECT FUNCTION
   const handleSubmit = (): void => {
     const isEventKeyError = eventKey === '';
     setEventKeyError(isEventKeyError);
@@ -55,16 +56,17 @@ const CheckIn = (): React.ReactElement => {
     console.log(error);
     return (
       <Box>
-        <Heading size="lg">Temporary Error</Heading>
+        <Heading>Temporary Error</Heading>
       </Box>
     );
   }
 
   return (
     <Box>
-      <Heading size="lg" pb="25px">
-        Home
+      <Heading size="md" pb="20px">
+        Check In
       </Heading>
+
       <VStack
         align="unset"
         spacing="5"
