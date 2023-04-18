@@ -1,6 +1,5 @@
-import React, { useState, BaseSyntheticEvent } from 'react';
+import React, { useMemo, useState, BaseSyntheticEvent } from 'react';
 import {
-  Table,
   TableContainer,
   VStack,
   Heading,
@@ -9,18 +8,22 @@ import {
   Input,
   Box,
   Center,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td
 } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 
+import { Table, Thead, Tbody, Tr, Th, Td, chakra } from '@chakra-ui/react'
+import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
+import { useTable, useSortBy } from 'react-table'
+
 import axiosInstance from '../../api';
+import axios from 'axios';
 import { toastError, toastSuccess } from '../../utils/toast';
 import { Profile } from '../../types/profile';
 import { FiColumns } from 'react-icons/fi';
+import { ColumnDef } from '@tanstack/react-table';
+import { ReTable } from '../../components/Leaderboard';
+// import { COLUMNS } from '../../components/Leaderboard/columns';
+
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -45,6 +48,7 @@ const CheckIn = (): React.ReactElement => {
         console.log(err);
       });
   };
+  
 
   // const { isError, error } = useQuery<Promise<void>, Error>(
   //   ['get-profile'],
@@ -60,6 +64,32 @@ const CheckIn = (): React.ReactElement => {
     }
   );
 
+  const cols = useMemo<ColumnDef<Profile>[]>(
+    () => [
+        {
+            header: 'Rank',
+            cell: (row) => row.renderValue(),
+            accessorKey: 'rank',
+        },
+        {
+            header: 'Name',
+            cell: (row) => row.renderValue(),
+            accessorKey: 'name',
+        },
+        {
+            header: 'Points',
+            cell: (row) => row.renderValue(),
+            accessorKey: 'points',
+        },
+        {
+            header: 'Events Attended',
+            cell: (row) => row.renderValue(),
+            accessorKey: 'events',
+        },
+    ],
+    []
+   );
+
   // if (isError) {
   //   console.log(error);
   //   return (
@@ -68,6 +98,8 @@ const CheckIn = (): React.ReactElement => {
   //     </Box>
   //   );
   // }
+  
+  
 
   return (
     <Box>
@@ -108,36 +140,10 @@ const CheckIn = (): React.ReactElement => {
       <Heading size="lg" pb="25px">
         <Center>Leaderboard</Center>
       </Heading>
-      <TableContainer>
-        <Table variant='simple'>
-          <Thead>
-            <Tr>
-              <Th>Rank</Th>
-              <Th>Name</Th>
-              <Th isNumeric>Points</Th>
-              <Th isNumeric>Events Attended</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data?.map((user, idx) => (
-            <Tr>
-              <Td>{idx + 1}</Td>
-              <Td>{user.name}</Td>
-              <Td isNumeric>{user.points}</Td>
-              <Td isNumeric>{user.events.length}</Td>
-            </Tr>
-          ))}
-          </Tbody>
-          {/* <Tfoot>
-            <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
-            </Tr>
-          </Tfoot> */}
-        </Table>
-      </TableContainer>
+      <ReTable />
+
       </VStack>
+
     </Box>
   );
 };

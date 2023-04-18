@@ -8,3 +8,12 @@ export interface Profile {
   netId : string;
   num_events: number;
 }
+
+export type ProfileType = {
+  events: Event[];
+  points: number;
+  name: string;
+  role: string;
+  netId : string;
+  num_events: number; 
+}
