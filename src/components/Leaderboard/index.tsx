@@ -39,6 +39,14 @@ const columns = [
   columnHelper.accessor('points', {
     header: () => 'Points',
     cell: (info) => info.renderValue()
+  }),
+  columnHelper.accessor('events', {
+    header: () => 'Events Attended',
+    cell: (info) => info.getValue().length
+  }),
+  columnHelper.accessor('netId', {
+    header: () => 'Net-Id',
+    cell: (info) => info.getValue()
   })
 ];
 
