@@ -2,30 +2,18 @@ import React, { useMemo, useState, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  TableContainer,
   VStack,
   Heading,
   Text,
   Button,
   Input,
   Box,
-  Center,
+  Center
 } from '@chakra-ui/react';
-import { useQuery } from 'react-query';
-
-import { Table, Thead, Tbody, Tr, Th, Td, chakra } from '@chakra-ui/react'
-import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
-import { useTable, useSortBy } from 'react-table'
 
 import axiosInstance from '../../api';
-import axios from 'axios';
 import { toastError, toastSuccess } from '../../utils/toast';
-import { Profile } from '../../types/profile';
-import { FiColumns } from 'react-icons/fi';
-import { ColumnDef } from '@tanstack/react-table';
-import { ReTable } from '../../components/Leaderboard';
-// import { COLUMNS } from '../../components/Leaderboard/columns';
-
+import ReTable from '../../components/Leaderboard';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -71,7 +59,6 @@ const CheckIn = (): React.ReactElement => {
         console.log(err);
       });
   };
-  
 
   const { data } = useQuery<Profile, Error>(
     ['get-profile'],
@@ -150,8 +137,6 @@ const CheckIn = (): React.ReactElement => {
   //     </Box>
   //   );
   // }
-  
-  
 
   return (
     <Box>
@@ -181,21 +166,19 @@ const CheckIn = (): React.ReactElement => {
         </VStack>
       </Box>
       <VStack
-          align="unset"
-          spacing="5"
-          bg="white"
-          p="5"
-          borderRadius="10"
-          border="1px"
-          borderColor="gray.100"
-        >
-      <Heading size="lg" pb="25px">
-        <Center>Leaderboard</Center>
-      </Heading>
-      <ReTable />
-
+        align="unset"
+        spacing="5"
+        bg="white"
+        p="5"
+        borderRadius="10"
+        border="1px"
+        borderColor="gray.100"
+      >
+        <Heading size="lg" pb="25px">
+          <Center>Leaderboard</Center>
+        </Heading>
+        <ReTable />
       </VStack>
-
     </Box>
   );
 };

@@ -1,79 +1,106 @@
-import * as React from 'react'
-import ReactDOM from 'react-dom/client'
-import { Profile } from '../../types/profile'
-
+import * as React from 'react';
+import { Profile } from '../../types/profile';
+import {
+  Box,
+  Heading,
+  Skeleton,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
+} from '@chakra-ui/react';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+  useReactTable
+} from '@tanstack/react-table';
 
-import { useQuery } from 'react-query'
-import axiosInstance from '../../api'
+import { useQuery } from 'react-query';
+import axiosInstance from '../../api';
 
-const { isLoading, isError, error, data } = useQuery<Profile[], Error>(
-    ['get-Users'],
-    async () => {
-      const res = await axiosInstance.get('/Users');
-      return res.data;
-    }
-  );
+export interface LeaderboardProfile extends Profile {
+  rank: number;
+}
 
-const columnHelper = createColumnHelper<Profile>()
+const columnHelper = createColumnHelper<LeaderboardProfile>();
 
 const columns = [
+  columnHelper.accessor('rank', {
+    header: () => 'Rank',
+    cell: (props) => props.row.index + 1
+  }),
   columnHelper.accessor('name', {
     header: () => 'Name',
-    cell: info => info.getValue(),
+    cell: (info) => info.getValue()
   }),
   columnHelper.accessor('points', {
     header: () => 'Points',
-    cell: info => info.renderValue(),
-  }),
-]
+    cell: (info) => info.renderValue()
+  })
+];
 
-export const ReTable = () => {
+const ReTable = (): React.ReactElement => {
+  const { isLoading, isError, error, data } = useQuery<
+    LeaderboardProfile[],
+    Error
+  >(['get-users'], async () => {
+    const res = await axiosInstance.get('/users');
+    return res.data;
+  });
+
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
 
   const table = useReactTable({
-    // @ts-ignore
-    data,
+    data: data ?? [],
     columns,
-    getCoreRowModel: getCoreRowModel(),
+    getCoreRowModel: getCoreRowModel()
   });
 
   return (
-    <div className="p-2">
-      <table>
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-        
-      </table>
-    </div>
-  )
-}
+    <Box>
+      <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
+        <Table>
+          <Thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <Tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <Th key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </Th>
+                ))}
+              </Tr>
+            ))}
+          </Thead>
+          <Tbody>
+            {table.getRowModel().rows.map((row) => (
+              <Tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <Td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Td>
+                ))}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Skeleton>
+    </Box>
+  );
+};
+
+export default ReTable;
