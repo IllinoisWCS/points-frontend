@@ -5,15 +5,15 @@ export interface Profile {
   points: number;
   name: string;
   role: string;
-  netId : string;
+  netId: string;
   num_events: number;
 }
 
-export type ProfileType = {
+export interface ProfileType {
   events: Event[];
   points: number;
   name: string;
   role: string;
-  netId : string;
-  num_events: number; 
+  netId: string;
+  num_events: number;
 }
