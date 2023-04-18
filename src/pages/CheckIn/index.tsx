@@ -1,29 +1,17 @@
-import React, { useMemo, useState, BaseSyntheticEvent } from 'react';
+import React, { useState, BaseSyntheticEvent } from 'react';
 import {
-  TableContainer,
   VStack,
   Heading,
   Text,
   Button,
   Input,
   Box,
-  Center,
+  Center
 } from '@chakra-ui/react';
-import { useQuery } from 'react-query';
-
-import { Table, Thead, Tbody, Tr, Th, Td, chakra } from '@chakra-ui/react'
-import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
-import { useTable, useSortBy } from 'react-table'
 
 import axiosInstance from '../../api';
-import axios from 'axios';
 import { toastError, toastSuccess } from '../../utils/toast';
-import { Profile } from '../../types/profile';
-import { FiColumns } from 'react-icons/fi';
-import { ColumnDef } from '@tanstack/react-table';
-import { ReTable } from '../../components/Leaderboard';
-// import { COLUMNS } from '../../components/Leaderboard/columns';
-
+import ReTable from '../../components/Leaderboard';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -48,7 +36,6 @@ const CheckIn = (): React.ReactElement => {
         console.log(err);
       });
   };
-  
 
   // const { isError, error } = useQuery<Promise<void>, Error>(
   //   ['get-profile'],
@@ -56,39 +43,13 @@ const CheckIn = (): React.ReactElement => {
   //     await axiosInstance.get('/profile');
   //   }
   // );
-  const { isLoading, isError, error, data } = useQuery<Profile[], Error>(
-    ['get-Users'],
-    async () => {
-      const res = await axiosInstance.get('/Users');
-      return res.data;
-    }
-  );
-
-  const cols = useMemo<ColumnDef<Profile>[]>(
-    () => [
-        {
-            header: 'Rank',
-            cell: (row) => row.renderValue(),
-            accessorKey: 'rank',
-        },
-        {
-            header: 'Name',
-            cell: (row) => row.renderValue(),
-            accessorKey: 'name',
-        },
-        {
-            header: 'Points',
-            cell: (row) => row.renderValue(),
-            accessorKey: 'points',
-        },
-        {
-            header: 'Events Attended',
-            cell: (row) => row.renderValue(),
-            accessorKey: 'events',
-        },
-    ],
-    []
-   );
+  // const { isLoading, isError, error, data } = useQuery<Profile[], Error>(
+  //   ['get-Users'],
+  //   async () => {
+  //     const res = await axiosInstance.get('/Users');
+  //     return res.data;
+  //   }
+  // );
 
   // if (isError) {
   //   console.log(error);
@@ -98,8 +59,6 @@ const CheckIn = (): React.ReactElement => {
   //     </Box>
   //   );
   // }
-  
-  
 
   return (
     <Box>
@@ -129,21 +88,19 @@ const CheckIn = (): React.ReactElement => {
         </VStack>
       </Box>
       <VStack
-          align="unset"
-          spacing="5"
-          bg="white"
-          p="5"
-          borderRadius="10"
-          border="1px"
-          borderColor="gray.100"
-        >
-      <Heading size="lg" pb="25px">
-        <Center>Leaderboard</Center>
-      </Heading>
-      <ReTable />
-
+        align="unset"
+        spacing="5"
+        bg="white"
+        p="5"
+        borderRadius="10"
+        border="1px"
+        borderColor="gray.100"
+      >
+        <Heading size="lg" pb="25px">
+          <Center>Leaderboard</Center>
+        </Heading>
+        <ReTable />
       </VStack>
-
     </Box>
   );
 };
