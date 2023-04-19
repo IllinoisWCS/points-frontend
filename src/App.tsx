@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import CheckIn from './pages/CheckIn';
+import CheckIn from './pages/Home';
 import Points from './pages/Points';
 import Events from './pages/Events';
 import NavbarLayout from './layouts/NavbarLayout';

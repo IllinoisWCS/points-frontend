@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Heading,
   Box,
@@ -21,9 +21,15 @@ const Points = (): React.ReactElement => {
     ['get-profile'],
     async () => {
       const res = await axiosInstance.get('/profile');
+      console.log('POINTS PAGE RES.DATA', res.data);
       return res.data;
     }
   );
+
+  useEffect(() => {
+    console.log('DATA IN USEEFFECT', data);
+    console.log('IS LOADING', isLoading);
+  }, [isLoading, data]);
 
   if (isError) {
     console.log(error);
