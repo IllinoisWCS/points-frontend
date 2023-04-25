@@ -1,12 +1,7 @@
 import * as React from 'react';
 import { Profile } from '../../types/profile';
 import { Table, createColumn } from 'react-chakra-pagination';
-import {
-  Box,
-  Heading,
-  Skeleton
-  // Table,
-} from '@chakra-ui/react';
+import { Box, Heading, Skeleton } from '@chakra-ui/react';
 
 import { useQuery } from 'react-query';
 import axiosInstance from '../../api';
@@ -32,7 +27,7 @@ const columns = [
   }),
   columnHelper.accessor('num_events', {
     header: () => 'Events Attended',
-    cell: (info) => info.renderValue()
+    cell: (props) => props.getValue()
   }),
   columnHelper.accessor('netId', {
     header: () => 'NetId',
@@ -79,7 +74,9 @@ const ReTable = (): React.ReactElement => {
           totalRegisters={data?.length}
           page={page}
           // Listen change page event and control the current page using state
-          onPageChange={(page) => { setPage(page); }}
+          onPageChange={(page) => {
+            setPage(page);
+          }}
           columns={columns}
           data={tableData ?? []}
         />
