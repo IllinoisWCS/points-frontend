@@ -9,11 +9,20 @@ import {
   Input,
   Box,
   Center
+  // useQuery,
+  // TableContainer,
+  // Table,
+  // Td,
+  // Tbody,
+  // Tr,
+  // Th,
+  // Thead
 } from '@chakra-ui/react';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
 import ReTable from '../../components/Leaderboard';
+// import { Profile } from '../../types/profile';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -178,6 +187,28 @@ const CheckIn = (): React.ReactElement => {
           <Center>Leaderboard</Center>
         </Heading>
         <ReTable />
+        {/* <TableContainer>
+        <Table variant='simple'>
+          <Thead>
+            <Tr>
+              <Th>Rank</Th>
+              <Th>Name</Th>
+              <Th isNumeric>Points</Th>
+              <Th isNumeric>Events Attended</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data?.map((user, idx) => (
+            <Tr>
+              <Td>{idx + 1}</Td>
+              <Td>{user.name}</Td>
+              <Td isNumeric>{user.points}</Td>
+              <Td isNumeric>{user.events.length}</Td>
+            </Tr>
+          ))}
+          </Tbody>
+        </Table>
+      </TableContainer> */}
       </VStack>
     </Box>
   );
