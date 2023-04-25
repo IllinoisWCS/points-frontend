@@ -1,22 +1,12 @@
 import * as React from 'react';
 import { Profile } from '../../types/profile';
+import { Table, createColumn } from 'react-chakra-pagination';
 import {
   Box,
   Heading,
-  Skeleton,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr
+  Skeleton
+  // Table,
 } from '@chakra-ui/react';
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable
-} from '@tanstack/react-table';
 
 import { useQuery } from 'react-query';
 import axiosInstance from '../../api';
@@ -25,12 +15,12 @@ export interface LeaderboardProfile extends Profile {
   rank: number;
 }
 
-const columnHelper = createColumnHelper<LeaderboardProfile>();
+const columnHelper = createColumn<LeaderboardProfile>();
 
 const columns = [
   columnHelper.accessor('rank', {
     header: () => 'Rank',
-    cell: (props) => props.row.index + 1
+    cell: (props) => props.getValue()
   }),
   columnHelper.accessor('name', {
     header: () => 'Name',
@@ -40,12 +30,12 @@ const columns = [
     header: () => 'Points',
     cell: (info) => info.renderValue()
   }),
-  columnHelper.accessor('events', {
+  columnHelper.accessor('num_events', {
     header: () => 'Events Attended',
-    cell: (info) => info.getValue().length
+    cell: (info) => info.renderValue()
   }),
   columnHelper.accessor('netId', {
-    header: () => 'Net-Id',
+    header: () => 'NetId',
     cell: (info) => info.getValue()
   })
 ];
@@ -67,45 +57,32 @@ const ReTable = (): React.ReactElement => {
       </Box>
     );
   }
+  const [page, setPage] = React.useState(0);
 
-  const table = useReactTable({
-    data: data ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel()
-  });
-
+  const tableData = data?.map((profile, index) => ({
+    rank: index + 1,
+    name: profile.name,
+    events: profile.events,
+    points: profile.points,
+    num_events: profile.events.length,
+    netId: profile.netId
+  }));
   return (
     <Box>
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
-        <Table>
-          <Thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <Tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <Th key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </Th>
-                ))}
-              </Tr>
-            ))}
-          </Thead>
-          <Tbody>
-            {table.getRowModel().rows.map((row) => (
-              <Tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <Td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Td>
-                ))}
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
+        <Table
+          colorScheme="blue"
+          // Fallback component when list is empty
+          emptyData={{
+            text: 'Nobody users found'
+          }}
+          totalRegisters={data?.length}
+          page={page}
+          // Listen change page event and control the current page using state
+          onPageChange={(page) => { setPage(page); }}
+          columns={columns}
+          data={tableData ?? []}
+        />
       </Skeleton>
     </Box>
   );
