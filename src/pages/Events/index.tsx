@@ -70,6 +70,9 @@ const Events = (): React.ReactElement => {
                 {event.name}
               </Text>
               <Text className="muted">{getEventDate(event)}</Text>
+              <Text className="muted" fontSize="sm">
+                {event.key ?? ' '}
+              </Text>
             </Box>
           ))}
         </Stack>
