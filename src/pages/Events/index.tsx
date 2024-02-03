@@ -8,27 +8,30 @@ import {
   Heading,
   Skeleton
 } from '@chakra-ui/react';
-import { useQuery } from 'react-query';
 
 import EventModal from './EventModal';
-import axiosInstance from '../../api';
 import { getEventDate } from '../../utils/eventDate';
-import { Event } from '../../types/event';
+import { useEventQuery } from './useEventQuery';
+import { useProfileQuery } from './useProfileQuery';
 
 const Events = (): React.ReactElement => {
   const [modal, setModal] = useState(false);
   const [reloadOnClose, setReloadOnClose] = useState(false);
 
-  const { isLoading, isError, error, data } = useQuery<Event[], Error>(
-    ['get-events'],
-    async () => {
-      const res = await axiosInstance.get('/events');
-      return res.data;
-    }
-  );
+  const {
+    data: eventData,
+    error: eventError,
+    isLoading: eventIsLoading,
+    isError: eventIsError
+  } = useEventQuery();
+  const {
+    data: profileData,
+    error: profileError,
+    isError: profileIsError
+  } = useProfileQuery();
 
-  if (isError) {
-    console.log(error);
+  if (eventIsError) {
+    console.log(eventError);
     return (
       <Box>
         <Heading size="lg">Temporary Error</Heading>
@@ -36,6 +39,14 @@ const Events = (): React.ReactElement => {
     );
   }
 
+  if (profileIsError) {
+    console.log(profileError);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
   const handleToggleModal = (): void => {
     setModal(!modal);
     if (reloadOnClose) {
@@ -54,17 +65,27 @@ const Events = (): React.ReactElement => {
         toggleModal={handleToggleModal}
         reloadOnClose={handleReloadOnClose}
       />
-      <Button onClick={handleToggleModal} mb="5">
-        Create New Event
-      </Button>
-      <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
+
+      {profileData?.role === 'officer' ? (
+        <Button onClick={handleToggleModal} mb="5">
+          Create New Event
+        </Button>
+      ) : (
+        <div></div>
+      )}
+
+      <Skeleton
+        startColor="gray.100"
+        endColor="gray.200"
+        isLoaded={!eventIsLoading}
+      >
         <Stack
           divider={<StackDivider />}
           border="1px"
           borderColor="gray.100"
           borderRadius="10"
         >
-          {data?.map((event, idx) => (
+          {eventData?.map((event, idx) => (
             <Box key={idx} p="5">
               <Text fontSize="lg" fontWeight="medium">
                 {event.name}
