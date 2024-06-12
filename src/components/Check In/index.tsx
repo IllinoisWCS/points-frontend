@@ -1,18 +1,33 @@
-import React, { useState, BaseSyntheticEvent } from 'react';
+import React, { useState, useEffect, BaseSyntheticEvent } from 'react';
 import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
+import Confetti from 'react-confetti';
 
 const CheckIn = (): React.ReactElement => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [eventKey, setEventKey] = useState('');
   const [eventKeyError, setEventKeyError] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  useEffect(() => {
+    if(isSubmitted) {
+      setShowConfetti(true);// show confetti
+      const timer = setTimeout(() => {// do after 3 seconds
+        setShowConfetti(false);
+        setIsSubmitted(false);
+      },3000);
+      return () => { clearTimeout(timer); };// clear timer
+    }
+  }, [isSubmitted]); // isSubmitted is a dependency!
 
   const handleChangeKey = (event: BaseSyntheticEvent): void => {
     setEventKey(event.target.value);
   };
 
+  // CORRECT FUNCTION
   const handleSubmit = (): void => {
     const isEventKeyError = eventKey === '';
     setEventKeyError(isEventKeyError);
@@ -27,6 +42,7 @@ const CheckIn = (): React.ReactElement => {
         toastError(err.response.data.message);
         console.log(err);
       });
+    setIsSubmitted(true);
   };
 
   const { isError, error } = useQuery<Promise<void>, Error>(
@@ -40,16 +56,17 @@ const CheckIn = (): React.ReactElement => {
     console.log(error);
     return (
       <Box>
-        <Heading size="lg">Temporary Error</Heading>
+        <Heading>Temporary Error</Heading>
       </Box>
     );
   }
 
   return (
     <Box>
-      <Heading size="lg" pb="25px">
-        Check-in
+      <Heading size="md" pb="20px">
+        Check In
       </Heading>
+
       <VStack
         align="unset"
         spacing="5"
@@ -68,6 +85,13 @@ const CheckIn = (): React.ReactElement => {
           onChange={handleChangeKey}
         />
         <Button onClick={handleSubmit}>Check-in</Button>
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          numberOfPieces={100}
+          recycle={false}
+          run={showConfetti}
+        />
       </VStack>
     </Box>
   );
