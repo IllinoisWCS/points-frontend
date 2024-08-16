@@ -3,12 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://points.illinoiswcs.org",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "prepare": "husky install",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.{tsx,ts}' --write"
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.{tsx,ts}' --write",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -b main -d build"
   },
   "husky": {
     "hooks": {
@@ -28,6 +31,7 @@
     "axios": "^1.2.3",
     "cors": "^2.8.5",
     "framer-motion": "^8.5.0",
+    "gh-pages": "^6.1.1",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dark-mode-toggle-2": "^2.0.8",
