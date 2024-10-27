@@ -1,9 +1,9 @@
 import React, { useState, BaseSyntheticEvent } from 'react';
 import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
-import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
+import { useProfileQuery } from '../Events/useProfileQuery';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -29,12 +29,7 @@ const CheckIn = (): React.ReactElement => {
       });
   };
 
-  const { isError, error } = useQuery<Promise<void>, Error>(
-    ['get-profile'],
-    async () => {
-      await axiosInstance.get('/profile');
-    }
-  );
+  const { isError, error } = useProfileQuery();
 
   if (isError) {
     console.log(error);
