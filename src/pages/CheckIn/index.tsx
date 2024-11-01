@@ -1,9 +1,9 @@
 import React, { useState, BaseSyntheticEvent } from 'react';
 import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
-import { useQuery } from 'react-query';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
+import { useQuery } from 'react-query';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');

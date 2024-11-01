@@ -7,12 +7,17 @@ import {
   Icon,
   useColorModeValue,
   Text,
-  useColorMode
+  useColorMode, 
+  Heading
 } from '@chakra-ui/react';
 import { FiHome, FiTrendingUp, FiCalendar } from 'react-icons/fi';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
 
+import { useQuery } from 'react-query';
+
+import axiosInstance from '../../api';
 import { LinkItemProps, NavbarProps, NavItemProps } from './types';
+import { Profile } from '../../types/profile';
 import Logo from '../Logo';
 
 const LinkItems: LinkItemProps[] = [
@@ -23,6 +28,31 @@ const LinkItems: LinkItemProps[] = [
 
 const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const { isError, error, data } = useQuery<Profile, Error>(
+    ['get-profile'],
+    async () => {
+      const res = await axiosInstance.get('/profile');
+      return res.data;
+    }
+  );
+
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
+
+  const LoginStatus = (): React.ReactElement => {
+    return (
+      <Text>
+        {data?.name ? `Welcome back, ${data.name.split(' ')[0]}!` : 'Welcome, guest!'}
+      </Text>
+    );
+  };
 
   return (
     <Box
@@ -39,6 +69,15 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
           <Logo />
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+      </Flex>
+      <Flex         
+        align="center"
+        p="4"
+        mx="4"
+        borderRadius="lg"
+        role="group"
+        cursor="pointer">
+          <LoginStatus />
       </Flex>
       {LinkItems.map((link) => (
         <NavItem
