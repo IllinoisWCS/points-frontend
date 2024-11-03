@@ -29,7 +29,7 @@ const MobileNavbar = ({
         icon={<FiMenu />}
       />
 
-      <Stack maxH="100%" justify="center" overflow="hidden">
+      <Stack maxH="100%" justify="center" overflow="hidden" maxW="60dvw">
         <Logo />
       </Stack>
     </Flex>
