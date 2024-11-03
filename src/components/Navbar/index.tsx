@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 import {
+  Heading,
   Box,
   CloseButton,
   Flex,
@@ -11,8 +12,11 @@ import {
 } from '@chakra-ui/react';
 import { FiHome, FiTrendingUp, FiCalendar } from 'react-icons/fi';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
+import { useQuery } from 'react-query';
 
+import axiosInstance from '../../api';
 import { LinkItemProps, NavbarProps, NavItemProps } from './types';
+import { Profile } from '../../types/profile';
 import Logo from '../Logo';
 
 const LinkItems: LinkItemProps[] = [
@@ -23,6 +27,34 @@ const LinkItems: LinkItemProps[] = [
 
 const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const { isError, error, data } = useQuery<Profile, Error>(
+    ['get-profile'],
+    async () => {
+      const res = await axiosInstance.get('/profile');
+      return res.data;
+    }
+  );
+
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
+
+  const Greeting = (): React.ReactElement => {
+    const names = data?.name.split(' ');
+    const name = names ? names[0] : 'undefined';
+    return (
+      <Box p="4" m="4">
+        <Text>
+          {data?.name ? `Welcome back, ${name}!` : 'Hello, guest user!'}
+        </Text>
+      </Box>
+    );
+  };
 
   return (
     <Box
@@ -40,6 +72,7 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
+      <Greeting />
       {LinkItems.map((link) => (
         <NavItem
           key={link.name}
