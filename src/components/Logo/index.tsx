@@ -6,7 +6,7 @@ import logo from '../../assets/logo.png';
 const Logo = (): React.ReactElement => {
   return (
     <Link href="http://wcs.illinois.edu">
-      <Image src={logo} alt="wcs logo" />
+      <Image src={logo} width={'200px'} alt="wcs logo" />
     </Link>
   );
 };
