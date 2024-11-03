@@ -46,15 +46,11 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
 
   const Greeting = (): React.ReactElement => {
     const names = data?.name.split(' ');
+    const name = names ? names[0] : 'undefined';
     return (
-      <Box
-        p="4"
-        bg={useColorModeValue('#fafafa', '#191b3d')}
-        m="4"
-        rounded="md"
-      >
-        <Text fontSize="xl" fontFamily="monospace" fontWeight="bold">
-          {data?.name ? `Welcome back, ${names[0]}!` : 'Hello, guest user!'}
+      <Box p="4" m="4">
+        <Text>
+          {data?.name ? `Welcome back, ${name}!` : 'Hello, guest user!'}
         </Text>
       </Box>
     );
