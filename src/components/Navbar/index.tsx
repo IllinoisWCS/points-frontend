@@ -2,6 +2,7 @@ import React from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 import {
   Box,
+  Heading,
   CloseButton,
   Flex,
   Icon,
@@ -14,6 +15,9 @@ import { DarkModeToggle } from 'react-dark-mode-toggle-2';
 
 import { LinkItemProps, NavbarProps, NavItemProps } from './types';
 import Logo from '../Logo';
+import axiosInstance from '../../api';
+import { Profile } from '../../types/profile';
+import { useQuery } from 'react-query';
 
 const LinkItems: LinkItemProps[] = [
   { name: 'Home', icon: FiHome, to: '/' },
@@ -23,7 +27,24 @@ const LinkItems: LinkItemProps[] = [
 
 const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const { isError, error, data } = useQuery<Profile, Error>(
+    ['get-profile'],
+    async () => {
+      const res = await axiosInstance.get('/profile');
+      return res.data;
+    }
+  );
 
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
+
+  const firstName = data?.name ? data.name.split(' ')[0] : 'Guest';
   return (
     <Box
       bg={useColorModeValue('white', 'gray.800')}
@@ -40,6 +61,13 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
+
+      <Flex alignItems="center" mx="8" mt="2" mb="2">
+        <Text fontSize="lg" fontWeight="normal">
+          {data?.name ? `Welcome back, ${firstName}!` : 'Hello, guest user!'}
+        </Text>
+      </Flex>
+
       {LinkItems.map((link) => (
         <NavItem
           key={link.name}
