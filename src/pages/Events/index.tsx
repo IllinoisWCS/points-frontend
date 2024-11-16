@@ -10,12 +10,14 @@ import {
 } from '@chakra-ui/react';
 
 import EventModal from './EventModal';
+import { Event } from '../../types/event';
 import { getEventDate } from '../../utils/eventDate';
 import { useEventQuery } from './useEventQuery';
 import { useProfileQuery } from './useProfileQuery';
 
 const Events = (): React.ReactElement => {
   const [modal, setModal] = useState(false);
+  const [event, setEvent] = useState<Event>();
   const [reloadOnClose, setReloadOnClose] = useState(false);
 
   const {
@@ -54,6 +56,14 @@ const Events = (): React.ReactElement => {
     }
   };
 
+  const handleEditModal = (event: Event): void => {
+    setEvent(event);
+    setModal(!modal);
+    if (reloadOnClose) {
+      window.location.reload();
+    }
+  };
+
   const handleReloadOnClose = (): void => {
     setReloadOnClose(!reloadOnClose);
   };
@@ -62,6 +72,7 @@ const Events = (): React.ReactElement => {
     <Box>
       <EventModal
         open={modal}
+        event={event}
         toggleModal={handleToggleModal}
         reloadOnClose={handleReloadOnClose}
       />
@@ -94,6 +105,13 @@ const Events = (): React.ReactElement => {
               <Text className="muted" fontSize="sm">
                 {event.key ?? ' '}
               </Text>
+              {profileData?.role === 'officer' ? (
+                <Button onClick={() => { handleEditModal(event); }} mb="5">
+                  Edit Event
+                </Button>
+              ) : (
+                <div></div>
+              )}
             </Box>
           ))}
         </Stack>
