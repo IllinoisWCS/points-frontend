@@ -9,10 +9,6 @@ const instance = axios.create({
 });
 
 instance.interceptors.response.use(undefined, async (err) => {
-  if (err.response.status === 401) {
-    window.location.href = `${String(instance.defaults.baseURL)}/auth/login`;
-  }
-
   return await Promise.reject(err);
 });
 

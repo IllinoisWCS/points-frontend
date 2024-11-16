@@ -72,7 +72,9 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
       window.location.href = '/';
     } else {
       // user clicked login
-      window.location.href = '/login';
+      window.location.href = `${String(
+        axiosInstance.defaults.baseURL
+      )}/auth/login`;
     }
   };
 
