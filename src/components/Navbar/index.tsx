@@ -8,15 +8,15 @@ import {
   Icon,
   useColorModeValue,
   Text,
-  useColorMode
+  useColorMode,
+  Button
 } from '@chakra-ui/react';
 import { FiHome, FiTrendingUp, FiCalendar } from 'react-icons/fi';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
 import { useQuery } from 'react-query';
-
 import axiosInstance from '../../api';
-import { LinkItemProps, NavbarProps, NavItemProps } from './types';
 import { Profile } from '../../types/profile';
+import { LinkItemProps, NavbarProps, NavItemProps } from './types';
 import Logo from '../Logo';
 
 const LinkItems: LinkItemProps[] = [
@@ -56,6 +56,26 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
     );
   };
 
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
+
+  const handleClick = async (): Promise<void> => {
+    if (data) {
+      // user clicked logout
+      await axiosInstance.post('/auth/logout', {});
+      window.location.href = '/';
+    } else {
+      // user clicked login
+      window.location.href = '/login';
+    }
+  };
+
   return (
     <Box
       bg={useColorModeValue('white', 'gray.800')}
@@ -89,6 +109,22 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
           isDarkMode={colorMode === 'light'}
           key={colorMode}
         />
+      </Flex>
+      <Flex
+        align="center"
+        p="4"
+        mx="4"
+        borderRadius="lg"
+        role="group"
+        cursor="pointer"
+      >
+        <Button
+          onClick={(e) => {
+            void handleClick();
+          }}
+        >
+          {data ? 'Logout' : 'Login'}
+        </Button>
       </Flex>
     </Box>
   );
