@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -23,11 +23,13 @@ import {
 import { useMutation } from 'react-query';
 
 import axiosInstance from '../../../api';
-import { EventCategoryType, NewEvent } from '../../../types/event';
+import { EventCategoryType, NewEvent, Event } from '../../../types/event';
 import { EventModalProps, StringFieldProps, SameDayFieldProps } from './types';
 
 const EventModal = (props: EventModalProps): React.ReactElement => {
-  const { open, toggleModal, reloadOnClose } = props;
+  const { open, event, toggleModal, reloadOnClose } = props;
+  const [_id, setId] = useState('');
+  const [key, setKey] = useState('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState<EventCategoryType>('explorations');
   const [points, setPoints] = useState(1);
@@ -154,6 +156,42 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     toggleModal();
   };
 
+  useEffect(() => {
+    if (event) {
+      const eventStart = new Date(event.start);
+      const eventEnd = new Date(event.end);
+      const eventStartYear = eventStart.getFullYear();
+      const eventStartMonth = eventStart.toISOString().substring(5, 7);
+      const eventStartDay = eventStart.toISOString().substring(8, 10);
+      const eventStartHour = eventStart.toString().substring(16, 18);
+      const eventStartMinute = eventStart.toString().substring(19, 21);
+      const eventEndYear = eventEnd.getFullYear();
+      const eventEndMonth = eventEnd.toISOString().substring(5, 7);
+      const eventEndDay = eventEnd.toISOString().substring(8, 10);
+      const eventEndHour = eventEnd.toString().substring(16, 18);
+      const eventEndMinute = eventEnd.toString().substring(19, 21);
+
+      setId(event._id);
+      setKey(event._id);
+      setName(event.name);
+      setCategory(event.category);
+      setPoints(event.points);
+      setStartDate(`${eventStartYear}-${eventStartMonth}-${eventStartDay}`);
+      setEndDate(`${eventEndYear}-${eventEndMonth}-${eventEndDay}`);
+      setStartTime(`${eventStartHour}:${eventStartMinute}`);
+      setEndTime(`${eventEndHour}:${eventEndMinute}`);
+      setVisibility(event.private ? 'private' : 'public');
+      setSameDay(
+        eventStartYear === eventEndYear &&
+          eventStartMonth === eventEndMonth &&
+          eventStartDay === eventEndDay
+      );
+      setSuccess(false);
+      setError(false);
+      setMsg('');
+    }
+  }, [event?._id]);
+
   const validateFields = (): boolean => {
     if (success) setSuccess(false);
     if (pointsErr || startDateErr || endDateErr || startTimeErr || endTimeErr) {
@@ -176,7 +214,28 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
           setSuccess(false);
           setError(true);
           setMsg(
-            'Internal Error: event creation was unsuccessful.' +
+            'Internal Error: event creation was unsuccessful. ' +
+              'Please contact the current WCS infra chair for help.'
+          );
+        });
+    }
+  });
+
+  const editEvent = useMutation({
+    mutationFn: async (event: Event): Promise<void> => {
+      await axiosInstance
+        .patch(`/events/${event._id}`, event)
+        .then((res) => {
+          setSuccess(true);
+          setError(false);
+          setMsg(`Success! ${String(res.data.name)} has been edited.`);
+          reloadOnClose();
+        })
+        .catch(() => {
+          setSuccess(false);
+          setError(true);
+          setMsg(
+            'Internal Error: event edit was unsuccessful. ' +
               'Please contact the current WCS infra chair for help.'
           );
         });
@@ -188,7 +247,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
       const start = new Date(`${startDate} ${startTime}`);
       const end = new Date(`${sameDay ? startDate : endDate} ${endTime}`);
 
-      const event = {
+      const cEvent = {
         name,
         category,
         points,
@@ -196,7 +255,19 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
         end,
         private: visibility === 'private'
       };
-      createEvent.mutate(event);
+
+      const eEvent: Event = {
+        _id,
+        key,
+        name,
+        category,
+        points,
+        start,
+        end,
+        private: visibility === 'private'
+      };
+
+      !event?._id ? createEvent.mutate(cEvent) : editEvent.mutate(eEvent);
     }
   };
 
@@ -215,7 +286,10 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
       <ModalOverlay />
       <ModalCloseButton />
       <ModalContent p="10" minW="50%">
-        <ModalHeader>Create a New Event</ModalHeader>
+        <ModalHeader>
+          {' '}
+          {!event?._id ? 'Create a New Event' : 'Edit Event'}{' '}
+        </ModalHeader>
         <ModalBody>
           <Stack spacing="3">
             <FormControl isRequired width="100%">
@@ -247,7 +321,12 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
             </HStack>
             <FormControl isInvalid={pointsErr} isRequired>
               <FormLabel>Points</FormLabel>
-              <NumberInput min={0.5} max={4} onChange={handlePointsChange}>
+              <NumberInput
+                min={0.5}
+                max={4}
+                onChange={handlePointsChange}
+                value={points}
+              >
                 <NumberInputField />
               </NumberInput>
             </FormControl>
