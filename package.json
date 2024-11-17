@@ -9,7 +9,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "prepare": "husky install",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.{tsx,ts}' --write",
+    "prettier-format": "prettier --config .prettierrc --write",
     "predeploy": "npm run build",
     "deploy": "gh-pages -b main -d build"
   },
@@ -20,7 +20,7 @@
   },
   "lint-staged": {
     "src/**/*.{tsx,ts}": [
-      "npm run prettier-format",
+      "prettier --config .prettierrc --write",
       "eslint --fix --max-warnings=0"
     ]
   },
@@ -33,6 +33,7 @@
     "framer-motion": "^8.5.0",
     "gh-pages": "^6.1.1",
     "moment": "^2.29.4",
+    "qrcode.react": "^4.1.0",
     "react": "^18.2.0",
     "react-dark-mode-toggle-2": "^2.0.8",
     "react-dom": "^18.2.0",

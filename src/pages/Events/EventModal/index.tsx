@@ -22,6 +22,8 @@ import {
 } from '@chakra-ui/react';
 import { useMutation } from 'react-query';
 
+import EventQRCode from '../EventQRCode';
+
 import axiosInstance from '../../../api';
 import { EventCategoryType, NewEvent } from '../../../types/event';
 import { EventModalProps, StringFieldProps, SameDayFieldProps } from './types';
@@ -47,6 +49,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [msg, setMsg] = useState('');
+  const [eventKey, setEventKey] = useState<string | null>(null);
 
   const handleNameChange = (props: StringFieldProps): void => {
     setName(props.target.value);
@@ -170,6 +173,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
           setSuccess(true);
           setError(false);
           setMsg(`Success! Event key is ${String(res.data.key)}.`);
+          setEventKey(String(res.data.key));
           reloadOnClose();
         })
         .catch(() => {
@@ -179,6 +183,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
             'Internal Error: event creation was unsuccessful.' +
               'Please contact the current WCS infra chair for help.'
           );
+          setEventKey(null);
         });
     }
   });
@@ -294,10 +299,18 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
                 <FormLabel>Same day</FormLabel>
               </HStack>
             </FormControl>
+            <FormControl></FormControl>
             {success && (
               <Alert status="success" variant="left-accent">
                 <AlertIcon />
                 {msg}
+                {eventKey && (
+                  <EventQRCode
+                    eventKey={eventKey}
+                    size={64}
+                    inNotification={true}
+                  />
+                )}
               </Alert>
             )}
             {error && (

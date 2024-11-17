@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 
 import EventModal from './EventModal';
+import EventQRCode from './EventQRCode';
 import { getEventDate } from '../../utils/eventDate';
 import { useEventQuery } from './useEventQuery';
 import { useProfileQuery } from './useProfileQuery';
@@ -86,14 +87,26 @@ const Events = (): React.ReactElement => {
           borderRadius="10"
         >
           {eventData?.map((event, idx) => (
-            <Box key={idx} p="5">
-              <Text fontSize="lg" fontWeight="medium">
-                {event.name}
-              </Text>
-              <Text className="muted">{getEventDate(event)}</Text>
-              <Text className="muted" fontSize="sm">
-                {event.key ?? ' '}
-              </Text>
+            <Box key={idx} p="5" position="relative">
+              <Box>
+                <Text fontSize="lg" fontWeight="medium">
+                  {event.name}
+                </Text>
+                <Text className="muted">{getEventDate(event)}</Text>
+                <Text className="muted" fontSize="sm">
+                  {event.key ?? ' '}
+                </Text>
+              </Box>
+              {event.key && (
+                <Box
+                  position="absolute"
+                  top="50%"
+                  right="5"
+                  transform="translateY(-50%)"
+                >
+                  <EventQRCode eventKey={event.key} size={64} />
+                </Box>
+              )}
             </Box>
           ))}
         </Stack>
