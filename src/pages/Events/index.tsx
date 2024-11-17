@@ -6,13 +6,16 @@ import {
   StackDivider,
   Stack,
   Heading,
-  Skeleton
+  Skeleton,
+  IconButton,
+  Flex
 } from '@chakra-ui/react';
 
 import EventModal from './EventModal';
 import { getEventDate } from '../../utils/eventDate';
 import { useEventQuery } from './useEventQuery';
 import { useProfileQuery } from './useProfileQuery';
+import { FiEdit2 } from 'react-icons/fi';
 
 const Events = (): React.ReactElement => {
   const [modal, setModal] = useState(false);
@@ -47,6 +50,7 @@ const Events = (): React.ReactElement => {
       </Box>
     );
   }
+
   const handleToggleModal = (): void => {
     setModal(!modal);
     if (reloadOnClose) {
@@ -87,9 +91,20 @@ const Events = (): React.ReactElement => {
         >
           {eventData?.map((event, idx) => (
             <Box key={idx} p="5">
-              <Text fontSize="lg" fontWeight="medium">
-                {event.name}
-              </Text>
+              <Flex alignItems="center" gap="5">
+                <Text fontSize="lg" fontWeight="medium">
+                  {event.name}
+                </Text>
+                {profileData?.role === 'officer' && (
+                  <IconButton
+                    aria-label="Edit event"
+                    icon={<FiEdit2 />}
+                    onClick={() => { console.log('Edit event'); }}
+                    size="sm"
+                    variant="ghost"
+                  />
+                )}
+              </Flex>
               <Text className="muted">{getEventDate(event)}</Text>
               <Text className="muted" fontSize="sm">
                 {event.key ?? ' '}
