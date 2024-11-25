@@ -12,8 +12,11 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
   size = 128,
   inNotification = false
 }) => {
-  const baseUrl = 'https://en.wikipedia.org/wiki/Moo_Deng';
-  const eventUrl = `${baseUrl}${eventKey}`;
+  const baseUrl = import.meta.env.DEV
+    ? 'http://127.0.0.1:8080' // development frontend URL
+    : 'https://points.illinoiswcs.org'; // production frontend URL
+
+  const loadingUrl = `${baseUrl}/loading/${eventKey}`;
 
   return (
     <div
@@ -29,7 +32,7 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
       }
     >
       <QRCodeSVG
-        value={eventUrl}
+        value={loadingUrl}
         size={size}
         fgColor="#f76692"
         bgColor={inNotification ? '#d1fae5' : '#ffffff'}
