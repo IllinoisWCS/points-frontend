@@ -95,17 +95,17 @@ const Events = (): React.ReactElement => {
                 <Text fontSize="lg" fontWeight="medium">
                   {event.name}
                 </Text>
-                {/* {profileData?.role === 'officer' && ( */}
-                <IconButton
-                  aria-label="Edit event"
-                  icon={<FiEdit2 />}
-                  onClick={() => {
-                    console.log('Edit event');
-                  }}
-                  size="sm"
-                  variant="ghost"
-                />
-                {/* )} */}
+                {profileData?.role === 'officer' && (
+                  <IconButton
+                    aria-label="Edit event"
+                    icon={<FiEdit2 />}
+                    onClick={() => {
+                      console.log('Edit event');
+                    }}
+                    size="sm"
+                    variant="ghost"
+                  />
+                )}
               </Flex>
               <Text className="muted">{getEventDate(event)}</Text>
               <Text className="muted" fontSize="sm">
