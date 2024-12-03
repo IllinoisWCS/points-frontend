@@ -50,6 +50,7 @@ const Events = (): React.ReactElement => {
     );
   }
   const handleToggleModal = (): void => {
+    setEvent(undefined);
     setModal(!modal);
     if (reloadOnClose) {
       window.location.reload();
@@ -106,7 +107,12 @@ const Events = (): React.ReactElement => {
                 {event.key ?? ' '}
               </Text>
               {profileData?.role === 'officer' ? (
-                <Button onClick={() => { handleEditModal(event); }} mb="5">
+                <Button
+                  onClick={() => {
+                    handleEditModal(event);
+                  }}
+                  mb="5"
+                >
                   Edit Event
                 </Button>
               ) : (

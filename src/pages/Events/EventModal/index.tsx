@@ -178,19 +178,31 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
       setPoints(event.points);
       setStartDate(`${eventStartYear}-${eventStartMonth}-${eventStartDay}`);
       setEndDate(`${eventEndYear}-${eventEndMonth}-${eventEndDay}`);
-      setStartTime(`${eventStartHour}:${eventStartMinute}`);
-      setEndTime(`${eventEndHour}:${eventEndMinute}`);
-      setVisibility(event.private ? 'private' : 'public');
       setSameDay(
         eventStartYear === eventEndYear &&
           eventStartMonth === eventEndMonth &&
           eventStartDay === eventEndDay
       );
-      setSuccess(false);
-      setError(false);
-      setMsg('');
+      setStartTime(`${eventStartHour}:${eventStartMinute}`);
+      setEndTime(`${eventEndHour}:${eventEndMinute}`);
+      setVisibility(event.private ? 'private' : 'public');
+    } else {
+      setId('');
+      setKey('');
+      setName('');
+      setCategory('explorations');
+      setPoints(1);
+      setStartDate('');
+      setEndDate('');
+      setSameDay(false);
+      setStartTime('');
+      setEndTime('');
+      setVisibility('public');
     }
-  }, [event?._id]);
+    setSuccess(false);
+    setError(false);
+    setMsg('');
+  }, [event]);
 
   const validateFields = (): boolean => {
     if (success) setSuccess(false);
@@ -228,7 +240,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
         .then((res) => {
           setSuccess(true);
           setError(false);
-          setMsg(`Success! ${String(res.data.name)} has been edited.`);
+          setMsg(`Success! ${event.name} has been edited.`);
           reloadOnClose();
         })
         .catch(() => {
