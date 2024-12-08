@@ -18,7 +18,7 @@ const App = (): React.ReactElement => {
           <Route path="/" element={<CheckIn />} />
           <Route path="/points" element={<Points />} />
           <Route path="/events" element={<Events />} />
-          <Route path="/loading/:eventKey?" element={<LoadingScreen />} />
+          <Route path="/loading/:eventKey" element={<LoadingScreen />} />
         </Routes>
       </NavbarLayout>
     </BrowserRouter>

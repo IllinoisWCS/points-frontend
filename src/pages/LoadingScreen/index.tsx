@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api';
 import { useQuery } from 'react-query';
+import { toastError, toastSuccess } from '../../utils/toast';
 import { Profile } from '../../types/profile';
 
 const LoadingScreen = (): JSX.Element => {
@@ -9,65 +10,135 @@ const LoadingScreen = (): JSX.Element => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [hasAttemptedLogging, setHasAttemptedLogging] = useState(false);
+
   const { data, isLoading } = useQuery<Profile>(['get-profile'], async () => {
     const res = await axiosInstance.get('/profile');
+    console.log('Profile data received:', res.data);
     return res.data;
   });
+
+  const logPointsAndRedirect = async (): Promise<void> => {
+    if (!eventKey) {
+      console.error('Event Key is missing.');
+      toastError('Event key is missing. Unable to log points.');
+      return;
+    }
+
+    try {
+      console.log('Starting points logging process for event:', eventKey);
+      setIsProcessing(true);
+
+      const response = await axiosInstance.patch('/profile', { eventKey });
+      console.log('Points logged successfully:', response.data);
+      toastSuccess(response.data.message);
+      navigate('/points', { replace: true });
+    } catch (error: any) {
+      console.error('Error logging points:', error);
+      const errorMessage =
+        error.response?.data?.message ||
+        'An error occurred while logging points.';
+      toastError(errorMessage);
+    } finally {
+      setIsProcessing(false);
+      setHasAttemptedLogging(true);
+    }
+  };
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const isPostAuth = queryParams.get('postAuth') === 'true';
 
-    // Debug logging
-    console.log('LoadingScreen State:', {
-      isLoading,
+    console.log('Current state:', {
       hasData: !!data,
-      isPostAuth,
       eventKey,
-      pathname: location.pathname
+      isPostAuth,
+      isLoading,
+      isProcessing,
+      hasAttemptedLogging,
+      currentPath: location.pathname
     });
 
-    if (!isLoading) {
-      if (!data && !isPostAuth) {
-        // Use the FULL current path including eventKey
-        const fullReturnPath = `/loading/${eventKey ?? ''}`;
+    if (!isLoading && !isProcessing && !hasAttemptedLogging) {
+      if (!data) {
+        console.log('Redirecting to login - no data');
         const loginUrl = new URL(
           `${String(axiosInstance.defaults.baseURL)}/auth/login`
         );
 
         loginUrl.searchParams.set('fromQR', 'true');
-        loginUrl.searchParams.set('returnTo', fullReturnPath);
+        loginUrl.searchParams.set('eventKey', String(eventKey ?? ''));
+        loginUrl.searchParams.set('returnTo', `/loading/${eventKey ?? ''}`);
 
-        console.log('Redirecting to login:', loginUrl.toString());
+        console.log('Redirecting to:', loginUrl.toString());
         window.location.href = loginUrl.toString();
         return;
       }
 
-      if (data && eventKey && isPostAuth) {
-        console.log('Processing attendance for event:', eventKey);
-        const processAttendance = async (): Promise<void> => {
-          try {
-            await axiosInstance.post('/attendance', { eventKey });
-            console.log(
-              'Attendance processed successfully, navigating to points'
-            );
-            navigate('/points');
-          } catch (error) {
-            console.error('Error processing attendance:', error);
-          }
-        };
-        void processAttendance().catch((error) => {
-          console.error('Error in processing attendance:', error);
+      // If we have data and eventKey, proceed with logging points
+      // regardless of isPostAuth (since user might already be authenticated)
+      if (data && eventKey) {
+        console.log('User authenticated and eventKey present - logging points');
+        void logPointsAndRedirect();
+      } else {
+        console.log('Missing required conditions:', {
+          hasData: !!data,
+          hasEventKey: !!eventKey
         });
       }
     }
-  }, [eventKey, location, data, isLoading, navigate]);
+  }, [
+    data,
+    eventKey,
+    location,
+    isLoading,
+    isProcessing,
+    hasAttemptedLogging,
+    navigate
+  ]);
 
+  // Show appropriate loading states
   if (isLoading) {
-    return <div>Checking authentication...</div>;
+    return (
+      <div className="text-center p-4">
+        <div>Authenticating...</div>
+        <div className="text-sm text-gray-500">
+          Please wait while we verify your profile
+        </div>
+      </div>
+    );
   }
 
-  return <div>Processing attendance...</div>;
+  if (isProcessing) {
+    return (
+      <div className="text-center p-4">
+        <div>Processing your attendance...</div>
+        <div className="text-sm text-gray-500">Almost there!</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="text-center p-4">
+      <div>Current State:</div>
+      <pre className="text-left text-sm bg-gray-100 p-2 mt-2 rounded">
+        {JSON.stringify(
+          {
+            isLoading,
+            hasData: !!data,
+            eventKey,
+            path: location.pathname,
+            search: location.search,
+            isProcessing,
+            hasAttemptedLogging
+          },
+          null,
+          2
+        )}
+      </pre>
+    </div>
+  );
 };
 
 export default LoadingScreen;
