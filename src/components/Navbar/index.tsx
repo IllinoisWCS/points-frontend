@@ -13,10 +13,9 @@ import {
 import { FiHome, FiTrendingUp, FiCalendar } from 'react-icons/fi';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
 import { useQuery } from 'react-query';
-
 import axiosInstance from '../../api';
-import { LinkItemProps, NavbarProps, NavItemProps } from './types';
 import { Profile } from '../../types/profile';
+import { LinkItemProps, NavbarProps, NavItemProps } from './types';
 import Logo from '../Logo';
 
 const LinkItems: LinkItemProps[] = [

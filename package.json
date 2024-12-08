@@ -9,7 +9,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "prepare": "husky install",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.{tsx,ts}' --write",
+    "prettier-format": "prettier --config .prettierrc --write",
     "predeploy": "npm run build",
     "deploy": "gh-pages -b main -d build"
   },
@@ -19,8 +19,8 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{tsx,ts}": [
-      "npm run prettier-format",
+    "src/**/*.{ts,tsx}": [
+      "prettier --config .prettierrc --write",
       "eslint --fix --max-warnings=0"
     ]
   },
