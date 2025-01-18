@@ -123,18 +123,6 @@ const Events = (): React.ReactElement => {
               <Text className="muted" fontSize="sm">
                 {event.key ?? ' '}
               </Text>
-              {/* {profileData?.role === 'officer' ? (
-                <Button
-                  onClick={() => {
-                    handleEditModal(event);
-                  }}
-                  mb="5"
-                >
-                  Edit Event
-                </Button>
-              ) : (
-                <div></div>
-              )} */}
             </Box>
           ))}
         </Stack>
