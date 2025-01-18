@@ -112,7 +112,7 @@ const Events = (): React.ReactElement => {
                     aria-label="Edit event"
                     icon={<FiEdit2 />}
                     onClick={() => {
-                      console.log('Edit event');
+                      handleEditModal(event);
                     }}
                     size="sm"
                     variant="ghost"
@@ -123,7 +123,7 @@ const Events = (): React.ReactElement => {
               <Text className="muted" fontSize="sm">
                 {event.key ?? ' '}
               </Text>
-              {profileData?.role === 'officer' ? (
+              {/* {profileData?.role === 'officer' ? (
                 <Button
                   onClick={() => {
                     handleEditModal(event);
@@ -134,7 +134,7 @@ const Events = (): React.ReactElement => {
                 </Button>
               ) : (
                 <div></div>
-              )}
+              )} */}
             </Box>
           ))}
         </Stack>
