@@ -161,15 +161,20 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
       const eventStart = new Date(event.start);
       const eventEnd = new Date(event.end);
       const eventStartYear = eventStart.getFullYear();
-      const eventStartMonth = eventStart.toISOString().substring(5, 7);
-      const eventStartDay = eventStart.toISOString().substring(8, 10);
-      const eventStartHour = eventStart.toString().substring(16, 18);
-      const eventStartMinute = eventStart.toString().substring(19, 21);
+      // eslint-disable-next-line max-len
+      const eventStartMonth = String(eventStart.getMonth() + 1).padStart(
+        2,
+        '0'
+      );
+      const eventStartDay = String(eventStart.getDate()).padStart(2, '0');
+      const eventStartHour = String(eventStart.getHours()).padStart(2, '0');
+      const eventStartMinute = String(eventStart.getMinutes()).padStart(2, '0');
+
       const eventEndYear = eventEnd.getFullYear();
-      const eventEndMonth = eventEnd.toISOString().substring(5, 7);
-      const eventEndDay = eventEnd.toISOString().substring(8, 10);
-      const eventEndHour = eventEnd.toString().substring(16, 18);
-      const eventEndMinute = eventEnd.toString().substring(19, 21);
+      const eventEndMonth = String(eventEnd.getMonth() + 1).padStart(2, '0');
+      const eventEndDay = String(eventEnd.getDate()).padStart(2, '0');
+      const eventEndHour = String(eventEnd.getHours()).padStart(2, '0');
+      const eventEndMinute = String(eventEnd.getMinutes()).padStart(2, '0');
 
       setId(event._id);
       setKey(event._id);
