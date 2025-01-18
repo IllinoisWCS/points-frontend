@@ -301,11 +301,11 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   return (
     <Modal isOpen={open} onClose={clearAndToggle} isCentered>
       <ModalOverlay />
-      <ModalCloseButton />
       <ModalContent p="10" minW="50%">
         <ModalHeader>
           {' '}
           {!event?._id ? 'Create a New Event' : 'Edit Event'}{' '}
+          <ModalCloseButton />
         </ModalHeader>
         <ModalBody>
           <Stack spacing="3">
