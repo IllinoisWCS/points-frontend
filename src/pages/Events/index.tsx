@@ -9,14 +9,17 @@ import {
   Skeleton
 } from '@chakra-ui/react';
 
+import { Event } from '../../types/event';
 import EventModal from './EventModal';
-import EventQRCode from './EventQRCode';
+import QRModal from './QRCodeModal';
 import { getEventDate } from '../../utils/eventDate';
 import { useEventQuery } from './useEventQuery';
 import { useProfileQuery } from './useProfileQuery';
 
 const Events = (): React.ReactElement => {
-  const [modal, setModal] = useState(false);
+  const [event, setEvent] = useState<Event>();
+  const [eventModal, setEventModal] = useState(false);
+  const [qRModal, setQRModal] = useState(false);
   const [reloadOnClose, setReloadOnClose] = useState(false);
 
   const {
@@ -48,8 +51,16 @@ const Events = (): React.ReactElement => {
       </Box>
     );
   }
-  const handleToggleModal = (): void => {
-    setModal(!modal);
+  const handleToggleEventModal = (): void => {
+    setEventModal(!eventModal);
+    if (reloadOnClose) {
+      window.location.reload();
+    }
+  };
+
+  const handleToggleQR = (event?: Event): void => {
+    setEvent(event);
+    setQRModal(!qRModal);
     if (reloadOnClose) {
       window.location.reload();
     }
@@ -62,13 +73,19 @@ const Events = (): React.ReactElement => {
   return (
     <Box>
       <EventModal
-        open={modal}
-        toggleModal={handleToggleModal}
+        open={eventModal}
+        toggleModal={handleToggleEventModal}
         reloadOnClose={handleReloadOnClose}
       />
 
+      <QRModal
+        open={qRModal}
+        event={event}
+        toggleModal={() => { handleToggleQR(event); }}
+      />
+
       {profileData?.role === 'officer' ? (
-        <Button onClick={handleToggleModal} mb="5">
+        <Button onClick={handleToggleEventModal} mb="5">
           Create New Event
         </Button>
       ) : (
@@ -104,7 +121,9 @@ const Events = (): React.ReactElement => {
                   right="5"
                   transform="translateY(-50%)"
                 >
-                  <EventQRCode eventKey={event.key} size={64} />
+                  <Button onClick={() => { handleToggleQR(event); }} mb="5">
+                    Show QR code
+                  </Button>
                 </Box>
               )}
             </Box>
