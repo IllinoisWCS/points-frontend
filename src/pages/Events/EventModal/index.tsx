@@ -338,13 +338,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
             </HStack>
             <FormControl isInvalid={pointsErr} isRequired>
               <FormLabel>Points</FormLabel>
-              <NumberInput
-                min={0.5}
-                max={4}
-                step={0.1}
-                value={points}
-                onChange={handlePointsChange}
-              >
+              <NumberInput min={0.5} max={4} onChange={handlePointsChange}>
                 <NumberInputField />
               </NumberInput>
             </FormControl>
