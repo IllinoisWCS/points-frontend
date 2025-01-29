@@ -32,7 +32,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   const [key, setKey] = useState('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState<EventCategoryType>('explorations');
-  const [points, setPoints] = useState(1);
+  const [points, setPoints] = useState(0.5);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [sameDay, setSameDay] = useState(false);
@@ -196,7 +196,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
       setKey('');
       setName('');
       setCategory('explorations');
-      setPoints(1);
+      setPoints(0.5);
       setStartDate('');
       setEndDate('');
       setSameDay(false);
@@ -341,8 +341,9 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               <NumberInput
                 min={0.5}
                 max={4}
-                onChange={handlePointsChange}
+                step={0.1}
                 value={points}
+                onChange={handlePointsChange}
               >
                 <NumberInputField />
               </NumberInput>
