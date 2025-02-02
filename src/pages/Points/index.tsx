@@ -23,10 +23,12 @@ const Points = (): React.ReactElement => {
       try {
         const res = await axiosInstance.get('/profile');
         return res.data;
-      } catch (err) {
+      } catch (err: unknown) {
         if (
-          err.response &&
-          (err.response.status === 401 || err.response.status === 403)
+          err instanceof Error &&
+          (err as any).response &&
+          ((err as any).response.status === 401 ||
+            (err as any).response.status === 403)
         ) {
           return null;
         }
