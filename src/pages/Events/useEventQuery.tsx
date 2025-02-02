@@ -11,8 +11,29 @@ export const useEventQuery = (): {
   const { isLoading, isError, error, data } = useQuery<Event[], Error>(
     ['get-events'],
     async () => {
-      const res = await axiosInstance.get('/events');
-      return res.data;
+      try {
+        const res = await axiosInstance.get('/events');
+        return res.data;
+      } catch (err) {
+        if (
+          err.response &&
+          (err.response.status === 401 || err.response.status === 403)
+        ) {
+          return [];
+        }
+        throw err;
+      }
+    },
+    {
+      retry: (failureCount, error: any) => {
+        if (
+          error.response &&
+          (error.reponse.status === 401 || error.response.status === 403)
+        ) {
+          return false;
+        }
+        return failureCount < 3;
+      }
     }
   );
 

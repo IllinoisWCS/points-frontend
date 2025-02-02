@@ -8,7 +8,8 @@ import {
   Icon,
   useColorModeValue,
   Text,
-  useColorMode
+  useColorMode,
+  Button
 } from '@chakra-ui/react';
 import { FiHome, FiTrendingUp, FiCalendar } from 'react-icons/fi';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
@@ -29,19 +30,31 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
   const { isError, error, data } = useQuery<Profile, Error>(
     ['get-profile'],
     async () => {
-      const res = await axiosInstance.get('/profile');
-      return res.data;
+      try {
+        const res = await axiosInstance.get('/profile');
+        return res.data;
+      } catch (err) {
+        if (
+          err.response &&
+          (err.response.status === 401 || err.response.status === 403)
+        ) {
+          return null;
+        }
+        throw err;
+      }
+    },
+    {
+      retry: (failureCount, error: any) => {
+        if (
+          error.response &&
+          (error.response.status === 401 || error.response.status === 403)
+        ) {
+          return false;
+        }
+        return failureCount < 3;
+      }
     }
   );
-
-  if (isError) {
-    console.log(error);
-    return (
-      <Box>
-        <Heading size="lg">Temporary Error</Heading>
-      </Box>
-    );
-  }
 
   const Greeting = (): React.ReactElement => {
     const names = data?.name.split(' ');
@@ -53,6 +66,28 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
         </Text>
       </Box>
     );
+  };
+
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
+
+  const handleClick = async (): Promise<void> => {
+    if (data) {
+      // user clicked logout
+      await axiosInstance.post('/auth/logout', {});
+      window.location.href = '/';
+    } else {
+      // user clicked login
+      window.location.href = `${String(
+        axiosInstance.defaults.baseURL
+      )}/auth/login`;
+    }
   };
 
   return (
@@ -88,6 +123,22 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
           isDarkMode={colorMode === 'light'}
           key={colorMode}
         />
+      </Flex>
+      <Flex
+        align="center"
+        p="4"
+        mx="4"
+        borderRadius="lg"
+        role="group"
+        cursor="pointer"
+      >
+        <Button
+          onClick={(e) => {
+            void handleClick();
+          }}
+        >
+          {data ? 'Logout' : 'Login'}
+        </Button>
       </Flex>
     </Box>
   );
