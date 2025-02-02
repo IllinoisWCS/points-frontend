@@ -218,8 +218,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   return (
     <Modal isOpen={open} onClose={clearAndToggle} isCentered>
       <ModalOverlay />
-      <ModalCloseButton />
       <ModalContent p="10" minW="50%">
+        <ModalCloseButton />
         <ModalHeader>Create a New Event</ModalHeader>
         <ModalBody>
           <Stack spacing="3">
