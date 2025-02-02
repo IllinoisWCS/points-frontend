@@ -7,7 +7,6 @@ import {
   ModalOverlay,
   ModalBody,
   ModalContent,
-  Center,
   Box
 } from '@chakra-ui/react';
 import { QRCodeModalProps } from './types';
@@ -34,17 +33,15 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
         </ModalHeader>
         <ModalBody>
           {event?.key ? (
-            <Center>
-              <Box>
-                <EventQRCode eventKey={event?.key} size={256} />
-                <Button onClick={handleDownloadPNG} mr={3} mt={5}>
-                  Download as PNG
-                </Button>
-                <Button onClick={handleDownloadSVG} mt={5}>
-                  Download as SVG
-                </Button>
-              </Box>
-            </Center>
+            <Box>
+              <EventQRCode eventKey={event?.key} size={256} />
+              <Button onClick={handleDownloadPNG} mr={3} mt={5}>
+                Download as PNG
+              </Button>
+              <Button onClick={handleDownloadSVG} mt={5}>
+                Download as SVG
+              </Button>
+            </Box>
           ) : (
             'Event key not found'
           )}
