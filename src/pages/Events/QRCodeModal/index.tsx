@@ -20,26 +20,31 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
     toggleModal();
   };
 
+  const handleDownloadPNG = (): void => {};
+
+  const handleDownloadSVG = (): void => {};
+
   return (
     <Modal isOpen={open} onClose={clearAndToggle} isCentered>
       <ModalOverlay />
       <ModalContent p="10" minW="30%">
         <ModalCloseButton />
-        <ModalHeader>{event?.name} QR Code</ModalHeader>
+        <ModalHeader>
+          {event?.name} QR Code | {event?.key}
+        </ModalHeader>
         <ModalBody>
           {event?.key ? (
-            <Box>
-              Event key: {event?.key}
-              <Center>
-                <Box>
-                  <EventQRCode eventKey={event?.key} size={256} />
-                  <Button mr={3} mt={5}>
-                    Download as PNG
-                  </Button>
-                  <Button mt={5}>Download as SVG</Button>
-                </Box>
-              </Center>
-            </Box>
+            <Center>
+              <Box>
+                <EventQRCode eventKey={event?.key} size={256} />
+                <Button onClick={handleDownloadPNG} mr={3} mt={5}>
+                  Download as PNG
+                </Button>
+                <Button onClick={handleDownloadSVG} mt={5}>
+                  Download as SVG
+                </Button>
+              </Box>
+            </Center>
           ) : (
             'Event key not found'
           )}
