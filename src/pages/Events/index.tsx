@@ -6,17 +6,21 @@ import {
   StackDivider,
   Stack,
   Heading,
-  Skeleton
+  Skeleton,
+  IconButton,
+  Flex
 } from '@chakra-ui/react';
 
 import EventModal from './EventModal';
-import EventQRCode from './EventQRCode';
+import { Event } from '../../types/event';
 import { getEventDate } from '../../utils/eventDate';
 import { useEventQuery } from './useEventQuery';
 import { useProfileQuery } from './useProfileQuery';
+import { FiEdit2 } from 'react-icons/fi';
 
 const Events = (): React.ReactElement => {
   const [modal, setModal] = useState(false);
+  const [event, setEvent] = useState<Event>();
   const [reloadOnClose, setReloadOnClose] = useState(false);
 
   const {
@@ -48,7 +52,17 @@ const Events = (): React.ReactElement => {
       </Box>
     );
   }
+
   const handleToggleModal = (): void => {
+    setEvent(undefined);
+    setModal(!modal);
+    if (reloadOnClose) {
+      window.location.reload();
+    }
+  };
+
+  const handleEditModal = (event: Event): void => {
+    setEvent(event);
     setModal(!modal);
     if (reloadOnClose) {
       window.location.reload();
@@ -63,6 +77,7 @@ const Events = (): React.ReactElement => {
     <Box>
       <EventModal
         open={modal}
+        event={event}
         toggleModal={handleToggleModal}
         reloadOnClose={handleReloadOnClose}
       />
@@ -87,26 +102,27 @@ const Events = (): React.ReactElement => {
           borderRadius="10"
         >
           {eventData?.map((event, idx) => (
-            <Box key={idx} p="5" position="relative">
-              <Box>
+            <Box key={idx} p="5">
+              <Flex alignItems="center" gap="5">
                 <Text fontSize="lg" fontWeight="medium">
                   {event.name}
                 </Text>
-                <Text className="muted">{getEventDate(event)}</Text>
-                <Text className="muted" fontSize="sm">
-                  {event.key ?? ' '}
-                </Text>
-              </Box>
-              {event.key && (
-                <Box
-                  position="absolute"
-                  top="50%"
-                  right="5"
-                  transform="translateY(-50%)"
-                >
-                  <EventQRCode eventKey={event.key} size={64} />
-                </Box>
-              )}
+                {profileData?.role === 'officer' && (
+                  <IconButton
+                    aria-label="Edit event"
+                    icon={<FiEdit2 />}
+                    onClick={() => {
+                      handleEditModal(event);
+                    }}
+                    size="sm"
+                    variant="ghost"
+                  />
+                )}
+              </Flex>
+              <Text className="muted">{getEventDate(event)}</Text>
+              <Text className="muted" fontSize="sm">
+                {event.key ?? ' '}
+              </Text>
             </Box>
           ))}
         </Stack>
