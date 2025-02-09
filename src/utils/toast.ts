@@ -13,8 +13,8 @@ export const toastSuccess = (msg: string): void => {
   });
 };
 
-export const toastError = (msg: string): void => {
-  toast.error(`🦄 ${msg}`, {
+export const toastError = (msg: React.ReactNode): void => {
+  toast.error(msg, {
     position: 'top-right',
     autoClose: 2500,
     hideProgressBar: false,
