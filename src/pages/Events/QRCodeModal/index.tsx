@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Button,
   Modal,
   ModalCloseButton,
   ModalHeader,
@@ -19,10 +18,6 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
     toggleModal();
   };
 
-  const handleDownloadPNG = (): void => {};
-
-  const handleDownloadSVG = (): void => {};
-
   return (
     <Modal isOpen={open} onClose={clearAndToggle} isCentered>
       <ModalOverlay />
@@ -35,12 +30,6 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
           {event?.key ? (
             <Box>
               <EventQRCode eventKey={event?.key} size={256} />
-              <Button onClick={handleDownloadPNG} mr={3} mt={5}>
-                Download as PNG
-              </Button>
-              <Button onClick={handleDownloadSVG} mt={5}>
-                Download as SVG
-              </Button>
             </Box>
           ) : (
             'Event key not found'

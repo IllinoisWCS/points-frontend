@@ -1,5 +1,9 @@
+import { Event } from '../../../types/event';
+
 export interface EventModalProps {
   open: boolean;
+  // create: boolean;
+  event?: Event;
   toggleModal: () => void;
   reloadOnClose: () => void;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -25,14 +25,16 @@ import { useMutation } from 'react-query';
 import EventQRCode from '../EventQRCode';
 
 import axiosInstance from '../../../api';
-import { EventCategoryType, NewEvent } from '../../../types/event';
+import { EventCategoryType, NewEvent, Event } from '../../../types/event';
 import { EventModalProps, StringFieldProps, SameDayFieldProps } from './types';
 
 const EventModal = (props: EventModalProps): React.ReactElement => {
-  const { open, toggleModal, reloadOnClose } = props;
+  const { open, event, toggleModal, reloadOnClose } = props;
+  const [_id, setId] = useState('');
+  const [key, setKey] = useState('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState<EventCategoryType>('explorations');
-  const [points, setPoints] = useState(1);
+  const [points, setPoints] = useState(0.5);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [sameDay, setSameDay] = useState(false);
@@ -157,6 +159,59 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     toggleModal();
   };
 
+  useEffect(() => {
+    if (event) {
+      const eventStart = new Date(event.start);
+      const eventEnd = new Date(event.end);
+      const eventStartYear = eventStart.getFullYear();
+      // eslint-disable-next-line max-len
+      const eventStartMonth = String(eventStart.getMonth() + 1).padStart(
+        2,
+        '0'
+      );
+      const eventStartDay = String(eventStart.getDate()).padStart(2, '0');
+      const eventStartHour = String(eventStart.getHours()).padStart(2, '0');
+      const eventStartMinute = String(eventStart.getMinutes()).padStart(2, '0');
+
+      const eventEndYear = eventEnd.getFullYear();
+      const eventEndMonth = String(eventEnd.getMonth() + 1).padStart(2, '0');
+      const eventEndDay = String(eventEnd.getDate()).padStart(2, '0');
+      const eventEndHour = String(eventEnd.getHours()).padStart(2, '0');
+      const eventEndMinute = String(eventEnd.getMinutes()).padStart(2, '0');
+
+      setId(event._id);
+      setKey(event._id);
+      setName(event.name);
+      setCategory(event.category);
+      setPoints(event.points);
+      setStartDate(`${eventStartYear}-${eventStartMonth}-${eventStartDay}`);
+      setEndDate(`${eventEndYear}-${eventEndMonth}-${eventEndDay}`);
+      setSameDay(
+        eventStartYear === eventEndYear &&
+          eventStartMonth === eventEndMonth &&
+          eventStartDay === eventEndDay
+      );
+      setStartTime(`${eventStartHour}:${eventStartMinute}`);
+      setEndTime(`${eventEndHour}:${eventEndMinute}`);
+      setVisibility(event.private ? 'private' : 'public');
+    } else {
+      setId('');
+      setKey('');
+      setName('');
+      setCategory('explorations');
+      setPoints(0.5);
+      setStartDate('');
+      setEndDate('');
+      setSameDay(false);
+      setStartTime('');
+      setEndTime('');
+      setVisibility('public');
+    }
+    setSuccess(false);
+    setError(false);
+    setMsg('');
+  }, [event]);
+
   const validateFields = (): boolean => {
     if (success) setSuccess(false);
     if (pointsErr || startDateErr || endDateErr || startTimeErr || endTimeErr) {
@@ -180,7 +235,28 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
           setSuccess(false);
           setError(true);
           setMsg(
-            'Internal Error: event creation was unsuccessful.' +
+            'Internal Error: event creation was unsuccessful. ' +
+              'Please contact the current WCS infra chair for help.'
+          );
+        });
+    }
+  });
+
+  const editEvent = useMutation({
+    mutationFn: async (event: Event): Promise<void> => {
+      await axiosInstance
+        .patch(`/events/${event._id}`, event)
+        .then((res) => {
+          setSuccess(true);
+          setError(false);
+          setMsg(`Success! ${event.name} has been edited.`);
+          reloadOnClose();
+        })
+        .catch(() => {
+          setSuccess(false);
+          setError(true);
+          setMsg(
+            'Internal Error: event edit was unsuccessful. ' +
               'Please contact the current WCS infra chair for help.'
           );
           setEventKey(null);
@@ -193,7 +269,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
       const start = new Date(`${startDate} ${startTime}`);
       const end = new Date(`${sameDay ? startDate : endDate} ${endTime}`);
 
-      const event = {
+      const cEvent = {
         name,
         category,
         points,
@@ -201,7 +277,19 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
         end,
         private: visibility === 'private'
       };
-      createEvent.mutate(event);
+
+      const eEvent: Event = {
+        _id,
+        key,
+        name,
+        category,
+        points,
+        start,
+        end,
+        private: visibility === 'private'
+      };
+
+      !event?._id ? createEvent.mutate(cEvent) : editEvent.mutate(eEvent);
     }
   };
 

@@ -81,7 +81,9 @@ const Events = (): React.ReactElement => {
       <QRModal
         open={qRModal}
         event={event}
-        toggleModal={() => { handleToggleQR(event); }}
+        toggleModal={() => {
+          handleToggleQR(event);
+        }}
       />
 
       {profileData?.role === 'officer' ? (
@@ -121,7 +123,12 @@ const Events = (): React.ReactElement => {
                   right="5"
                   transform="translateY(-50%)"
                 >
-                  <Button onClick={() => { handleToggleQR(event); }} mb="5">
+                  <Button
+                    onClick={() => {
+                      handleToggleQR(event);
+                    }}
+                    mb="5"
+                  >
                     Show QR code
                   </Button>
                 </Box>

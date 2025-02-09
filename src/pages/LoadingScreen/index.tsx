@@ -119,26 +119,22 @@ const LoadingScreen = (): JSX.Element => {
     );
   }
 
-  return (
-    <div className="text-center p-4">
-      <div>Current State:</div>
-      <pre className="text-left text-sm bg-gray-100 p-2 mt-2 rounded">
-        {JSON.stringify(
-          {
-            isLoading,
-            hasData: !!data,
-            eventKey,
-            path: location.pathname,
-            search: location.search,
-            isProcessing,
-            hasAttemptedLogging
-          },
-          null,
-          2
-        )}
-      </pre>
-    </div>
-  );
+  if (isLoading || isProcessing) {
+    return (
+      <div className="text-center p-4">
+        <div>Loading...</div>
+        <div className="text-sm text-gray-500">Please wait...</div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="text-center p-4">
+        <div>Uh oh, looks like we weren’t able to log you in.’</div>
+      </div>
+    );
+  }
 };
 
 export default LoadingScreen;
