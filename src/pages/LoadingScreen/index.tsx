@@ -37,7 +37,6 @@ const LoadingScreen = (): JSX.Element => {
 
   const { data, isLoading } = useQuery<Profile>(['get-profile'], async () => {
     const res = await axiosInstance.get('/profile');
-    console.log('Profile data received:', res.data);
     return res.data;
   });
 
@@ -53,7 +52,6 @@ const LoadingScreen = (): JSX.Element => {
       setIsProcessing(true);
 
       const response = await axiosInstance.patch('/profile', { eventKey });
-      console.log('Points logged successfully:', response.data);
       toastSuccess(response.data.message);
       navigate('/points', { replace: true });
     } catch (error: any) {
@@ -70,19 +68,6 @@ const LoadingScreen = (): JSX.Element => {
   };
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const isPostAuth = queryParams.get('postAuth') === 'true';
-
-    console.log('Current state:', {
-      hasData: !!data,
-      eventKey,
-      isPostAuth,
-      isLoading,
-      isProcessing,
-      hasAttemptedLogging,
-      currentPath: location.pathname
-    });
-
     if (!isLoading && !isProcessing && !hasAttemptedLogging) {
       if (!data) {
         console.log('Redirecting to login - no data');
@@ -94,7 +79,6 @@ const LoadingScreen = (): JSX.Element => {
         loginUrl.searchParams.set('eventKey', String(eventKey ?? ''));
         loginUrl.searchParams.set('returnTo', `/loading/${eventKey ?? ''}`);
 
-        console.log('Redirecting to:', loginUrl.toString());
         window.location.href = loginUrl.toString();
         return;
       }
@@ -102,7 +86,6 @@ const LoadingScreen = (): JSX.Element => {
       // If we have data and eventKey, proceed with logging points
       // regardless of isPostAuth (since user might already be authenticated)
       if (data && eventKey) {
-        console.log('User authenticated and eventKey present - logging points');
         void logPointsAndRedirect();
       } else {
         console.log('Missing required conditions:', {
@@ -129,10 +112,16 @@ const LoadingScreen = (): JSX.Element => {
           <Box className="text-sm text-gray-500" fontSize="2xl" mb="10px">
             Please try manually logging your points here:
           </Box>
-          <Link href="http://127.0.0.1:8080">http://127.0.0.1:8080</Link>
-          {/* <Link href='https://points.illinoiswcs.org'>
-            https://points.illinoiswcs.org 
+          {/* <Link href='http://127.0.0.1:8080' fontSize="2xl" color="pink">
+            http://127.0.0.1:8080
           </Link> */}
+          <Link
+            href="https://points.illinoiswcs.org"
+            fontSize="2xl"
+            color="pink"
+          >
+            https://points.illinoiswcs.org
+          </Link>
         </Box>
       );
     }
