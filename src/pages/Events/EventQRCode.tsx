@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import { Button } from '@chakra-ui/react';
 
 interface EventQRCodeProps {
   eventKey: string;
@@ -28,8 +29,21 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
       return;
     }
 
+    const clonedSvg = qrRef.current.cloneNode(true) as SVGSVGElement;
+
+    // set attributes on the cloned SVG
+    clonedSvg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+    clonedSvg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    clonedSvg.setAttribute('width', `${size}px`); // Add px unit
+    clonedSvg.setAttribute('height', `${size}px`); // Add px unit
+
+    // add style to force size
+    clonedSvg.style.width = `${size}px`;
+    clonedSvg.style.height = `${size}px`;
+
     // turns qr code visual (svg) into xml code
     const svgData = new XMLSerializer().serializeToString(qrRef.current);
+
     // creates binary large object (blob) containing svg image data as xml
     const svgBlob = new Blob([svgData], {
       type: 'image/svg_xml;charset=utf-8'
@@ -60,15 +74,21 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
     }
 
     // creates drawing canvas in memory
+    const scale = 4;
     const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
+    canvas.width = size * scale;
+    canvas.height = size * scale;
 
     // tools for drawing on canvas
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       return;
     }
+
+    // smoothing
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.scale(scale, scale);
 
     // creates new image object
     const svgData = new XMLSerializer().serializeToString(qrRef.current);
@@ -112,15 +132,17 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
           size={size}
           fgColor="#f76692"
           bgColor={inNotification ? '#d1fae5' : '#ffffff'}
-          level="M"
+          level="H"
           title={`QR Code for event ${eventKey}`}
         />
       </div>
       <div style={{ marginTop: '10px' }}>
-        <button onClick={downloadSVG} style={{ marginRight: '10px' }}>
-          Download SVG
-        </button>
-        <button onClick={downloadPNG}>Download PNG</button>
+        <Button onClick={downloadPNG} mr={3} mt={5}>
+          Download as PNG
+        </Button>
+        <Button onClick={downloadSVG} mt={5}>
+          Download as SVG
+        </Button>
       </div>
     </div>
   );
