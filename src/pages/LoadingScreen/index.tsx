@@ -4,7 +4,7 @@ import axiosInstance from '../../api';
 import { useQuery } from 'react-query';
 import { toastError, toastSuccess } from '../../utils/toast';
 import { Profile } from '../../types/profile';
-import { Heading, Box, VStack, Progress } from '@chakra-ui/react';
+import { Heading, Box, VStack, Progress, Link } from '@chakra-ui/react';
 
 const LoadingScreen = (): JSX.Element => {
   const [isWaitingAuth, setIsWaitingAuth] = useState(true);
@@ -21,14 +21,18 @@ const LoadingScreen = (): JSX.Element => {
     const delay = setTimeout(() => {
       setIsWaitingAuth(false);
     }, 500);
-    return () => { clearTimeout(delay); };
+    return () => {
+      clearTimeout(delay);
+    };
   }, []);
 
   useEffect(() => {
     const delay = setTimeout(() => {
       setIsWaitingLogging(false);
     }, 1200);
-    return () => { clearTimeout(delay); };
+    return () => {
+      clearTimeout(delay);
+    };
   }, [isWaitingAuth]);
 
   const { data, isLoading } = useQuery<Profile>(['get-profile'], async () => {
@@ -122,9 +126,13 @@ const LoadingScreen = (): JSX.Element => {
       return (
         <Box>
           <Heading mb="10px">Sorry, something went wrong</Heading>
-          <Box className="text-sm text-gray-500" fontSize="2xl" mb="25px">
-            lorem ipsum
+          <Box className="text-sm text-gray-500" fontSize="2xl" mb="10px">
+            Please try manually logging your points here:
           </Box>
+          <Link href="http://127.0.0.1:8080">http://127.0.0.1:8080</Link>
+          {/* <Link href='https://points.illinoiswcs.org'>
+            https://points.illinoiswcs.org 
+          </Link> */}
         </Box>
       );
     }
