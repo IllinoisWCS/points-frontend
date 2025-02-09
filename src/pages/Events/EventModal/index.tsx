@@ -307,11 +307,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     <Modal isOpen={open} onClose={clearAndToggle} isCentered>
       <ModalOverlay />
       <ModalContent p="10" minW="50%">
-        <ModalHeader>
-          {' '}
-          {!event?._id ? 'Create a New Event' : 'Edit Event'}{' '}
-          <ModalCloseButton />
-        </ModalHeader>
+        <ModalCloseButton />
+        <ModalHeader>Create a New Event</ModalHeader>
         <ModalBody>
           <Stack spacing="3">
             <FormControl isRequired width="100%">
