@@ -4,14 +4,32 @@ import axiosInstance from '../../api';
 import { useQuery } from 'react-query';
 import { toastError, toastSuccess } from '../../utils/toast';
 import { Profile } from '../../types/profile';
+import { Heading, Box, VStack, Progress } from '@chakra-ui/react';
 
 const LoadingScreen = (): JSX.Element => {
+  const [isWaitingAuth, setIsWaitingAuth] = useState(true);
+  const [isWaitingLogging, setIsWaitingLogging] = useState(true);
+  const [isError, setIsError] = useState(false);
   const { eventKey } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [hasAttemptedLogging, setHasAttemptedLogging] = useState(false);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      setIsWaitingAuth(false);
+    }, 500);
+    return () => { clearTimeout(delay); };
+  }, []);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      setIsWaitingLogging(false);
+    }, 1200);
+    return () => { clearTimeout(delay); };
+  }, [isWaitingAuth]);
 
   const { data, isLoading } = useQuery<Profile>(['get-profile'], async () => {
     const res = await axiosInstance.get('/profile');
@@ -35,6 +53,7 @@ const LoadingScreen = (): JSX.Element => {
       toastSuccess(response.data.message);
       navigate('/points', { replace: true });
     } catch (error: any) {
+      setIsError(true);
       console.error('Error logging points:', error);
       const errorMessage =
         error.response?.data?.message ||
@@ -98,46 +117,73 @@ const LoadingScreen = (): JSX.Element => {
     navigate
   ]);
 
-  // Show appropriate loading states
-  if (isLoading) {
-    return (
-      <div className="text-center p-4">
-        <div>Authenticating...</div>
-        <div className="text-sm text-gray-500">
-          Please wait while we verify your profile
-        </div>
-      </div>
-    );
-  }
+  const Content = (): React.ReactElement => {
+    if (isError) {
+      return (
+        <Box>
+          <Heading mb="10px">Sorry, something went wrong</Heading>
+          <Box className="text-sm text-gray-500" fontSize="2xl" mb="25px">
+            lorem ipsum
+          </Box>
+        </Box>
+      );
+    }
 
-  if (isProcessing) {
+    if (isLoading || isWaitingAuth) {
+      return (
+        <Box>
+          <Heading mb="10px">Authenticating...</Heading>
+          <Box className="text-sm text-gray-500" fontSize="2xl" mb="25px">
+            Please wait while we verify your profile
+          </Box>
+        </Box>
+      );
+    }
+
+    if (isProcessing || isWaitingLogging) {
+      return (
+        <Box>
+          <Heading mb="10px">Hang tight...</Heading>
+          <Box className="text-sm text-gray-500" fontSize="2xl" mb="25px">
+            We&apos;re logging your points
+          </Box>
+        </Box>
+      );
+    }
+
     return (
-      <div className="text-center p-4">
-        <div>Processing your attendance...</div>
-        <div className="text-sm text-gray-500">Almost there!</div>
-      </div>
+      <Box>
+        <Heading mb="10px">You&apos;re checked in 🎉</Heading>
+        <Box className="text-sm text-gray-500" fontSize="2xl" mb="25px">
+          Thanks for joining us!
+        </Box>
+      </Box>
     );
-  }
+  };
 
   return (
-    <div className="text-center p-4">
-      <div>Current State:</div>
-      <pre className="text-left text-sm bg-gray-100 p-2 mt-2 rounded">
-        {JSON.stringify(
-          {
-            isLoading,
-            hasData: !!data,
-            eventKey,
-            path: location.pathname,
-            search: location.search,
-            isProcessing,
-            hasAttemptedLogging
-          },
-          null,
-          2
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="70vh"
+      minW="300px"
+    >
+      <VStack alignItems="left">
+        <Content />
+        {isError ? (
+          <div></div>
+        ) : (
+          <Progress
+            size="sm"
+            minW="300px"
+            maxW="40vw"
+            width="30vw"
+            isIndeterminate
+          />
         )}
-      </pre>
-    </div>
+      </VStack>
+    </Box>
   );
 };
 
