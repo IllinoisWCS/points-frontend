@@ -1,18 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Modal,
   ModalCloseButton,
   ModalHeader,
+  HStack,
   ModalOverlay,
   ModalBody,
   ModalContent,
-  Box
+  Box,
+  Switch
 } from '@chakra-ui/react';
 import { QRCodeModalProps } from './types';
 import EventQRCode from '../EventQRCode';
 
 const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
+  const [isToggled, toggleIsToggled] = useState(true);
   const { open, event, toggleModal } = props;
+
+  const handleToggleColor = (): void => {
+    toggleIsToggled(!isToggled);
+  };
 
   const clearAndToggle = (): void => {
     toggleModal();
@@ -24,12 +31,36 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
       <ModalContent p="10" minW="30%">
         <ModalCloseButton />
         <ModalHeader>
-          {event?.name} QR Code | {event?.key}
+          <HStack>
+            <Box>
+              {event?.name} QR Code | {event?.key}
+            </Box>
+            <Box justifyContent="flex-end">
+              <Switch
+                colorScheme="teal"
+                size="lg"
+                onChange={() => { handleToggleColor(); }}
+                defaultChecked
+                sx={{
+                  '.chakra-switch__track': {
+                    bg: isToggled ? '#d4696a' : 'gray.300'
+                  },
+                  '.chakra-switch__thumb': {
+                    bg: 'white'
+                  }
+                }}
+              />
+            </Box>
+          </HStack>
         </ModalHeader>
         <ModalBody>
           {event?.key ? (
             <Box>
-              <EventQRCode eventKey={event?.key} size={256} />
+              <EventQRCode
+                eventKey={event?.key}
+                size={256}
+                color={isToggled ? '#d4696a' : '#000000'}
+              />
             </Box>
           ) : (
             'Event key not found'
