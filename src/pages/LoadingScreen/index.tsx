@@ -20,7 +20,8 @@ const LoadingScreen = (): JSX.Element => {
   useEffect(() => {
     const delay = setTimeout(() => {
       setIsWaitingAuth(false);
-    }, 500);
+    }, 400);
+
     return () => {
       clearTimeout(delay);
     };
@@ -29,11 +30,20 @@ const LoadingScreen = (): JSX.Element => {
   useEffect(() => {
     const delay = setTimeout(() => {
       setIsWaitingLogging(false);
-    }, 1200);
+    }, 1000);
     return () => {
       clearTimeout(delay);
     };
   }, [isWaitingAuth]);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      navigate('/points', { replace: true });
+    }, 1500);
+    return () => {
+      clearTimeout(delay);
+    };
+  }, [isWaitingLogging]);
 
   const { data, isLoading } = useQuery<Profile>(['get-profile'], async () => {
     const res = await axiosInstance.get('/profile');
@@ -53,7 +63,6 @@ const LoadingScreen = (): JSX.Element => {
 
       const response = await axiosInstance.patch('/profile', { eventKey });
       toastSuccess(response.data.message);
-      navigate('/points', { replace: true });
     } catch (error: any) {
       setIsError(true);
       console.error('Error logging points:', error);

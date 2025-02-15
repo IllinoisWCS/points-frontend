@@ -299,7 +299,6 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
                 <FormLabel>Same day</FormLabel>
               </HStack>
             </FormControl>
-            <FormControl></FormControl>
             {success && (
               <Alert status="success" variant="left-accent">
                 <AlertIcon />
