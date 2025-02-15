@@ -44,7 +44,7 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
                 defaultChecked
                 sx={{
                   '.chakra-switch__track': {
-                    bg: isToggled ? '#d4696a' : 'gray.300'
+                    bg: isToggled ? '#d4696a' : '#000000'
                   }
                 }}
               />
