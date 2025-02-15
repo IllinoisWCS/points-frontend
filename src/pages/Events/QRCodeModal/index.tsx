@@ -35,18 +35,16 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
             <Box>
               {event?.name} QR Code | {event?.key}
             </Box>
-            <Box justifyContent="flex-end">
+            <Box>
               <Switch
-                colorScheme="teal"
                 size="lg"
-                onChange={() => { handleToggleColor(); }}
+                onChange={() => {
+                  handleToggleColor();
+                }}
                 defaultChecked
                 sx={{
                   '.chakra-switch__track': {
                     bg: isToggled ? '#d4696a' : 'gray.300'
-                  },
-                  '.chakra-switch__thumb': {
-                    bg: 'white'
                   }
                 }}
               />
