@@ -59,7 +59,7 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
   );
 
   const Greeting = (): React.ReactElement => {
-    if (!data) return null;
+    if (!data) return <></>;
 
     const names = data?.name.split(' ');
     const name = names[0];
