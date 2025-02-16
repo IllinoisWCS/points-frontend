@@ -22,7 +22,7 @@ const CheckIn = (): React.ReactElement => {
     if (!data) {
       toastError(
         <div>
-          Not Logged in.{' '}
+          Not logged in.{' '}
           <a
             href="#"
             onClick={(e) => {
