@@ -19,27 +19,32 @@ const CheckIn = (): React.ReactElement => {
     setEventKeyError(isEventKeyError);
     if (isEventKeyError) return;
 
+    if (!data) {
+      toastError(
+        <div>
+          Not Logged in.{' '}
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              void handleClick();
+            }}
+            style={{ color: '#f9dcf6', textDecoration: 'underline' }}
+          >
+            Login
+          </a>
+        </div>
+      );
+      return;
+    }
+
     axiosInstance
       .patch('/profile', { eventKey })
       .then((res) => {
         toastSuccess(res.data.message);
       })
       .catch((err) => {
-        toastError(
-          <div>
-            Not Logged in.{' '}
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                void handleClick();
-              }}
-              style={{ color: '#f9dcf6', textDecoration: 'underline' }}
-            >
-              Login
-            </a>
-          </div>
-        );
+        toastError(err.response?.data?.message || 'An error occurred');
         console.log(err);
       });
   };
