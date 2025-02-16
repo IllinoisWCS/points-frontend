@@ -5,12 +5,14 @@ import { Button } from '@chakra-ui/react';
 interface EventQRCodeProps {
   eventKey: string;
   size?: number;
+  color?: string;
   inNotification?: boolean;
 }
 
 const EventQRCode: React.FC<EventQRCodeProps> = ({
   eventKey,
   size = 128,
+  color = '#d4696a', // does this set a default color
   inNotification = false
 }) => {
   // creates react reference that can point to an svg element
@@ -130,7 +132,7 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
           ref={qrRef}
           value={loadingUrl}
           size={size}
-          fgColor="#f76692"
+          fgColor={color}
           bgColor={inNotification ? '#d1fae5' : '#ffffff'}
           level="H"
           title={`QR Code for event ${eventKey}`}

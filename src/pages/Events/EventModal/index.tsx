@@ -396,6 +396,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
                   <EventQRCode
                     eventKey={eventKey}
                     size={64}
+                    color={'#d4696a'}
                     inNotification={true}
                   />
                 )}
