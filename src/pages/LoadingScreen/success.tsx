@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 
-const SuccessPage = (): React.ReactElement => {
+const SuccessPage: React.FC = (): React.ReactElement => {
   const navigate = useNavigate();
   const { width, height } = useWindowSize();
   const [showConfetti, setShowConfetti] = useState(true);
@@ -33,7 +33,7 @@ const SuccessPage = (): React.ReactElement => {
     >
       {showConfetti && <Confetti width={width} height={height} />}
       <VStack spacing={5} textAlign="center">
-        <Heading size="2xl" color="pink">
+        <Heading size="2xl" color="pink.500">
           Success!
         </Heading>
         <Text fontSize="lg" color="gray.600">
