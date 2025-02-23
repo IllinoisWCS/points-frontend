@@ -32,6 +32,7 @@ const LoadingScreen = (): JSX.Element => {
 
       const response = await axiosInstance.patch('/profile', { eventKey });
       console.log('Points logged successfully:', response.data);
+      navigate('/success');
       toastSuccess(response.data.message);
       navigate('/points', { replace: true });
     } catch (error: any) {

@@ -1,5 +1,6 @@
 import React, { useState, BaseSyntheticEvent } from 'react';
 import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
@@ -8,6 +9,7 @@ import { useProfileQuery } from '../Events/useProfileQuery';
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
   const [eventKeyError, setEventKeyError] = useState(false);
+  const navigate = useNavigate();
 
   const handleChangeKey = (event: BaseSyntheticEvent): void => {
     setEventKey(event.target.value);
@@ -22,6 +24,7 @@ const CheckIn = (): React.ReactElement => {
       .patch('/profile', { eventKey })
       .then((res) => {
         toastSuccess(res.data.message);
+        navigate('/success');
       })
       .catch((err) => {
         toastError(err.response.data.message);
