@@ -3,7 +3,8 @@ import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
-import { useProfileQuery } from '../Events/useProfileQuery';
+import { useQuery } from 'react-query';
+import { Profile } from '../../types/profile';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -13,10 +14,29 @@ const CheckIn = (): React.ReactElement => {
     setEventKey(event.target.value);
   };
 
-  const handleSubmit = (): void => {
+  const handleSubmit = async (): Promise<void> => {
     const isEventKeyError = eventKey === '';
     setEventKeyError(isEventKeyError);
     if (isEventKeyError) return;
+
+    if (!data) {
+      toastError(
+        <div>
+          Not logged in.{' '}
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              void handleClick();
+            }}
+            style={{ color: '#f9dcf6', textDecoration: 'underline' }}
+          >
+            Login
+          </a>
+        </div>
+      );
+      return;
+    }
 
     axiosInstance
       .patch('/profile', { eventKey })
@@ -24,21 +44,54 @@ const CheckIn = (): React.ReactElement => {
         toastSuccess(res.data.message);
       })
       .catch((err) => {
-        toastError(err.response.data.message);
+        toastError(err.response?.data?.message || 'An error occurred');
         console.log(err);
       });
   };
 
-  const { isError, error } = useProfileQuery();
+  const { data } = useQuery<Profile, Error>(
+    ['get-profile'],
+    async () => {
+      try {
+        const res = await axiosInstance.get('/profile');
+        return res.data;
+      } catch (err: unknown) {
+        if (
+          err instanceof Error &&
+          (err as any).response &&
+          ((err as any).response.status === 401 ||
+            (err as any).response.status === 403)
+        ) {
+          return null;
+        }
+        throw err;
+      }
+    },
+    {
+      retry: (failureCount, error: any) => {
+        if (
+          error.response &&
+          (error.response.status === 401 || error.response.status === 403)
+        ) {
+          return false;
+        }
+        return failureCount < 3;
+      }
+    }
+  );
 
-  if (isError) {
-    console.log(error);
-    return (
-      <Box>
-        <Heading size="lg">Temporary Error</Heading>
-      </Box>
-    );
-  }
+  const handleClick = async (): Promise<void> => {
+    if (data) {
+      // user clicked logout
+      await axiosInstance.post('/auth/logout', {});
+      window.location.href = '/';
+    } else {
+      // user clicked login
+      window.location.href = `${String(
+        axiosInstance.defaults.baseURL
+      )}/auth/login`;
+    }
+  };
 
   return (
     <Box>
@@ -62,7 +115,14 @@ const CheckIn = (): React.ReactElement => {
           value={eventKey}
           onChange={handleChangeKey}
         />
-        <Button onClick={handleSubmit}>Check-in</Button>
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            handleSubmit().catch(console.error);
+          }}
+        >
+          Check-in
+        </Button>
       </VStack>
     </Box>
   );

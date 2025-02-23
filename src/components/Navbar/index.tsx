@@ -59,13 +59,14 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
   );
 
   const Greeting = (): React.ReactElement => {
+    if (!data) return <></>;
+
     const names = data?.name.split(' ');
-    const name = names ? names[0] : 'undefined';
+    const name = names[0];
+
     return (
       <Box p="4" m="4">
-        <Text>
-          {data?.name ? `Welcome back, ${name}!` : 'Hello, guest user!'}
-        </Text>
+        <Text>Welcome back, {name}!</Text>
       </Box>
     );
   };
@@ -91,6 +92,15 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
       )}/auth/login`;
     }
   };
+
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
 
   return (
     <Box

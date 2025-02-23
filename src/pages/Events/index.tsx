@@ -6,7 +6,9 @@ import {
   StackDivider,
   Stack,
   Heading,
-  Skeleton
+  Skeleton,
+  IconButton,
+  Flex
 } from '@chakra-ui/react';
 
 import { Event } from '../../types/event';
@@ -15,6 +17,7 @@ import QRModal from './QRCodeModal';
 import { getEventDate } from '../../utils/eventDate';
 import { useEventQuery } from './useEventQuery';
 import { useProfileQuery } from './useProfileQuery';
+import { FiEdit2 } from 'react-icons/fi';
 
 const Events = (): React.ReactElement => {
   const [event, setEvent] = useState<Event>();
@@ -51,7 +54,17 @@ const Events = (): React.ReactElement => {
       </Box>
     );
   }
+
   const handleToggleEventModal = (): void => {
+    setEvent(undefined);
+    setEventModal(!eventModal);
+    if (reloadOnClose) {
+      window.location.reload();
+    }
+  };
+
+  const handleEditModal = (event: Event): void => {
+    setEvent(event);
     setEventModal(!eventModal);
     if (reloadOnClose) {
       window.location.reload();
@@ -74,6 +87,7 @@ const Events = (): React.ReactElement => {
     <Box>
       <EventModal
         open={eventModal}
+        event={event}
         toggleModal={handleToggleEventModal}
         reloadOnClose={handleReloadOnClose}
       />
@@ -108,9 +122,22 @@ const Events = (): React.ReactElement => {
           {eventData?.map((event, idx) => (
             <Box key={idx} p="5" position="relative">
               <Box>
-                <Text fontSize="lg" fontWeight="medium">
-                  {event.name}
-                </Text>
+                <Flex alignItems="center" gap="5">
+                  <Text fontSize="lg" fontWeight="medium">
+                    {event.name}
+                  </Text>
+                  {profileData?.role === 'officer' && (
+                    <IconButton
+                      aria-label="Edit event"
+                      icon={<FiEdit2 />}
+                      onClick={() => {
+                        handleEditModal(event);
+                      }}
+                      size="sm"
+                      variant="ghost"
+                    />
+                  )}
+                </Flex>
                 <Text className="muted">{getEventDate(event)}</Text>
                 <Text className="muted" fontSize="sm">
                   {event.key ?? ' '}
