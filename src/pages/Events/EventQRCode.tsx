@@ -115,18 +115,22 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: window.innerWidth < 600 ? 'column' : 'row',
+        textAlign: 'center'
+      }}
+    >
       <div
-        style={
-          inNotification
-            ? {
-                marginLeft: 'auto',
-                backgroundColor: '#c6f6d5',
-                padding: '4px',
-                borderRadius: '4px'
-              }
-            : {}
-        }
+        style={{
+          backgroundColor: inNotification ? '#c6f6d5' : 'transparent',
+          padding: '4px',
+          borderRadius: '4px',
+          display: 'flex',
+          justifyContent: 'center'
+        }}
       >
         <QRCodeSVG
           ref={qrRef}
@@ -142,12 +146,13 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
         style={{
           display: 'flex',
           flexDirection: 'column',
-          marginLeft: '20px',
-          marginRight: '20px'
+          marginLeft: window.innerWidth < 600 ? '0px' : '20px',
+          marginTop: window.innerWidth < 600 ? '10px' : '0px',
+          gap: '5px'
         }}
       >
         <Button onClick={downloadPNG}>Download as PNG</Button>
-        <Button onClick={downloadSVG} style={{ marginTop: '10px' }}>
+        <Button onClick={downloadSVG} style={{ marginTop: '5px' }}>
           Download as SVG
         </Button>
       </div>
