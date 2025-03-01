@@ -115,7 +115,7 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
       <div
         style={
           inNotification
@@ -138,11 +138,16 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
           title={`QR Code for event ${eventKey}`}
         />
       </div>
-      <div style={{ marginTop: '10px' }}>
-        <Button onClick={downloadPNG} mr={3} mt={5}>
-          Download as PNG
-        </Button>
-        <Button onClick={downloadSVG} mt={5}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          marginLeft: '20px',
+          marginRight: '20px'
+        }}
+      >
+        <Button onClick={downloadPNG}>Download as PNG</Button>
+        <Button onClick={downloadSVG} style={{ marginTop: '10px' }}>
           Download as SVG
         </Button>
       </div>
