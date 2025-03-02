@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Button } from '@chakra-ui/react';
@@ -23,7 +24,7 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
     ? 'http://127.0.0.1:8080' // development frontend URL
     : 'https://points.illinoiswcs.org'; // production frontend URL
 
-  const loadingUrl = `${baseUrl}/success`; // redirect
+  const loadingUrl = `${baseUrl}/loading/${eventKey}`;
 
   // download as svg
   const downloadSVG = (): void => {
