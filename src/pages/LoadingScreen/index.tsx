@@ -7,8 +7,8 @@ import { Profile } from '../../types/profile';
 import { Heading, Box, VStack, Progress, Link } from '@chakra-ui/react';
 
 const LoadingScreen = (): JSX.Element => {
-  const [isWaitingAuth, setIsWaitingAuth] = useState(true);
-  const [isWaitingLogging, setIsWaitingLogging] = useState(true);
+  const [state, setState] = useState('auth');
+
   const [isError, setIsError] = useState(false);
   const { eventKey } = useParams();
   const location = useLocation();
@@ -18,32 +18,29 @@ const LoadingScreen = (): JSX.Element => {
   const [hasAttemptedLogging, setHasAttemptedLogging] = useState(false);
 
   useEffect(() => {
-    const delay = setTimeout(() => {
-      setIsWaitingAuth(false);
+    const authDelay = setTimeout(() => {
+      setState('logging');
+
+      const loggingDelay = setTimeout(() => {
+        setState('done');
+
+        const doneDelay = setTimeout(() => {
+          navigate('/points', { replace: true });
+        }, 900);
+        return () => {
+          clearTimeout(doneDelay);
+        };
+      }, 800);
+
+      return () => {
+        clearTimeout(loggingDelay);
+      };
     }, 400);
 
     return () => {
-      clearTimeout(delay);
+      clearTimeout(authDelay);
     };
   }, []);
-
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      setIsWaitingLogging(false);
-    }, 1000);
-    return () => {
-      clearTimeout(delay);
-    };
-  }, [isWaitingAuth]);
-
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      navigate('/points', { replace: true });
-    }, 1500);
-    return () => {
-      clearTimeout(delay);
-    };
-  }, [isWaitingLogging]);
 
   const { data, isLoading } = useQuery<Profile>(['get-profile'], async () => {
     const res = await axiosInstance.get('/profile');
@@ -121,7 +118,10 @@ const LoadingScreen = (): JSX.Element => {
           <Box className="text-sm text-gray-500" fontSize="2xl" mb="10px">
             Please try manually logging your points here:
           </Box>
-          {/* <Link href='http://127.0.0.1:8080' fontSize="2xl" color="pink">
+          {/* <Link href='http://127.0.0.1:8080' 
+           fontSize="2xl" 
+           color="pink"
+          >
             http://127.0.0.1:8080
           </Link> */}
           <Link
@@ -135,7 +135,7 @@ const LoadingScreen = (): JSX.Element => {
       );
     }
 
-    if (isLoading || isWaitingAuth) {
+    if (isLoading || state === 'auth') {
       return (
         <Box>
           <Heading mb="10px">Authenticating...</Heading>
@@ -146,7 +146,7 @@ const LoadingScreen = (): JSX.Element => {
       );
     }
 
-    if (isProcessing || isWaitingLogging) {
+    if (isProcessing || state === 'logging') {
       return (
         <Box>
           <Heading mb="10px">Hang tight...</Heading>
