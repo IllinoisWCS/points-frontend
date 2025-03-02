@@ -11,7 +11,7 @@
     "prepare": "husky install",
     "prettier-format": "prettier --config .prettierrc --write",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -b main -d build"
+    "deploy": "gh-pages -b main -d dist"
   },
   "husky": {
     "hooks": {
