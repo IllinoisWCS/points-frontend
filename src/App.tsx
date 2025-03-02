@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,7 +12,7 @@ import SuccessPage from './pages/LoadingScreen/success';
 
 const App = (): React.ReactElement => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ToastContainer />
       <NavbarLayout>
         <Routes>
@@ -23,7 +23,7 @@ const App = (): React.ReactElement => {
           <Route path="/success" element={<SuccessPage />} />
         </Routes>
       </NavbarLayout>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
