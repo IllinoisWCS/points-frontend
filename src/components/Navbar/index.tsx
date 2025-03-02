@@ -93,6 +93,15 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
     }
   };
 
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
+
   return (
     <Box
       bg={useColorModeValue('white', 'gray.800')}
