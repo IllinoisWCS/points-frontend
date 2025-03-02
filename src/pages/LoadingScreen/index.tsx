@@ -83,7 +83,7 @@ const LoadingScreen = (): JSX.Element => {
 
         loginUrl.searchParams.set('fromQR', 'true');
         loginUrl.searchParams.set('eventKey', String(eventKey ?? ''));
-        loginUrl.searchParams.set('returnTo', `/loading/${eventKey ?? ''}`);
+        loginUrl.searchParams.set('returnTo', `/#/loading/${eventKey ?? ''}`);
 
         window.location.href = loginUrl.toString();
         return;
