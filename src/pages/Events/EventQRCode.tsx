@@ -7,13 +7,15 @@ interface EventQRCodeProps {
   size?: number;
   color?: string;
   inNotification?: boolean;
+  layout?: 'default' | 'alternate';
 }
 
 const EventQRCode: React.FC<EventQRCodeProps> = ({
   eventKey,
   size = 128,
   color = '#d4696a', // does this set a default color
-  inNotification = false
+  inNotification = false,
+  layout = 'default'
 }) => {
   // creates react reference that can point to an svg element
   // useRef is react hook that creates mutable reference to object
@@ -114,23 +116,67 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
     img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
   };
 
-  return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: window.innerWidth < 600 ? 'column' : 'row',
-        textAlign: 'center'
-      }}
-    >
+  if (layout === 'default') {
+    return (
       <div
         style={{
-          backgroundColor: inNotification ? '#c6f6d5' : 'transparent',
-          padding: '4px',
-          borderRadius: '4px',
           display: 'flex',
-          justifyContent: 'center'
+          justifyContent: 'flex-end',
+          alignItems: window.innerWidth < 600 ? 'flex-end' : 'center',
+          flexDirection: window.innerWidth < 600 ? 'column' : 'row',
+          textAlign: 'center'
         }}
+      >
+        <div
+          style={{
+            backgroundColor: inNotification ? '#c6f6d5' : 'transparent',
+            padding: '4px',
+            borderRadius: '4px',
+            display: 'flex-end',
+            justifyContent: 'center'
+          }}
+        >
+          <QRCodeSVG
+            ref={qrRef}
+            value={loadingUrl}
+            size={size}
+            fgColor={color}
+            bgColor={inNotification ? '#d1fae5' : '#ffffff'}
+            level="H"
+            title={`QR Code for event ${eventKey}`}
+          />
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'right',
+            marginLeft: window.innerWidth < 600 ? '0px' : '20px',
+            marginTop: window.innerWidth < 600 ? '10px' : '0px',
+            gap: '5px'
+          }}
+        >
+          <Button onClick={downloadPNG}>Download as PNG</Button>
+          <Button onClick={downloadSVG} style={{ marginTop: '5px' }}>
+            Download as SVG
+          </Button>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <div
+        style={
+          inNotification
+            ? {
+                marginLeft: 'auto',
+                backgroundColor: '#c6f6d5',
+                padding: '4px',
+                borderRadius: '4px'
+              }
+            : {}
+        }
       >
         <QRCodeSVG
           ref={qrRef}
@@ -142,22 +188,15 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
           title={`QR Code for event ${eventKey}`}
         />
       </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          marginLeft: window.innerWidth < 600 ? '0px' : '20px',
-          marginTop: window.innerWidth < 600 ? '10px' : '0px',
-          gap: '5px'
-        }}
-      >
-        <Button onClick={downloadPNG}>Download as PNG</Button>
-        <Button onClick={downloadSVG} style={{ marginTop: '5px' }}>
+      <div style={{ marginTop: '10px' }}>
+        <Button onClick={downloadPNG} mr={3} mt={5}>
+          Download as PNG
+        </Button>
+        <Button onClick={downloadSVG} mt={5}>
           Download as SVG
         </Button>
       </div>
     </div>
   );
 };
-
 export default EventQRCode;

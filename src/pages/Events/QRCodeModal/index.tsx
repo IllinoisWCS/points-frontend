@@ -58,6 +58,7 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
                 eventKey={event?.key}
                 size={256}
                 color={isToggled ? '#d4696a' : '#000000'}
+                layout={'alternate'}
               />
             </Box>
           ) : (
