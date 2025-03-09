@@ -156,7 +156,7 @@ const Events = (): React.ReactElement => {
                     }}
                     mb="5"
                   >
-                    Show QR code
+                    Show QR Code
                   </Button>
                 </Box>
               )}
