@@ -28,16 +28,17 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
   return (
     <Modal isOpen={open} onClose={clearAndToggle} isCentered>
       <ModalOverlay />
-      <ModalContent p="10" minW="30%">
+      <ModalContent p="10">
         <ModalCloseButton />
         <ModalHeader>
-          <HStack>
-            <Box>
-              {event?.name} QR Code | {event?.key}
-            </Box>
+          <Box>{event?.name} QR Code</Box>
+        </ModalHeader>
+        <ModalBody>
+          <HStack justifyContent="space-between" mb={4}>
+            <Box>Event Key: {event?.key}</Box>
             <Box>
               <Switch
-                size="lg"
+                size="md"
                 onChange={() => {
                   handleToggleColor();
                 }}
@@ -50,13 +51,11 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
               />
             </Box>
           </HStack>
-        </ModalHeader>
-        <ModalBody>
           {event?.key ? (
             <Box>
               <EventQRCode
                 eventKey={event?.key}
-                size={256}
+                size={320}
                 color={isToggled ? '#d4696a' : '#000000'}
               />
             </Box>

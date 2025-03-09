@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { Button } from '@chakra-ui/react';
+import { Button, HStack } from '@chakra-ui/react';
+import { FiDownload } from 'react-icons/fi';
 
 interface EventQRCodeProps {
   eventKey: string;
@@ -37,8 +38,8 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
     // set attributes on the cloned SVG
     clonedSvg.setAttribute('viewBox', `0 0 ${size} ${size}`);
     clonedSvg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    clonedSvg.setAttribute('width', `${size}px`); // Add px unit
-    clonedSvg.setAttribute('height', `${size}px`); // Add px unit
+    clonedSvg.setAttribute('width', `${size}px`);
+    clonedSvg.setAttribute('height', `${size}px`);
 
     // add style to force size
     clonedSvg.style.width = `${size}px`;
@@ -136,17 +137,19 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
           fgColor={color}
           bgColor={inNotification ? '#d1fae5' : '#ffffff'}
           level="H"
-          title={`QR Code for event ${eventKey}`}
+          title={`QR code for event key ${eventKey}`}
         />
       </div>
-      <div style={{ marginTop: '10px' }}>
-        <Button onClick={downloadPNG} mr={3} mt={5}>
-          Download as PNG
+      <HStack justifyContent={'space-between'} mt={8}>
+        <Button onClick={downloadPNG}>
+          <FiDownload />
+          &nbsp;Save as PNG
         </Button>
-        <Button onClick={downloadSVG} mt={5}>
-          Download as SVG
+        <Button onClick={downloadSVG}>
+          <FiDownload />
+          &nbsp;Save as SVG
         </Button>
-      </div>
+      </HStack>
     </div>
   );
 };
