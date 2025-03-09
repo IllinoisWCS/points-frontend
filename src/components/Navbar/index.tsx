@@ -59,7 +59,7 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
   );
 
   const Greeting = (): React.ReactElement => {
-    if (!data) return null;
+    if (!data) return <></>;
 
     const names = data?.name.split(' ');
     const name = names[0];
@@ -92,6 +92,15 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
       )}/auth/login`;
     }
   };
+
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
 
   return (
     <Box

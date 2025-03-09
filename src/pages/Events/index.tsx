@@ -11,16 +11,18 @@ import {
   Flex
 } from '@chakra-ui/react';
 
-import EventModal from './EventModal';
 import { Event } from '../../types/event';
+import EventModal from './EventModal';
+import QRModal from './QRCodeModal';
 import { getEventDate } from '../../utils/eventDate';
 import { useEventQuery } from './useEventQuery';
 import { useProfileQuery } from './useProfileQuery';
 import { FiEdit2 } from 'react-icons/fi';
 
 const Events = (): React.ReactElement => {
-  const [modal, setModal] = useState(false);
   const [event, setEvent] = useState<Event>();
+  const [eventModal, setEventModal] = useState(false);
+  const [qRModal, setQRModal] = useState(false);
   const [reloadOnClose, setReloadOnClose] = useState(false);
 
   const {
@@ -53,9 +55,9 @@ const Events = (): React.ReactElement => {
     );
   }
 
-  const handleToggleModal = (): void => {
+  const handleToggleEventModal = (): void => {
     setEvent(undefined);
-    setModal(!modal);
+    setEventModal(!eventModal);
     if (reloadOnClose) {
       window.location.reload();
     }
@@ -63,7 +65,15 @@ const Events = (): React.ReactElement => {
 
   const handleEditModal = (event: Event): void => {
     setEvent(event);
-    setModal(!modal);
+    setEventModal(!eventModal);
+    if (reloadOnClose) {
+      window.location.reload();
+    }
+  };
+
+  const handleToggleQR = (event?: Event): void => {
+    setEvent(event);
+    setQRModal(!qRModal);
     if (reloadOnClose) {
       window.location.reload();
     }
@@ -76,14 +86,22 @@ const Events = (): React.ReactElement => {
   return (
     <Box>
       <EventModal
-        open={modal}
+        open={eventModal}
         event={event}
-        toggleModal={handleToggleModal}
+        toggleModal={handleToggleEventModal}
         reloadOnClose={handleReloadOnClose}
       />
 
+      <QRModal
+        open={qRModal}
+        event={event}
+        toggleModal={() => {
+          handleToggleQR(event);
+        }}
+      />
+
       {profileData?.role === 'officer' ? (
-        <Button onClick={handleToggleModal} mb="5">
+        <Button onClick={handleToggleEventModal} mb="5">
           Create New Event
         </Button>
       ) : (
@@ -102,27 +120,46 @@ const Events = (): React.ReactElement => {
           borderRadius="10"
         >
           {eventData?.map((event, idx) => (
-            <Box key={idx} p="5">
-              <Flex alignItems="center" gap="5">
-                <Text fontSize="lg" fontWeight="medium">
-                  {event.name}
+            <Box key={idx} p="5" position="relative">
+              <Box>
+                <Flex alignItems="center" gap="5">
+                  <Text fontSize="lg" fontWeight="medium">
+                    {event.name}
+                  </Text>
+                  {profileData?.role === 'officer' && (
+                    <IconButton
+                      aria-label="Edit event"
+                      icon={<FiEdit2 />}
+                      onClick={() => {
+                        handleEditModal(event);
+                      }}
+                      size="sm"
+                      variant="ghost"
+                    />
+                  )}
+                </Flex>
+                <Text className="muted">{getEventDate(event)}</Text>
+                <Text className="muted" fontSize="sm">
+                  {event.key ?? ' '}
                 </Text>
-                {profileData?.role === 'officer' && (
-                  <IconButton
-                    aria-label="Edit event"
-                    icon={<FiEdit2 />}
+              </Box>
+              {event.key && (
+                <Box
+                  position="absolute"
+                  top="50%"
+                  right="5"
+                  transform="translateY(-50%)"
+                >
+                  <Button
                     onClick={() => {
-                      handleEditModal(event);
+                      handleToggleQR(event);
                     }}
-                    size="sm"
-                    variant="ghost"
-                  />
-                )}
-              </Flex>
-              <Text className="muted">{getEventDate(event)}</Text>
-              <Text className="muted" fontSize="sm">
-                {event.key ?? ' '}
-              </Text>
+                    mb="5"
+                  >
+                    Show QR code
+                  </Button>
+                </Box>
+              )}
             </Box>
           ))}
         </Stack>
