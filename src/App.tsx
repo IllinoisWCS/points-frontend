@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,6 +11,30 @@ import NavbarLayout from './layouts/NavbarLayout';
 import SuccessPage from './pages/LoadingScreen/success';
 
 const App = (): React.ReactElement => {
+  useEffect(() => {
+    // Check URL parameters on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+    const eventKey = urlParams.get('eventKey');
+
+    // If this is a check-in action, redirect to the loading route
+    if (action === 'checkin' && eventKey) {
+      // Clear the URL parameters
+      window.history.replaceState(
+        {},
+        '',
+        `${window.location.origin}${window.location.pathname}`
+      );
+
+      // Force navigation to the loading route
+      const newUrl = `${window.location.origin}${window.location.pathname}`;
+      window.location.href = `${newUrl}#/loading/${eventKey}`;
+
+      // Force a reload to ensure the component loads fresh
+      setTimeout(() => { window.location.reload(); }, 100);
+    }
+  }, []);
+
   return (
     <HashRouter>
       <ToastContainer />

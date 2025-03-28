@@ -25,7 +25,9 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
     ? 'http://127.0.0.1:8080' // development frontend URL
     : 'https://points.illinoiswcs.org'; // production frontend URL
 
-  const loadingUrl = `${baseUrl}/#/loading/${eventKey}`;
+  // const loadingUrl = `${baseUrl}/#/loading/${eventKey}`;
+  const loadingUrl =
+    `${baseUrl}?action=checkin&eventKey=${eventKey}` + `&t=${Date.now()}`;
 
   // download as svg
   const downloadSVG = (): void => {
