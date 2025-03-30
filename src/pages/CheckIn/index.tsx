@@ -14,6 +14,7 @@ import {
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
 import { Profile } from '../../types/profile';
+// import { isError } from 'react-query';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -104,14 +105,15 @@ const CheckIn = (): React.ReactElement => {
     }
   };
 
-  if (isError) {
-    console.log(error);
-    return (
-      <Box>
-        <Heading size="lg">Temporary Error</Heading>
-      </Box>
-    );
-  }
+  // Look into this!
+  // if (isError) {
+  //   console.log(isError);
+  //   return (
+  //     <Box>
+  //       <Heading size="lg">Temporary Error</Heading>
+  //     </Box>
+  //   );
+  // }
 
   return (
     <Box>
