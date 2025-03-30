@@ -54,12 +54,15 @@ const ReTable = (): React.ReactElement => {
   }
   const [page, setPage] = React.useState(0);
 
-  const tableData = data?.map((profile, index) => ({
+  const filteredData = data?.filter((profile) => profile.role !== 'officer');
+
+  const tableData = filteredData?.map((profile, index) => ({
     rank: index + 1,
     name: profile.name,
     events: profile.events,
     points: profile.points,
     num_events: profile.events.length,
+    role: profile.role,
     netId: profile.netId
   }));
   return (
