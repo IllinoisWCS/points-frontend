@@ -1,4 +1,4 @@
-import React, { useMemo, useState, BaseSyntheticEvent } from 'react';
+import React, { /* useMemo, */ useState, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -8,12 +8,12 @@ import {
   Button,
   Input,
   Box,
-  Center
+  useQuery
 } from '@chakra-ui/react';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
-import ReTable from '../../components/Leaderboard';
+import { Profile } from '../../types/profile';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -79,7 +79,7 @@ const CheckIn = (): React.ReactElement => {
       }
     },
     {
-      retry: (failureCount, error: any) => {
+      retry: (failureCount: number, error: any) => {
         if (
           error.response &&
           (error.response.status === 401 || error.response.status === 403)
@@ -103,40 +103,15 @@ const CheckIn = (): React.ReactElement => {
       )}/auth/login`;
     }
   };
-  const cols = useMemo<ColumnDef<Profile>[]>(
-    () => [
-        {
-            header: 'Rank',
-            cell: (row) => row.renderValue(),
-            accessorKey: 'rank',
-        },
-        {
-            header: 'Name',
-            cell: (row) => row.renderValue(),
-            accessorKey: 'name',
-        },
-        {
-            header: 'Points',
-            cell: (row) => row.renderValue(),
-            accessorKey: 'points',
-        },
-        {
-            header: 'Events Attended',
-            cell: (row) => row.renderValue(),
-            accessorKey: 'events',
-        },
-    ],
-    []
-   );
 
-  // if (isError) {
-  //   console.log(error);
-  //   return (
-  //     <Box>
-  //       <Heading size="lg">Temporary Error</Heading>
-  //     </Box>
-  //   );
-  // }
+  if (isError) {
+    console.log(error);
+    return (
+      <Box>
+        <Heading size="lg">Temporary Error</Heading>
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -162,23 +137,15 @@ const CheckIn = (): React.ReactElement => {
             value={eventKey}
             onChange={handleChangeKey}
           />
-          <Button onClick={handleSubmit}>Check-in</Button>
+          <Button
+            onClick={() => {
+              void handleSubmit();
+            }}
+          >
+            Check-in
+          </Button>
         </VStack>
       </Box>
-      <VStack
-        align="unset"
-        spacing="5"
-        bg="white"
-        p="5"
-        borderRadius="10"
-        border="1px"
-        borderColor="gray.100"
-      >
-        <Heading size="lg" pb="25px">
-          <Center>Leaderboard</Center>
-        </Heading>
-        <ReTable />
-      </VStack>
     </Box>
   );
 };
