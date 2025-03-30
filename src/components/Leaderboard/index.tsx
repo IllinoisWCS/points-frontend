@@ -24,14 +24,6 @@ const columns = [
   columnHelper.accessor('points', {
     header: () => 'Points',
     cell: (info) => info.renderValue()
-  }),
-  columnHelper.accessor('num_events', {
-    header: () => 'Events Attended',
-    cell: (props) => props.getValue()
-  }),
-  columnHelper.accessor('netId', {
-    header: () => 'NetId',
-    cell: (info) => info.getValue()
   })
 ];
 
@@ -54,14 +46,22 @@ const ReTable = (): React.ReactElement => {
   }
   const [page, setPage] = React.useState(0);
 
-  const tableData = data?.map((profile, index) => ({
-    rank: index + 1,
-    name: profile.name,
-    events: profile.events,
-    points: profile.points,
-    num_events: profile.events.length,
-    netId: profile.netId
-  }));
+  const tableData = data?.map((profile, index) =>
+    profile.name ? (
+      {
+        rank: index + 1,
+        name:
+          profile.name.split(' ')[0] +
+            ' ' +
+            String(profile?.name?.split(' ').at(-1)?.[0]) ?? '',
+        events: profile.events,
+        points: profile.points
+      }
+    ) : (
+      <></>
+    )
+  );
+
   return (
     <Box>
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
