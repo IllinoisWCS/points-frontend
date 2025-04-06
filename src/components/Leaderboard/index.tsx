@@ -1,7 +1,15 @@
 import * as React from 'react';
 import { Profile } from '../../types/profile';
 import { Table, createColumn } from 'react-chakra-pagination';
-import { Box, Heading, Skeleton } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Skeleton,
+  Input,
+  HStack,
+  Center
+} from '@chakra-ui/react';
+import { LuSearch } from 'react-icons/lu';
 
 import { useQuery } from 'react-query';
 import axiosInstance from '../../api';
@@ -24,14 +32,6 @@ const columns = [
   columnHelper.accessor('points', {
     header: () => 'Points',
     cell: (info) => info.renderValue()
-  }),
-  columnHelper.accessor('num_events', {
-    header: () => 'Events Attended',
-    cell: (props) => props.getValue()
-  }),
-  columnHelper.accessor('netId', {
-    header: () => 'NetId',
-    cell: (info) => info.getValue()
   })
 ];
 
@@ -52,27 +52,46 @@ const ReTable = (): React.ReactElement => {
       </Box>
     );
   }
+
   const [page, setPage] = React.useState(0);
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const filteredData = data?.filter((profile) => profile.role !== 'officer');
 
-  const tableData = filteredData?.map((profile, index) => ({
-    rank: index + 1,
-    name: profile.name,
-    events: profile.events,
-    points: profile.points,
-    num_events: profile.events.length,
-    role: profile.role,
-    netId: profile.netId
-  }));
+  const tableData = filteredData?.map((profile, index) =>
+    profile.name
+      ? {
+          rank: index + 1,
+          name:
+            profile.name.split(' ')[0] +
+              ' ' +
+              String(profile?.name?.split(' ').at(-1)?.[0]) ?? '',
+          events: profile.events,
+          points: profile.points,
+          role: profile.role
+        }
+      : null
+  );
   return (
     <Box>
+      <HStack>
+        <Center w="40px" h="40px">
+          <LuSearch size={25} />
+        </Center>
+        <Input
+          placeholder="Search"
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+          }}
+        />
+      </HStack>
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
         <Table
           colorScheme="blue"
           // Fallback component when list is empty
           emptyData={{
-            text: 'Nobody users found'
+            text: 'No users found'
           }}
           totalRegisters={data?.length}
           page={page}
@@ -81,7 +100,11 @@ const ReTable = (): React.ReactElement => {
             setPage(page);
           }}
           columns={columns}
-          data={tableData ?? []}
+          data={
+            tableData?.filter((profile) =>
+              profile?.name.toLowerCase().includes(searchQuery.toLowerCase())
+            ) ?? []
+          }
         />
       </Skeleton>
     </Box>

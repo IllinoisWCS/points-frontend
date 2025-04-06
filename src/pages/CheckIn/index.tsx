@@ -1,4 +1,6 @@
-import React, { useState, BaseSyntheticEvent } from 'react';
+import React, { /* useMemo, */ useState, BaseSyntheticEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import {
   VStack,
   Heading,
@@ -6,46 +8,106 @@ import {
   Button,
   Input,
   Box,
-  Center
+  useQuery
 } from '@chakra-ui/react';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
-import ReTable from '../../components/Leaderboard';
+import { Profile } from '../../types/profile';
+// import { isError } from 'react-query';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
   const [eventKeyError, setEventKeyError] = useState(false);
+  const navigate = useNavigate();
 
   const handleChangeKey = (event: BaseSyntheticEvent): void => {
     setEventKey(event.target.value);
   };
 
-  const handleSubmit = (): void => {
+  const handleSubmit = async (): Promise<void> => {
     const isEventKeyError = eventKey === '';
     setEventKeyError(isEventKeyError);
     if (isEventKeyError) return;
+
+    if (!data) {
+      toastError(
+        <div>
+          Not logged in.{' '}
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              void handleClick();
+            }}
+            style={{ color: '#f9dcf6', textDecoration: 'underline' }}
+          >
+            Login
+          </a>
+        </div>
+      );
+      return;
+    }
 
     axiosInstance
       .patch('/profile', { eventKey })
       .then((res) => {
         toastSuccess(res.data.message);
+        navigate('/success');
       })
       .catch((err) => {
-        toastError(err.response.data.message);
+        toastError(err.response?.data?.message || 'An error occurred');
         console.log(err);
       });
   };
 
-  // const { isError, error } = useQuery<Promise<void>, Error>(
-  //   ['get-profile'],
-  //   async () => {
-  //     await axiosInstance.get('/profile');
-  //   }
-  // );
+  const { data } = useQuery<Profile, Error>(
+    ['get-profile'],
+    async () => {
+      try {
+        const res = await axiosInstance.get('/profile');
+        return res.data;
+      } catch (err: unknown) {
+        if (
+          err instanceof Error &&
+          (err as any).response &&
+          ((err as any).response.status === 401 ||
+            (err as any).response.status === 403)
+        ) {
+          return null;
+        }
+        throw err;
+      }
+    },
+    {
+      retry: (failureCount: number, error: any) => {
+        if (
+          error.response &&
+          (error.response.status === 401 || error.response.status === 403)
+        ) {
+          return false;
+        }
+        return failureCount < 3;
+      }
+    }
+  );
 
+  const handleClick = async (): Promise<void> => {
+    if (data) {
+      // user clicked logout
+      await axiosInstance.post('/auth/logout', {});
+      window.location.href = '/';
+    } else {
+      // user clicked login
+      window.location.href = `${String(
+        axiosInstance.defaults.baseURL
+      )}/auth/login`;
+    }
+  };
+
+  // Look into this!
   // if (isError) {
-  //   console.log(error);
+  //   console.log(isError);
   //   return (
   //     <Box>
   //       <Heading size="lg">Temporary Error</Heading>
@@ -77,23 +139,15 @@ const CheckIn = (): React.ReactElement => {
             value={eventKey}
             onChange={handleChangeKey}
           />
-          <Button onClick={handleSubmit}>Check-in</Button>
+          <Button
+            onClick={() => {
+              void handleSubmit();
+            }}
+          >
+            Check-in
+          </Button>
         </VStack>
       </Box>
-      <VStack
-        align="unset"
-        spacing="5"
-        bg="white"
-        p="5"
-        borderRadius="10"
-        border="1px"
-        borderColor="gray.100"
-      >
-        <Heading size="lg" pb="25px">
-          <Center>Leaderboard</Center>
-        </Heading>
-        <ReTable />
-      </VStack>
     </Box>
   );
 };

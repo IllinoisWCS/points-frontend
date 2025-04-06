@@ -20,8 +20,31 @@ const Points = (): React.ReactElement => {
   const { isLoading, isError, error, data } = useQuery<Profile, Error>(
     ['get-profile'],
     async () => {
-      const res = await axiosInstance.get('/profile');
-      return res.data;
+      try {
+        const res = await axiosInstance.get('/profile');
+        return res.data;
+      } catch (err: unknown) {
+        if (
+          err instanceof Error &&
+          (err as any).response &&
+          ((err as any).response.status === 401 ||
+            (err as any).response.status === 403)
+        ) {
+          return null;
+        }
+        throw err;
+      }
+    },
+    {
+      retry: (failureCount, error: any) => {
+        if (
+          error.response &&
+          (error.response.status === 401 || error.response.status === 403)
+        ) {
+          return false;
+        }
+        return failureCount < 3;
+      }
     }
   );
 
