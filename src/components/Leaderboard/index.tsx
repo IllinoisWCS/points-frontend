@@ -56,7 +56,9 @@ const ReTable = (): React.ReactElement => {
   const [page, setPage] = React.useState(0);
   const [searchQuery, setSearchQuery] = React.useState('');
 
-  const tableData = data?.map((profile, index) =>
+  const filteredData = data?.filter((profile) => profile.role !== 'officer');
+
+  const tableData = filteredData?.map((profile, index) =>
     profile.name
       ? {
           rank: index + 1,
@@ -65,7 +67,8 @@ const ReTable = (): React.ReactElement => {
               ' ' +
               String(profile?.name?.split(' ').at(-1)?.[0]) ?? '',
           events: profile.events,
-          points: profile.points
+          points: profile.points,
+          role: profile.role
         }
       : null
   );
@@ -78,7 +81,9 @@ const ReTable = (): React.ReactElement => {
         <Input
           placeholder="Search"
           value={searchQuery}
-          onChange={(e) => { setSearchQuery(e.target.value); }}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+          }}
         />
       </HStack>
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>

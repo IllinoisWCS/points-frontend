@@ -14,6 +14,7 @@ export interface ProfileType {
   points: number;
   name: string;
   role: string;
+  role: string;
   netId: string;
   num_events: number;
 }
