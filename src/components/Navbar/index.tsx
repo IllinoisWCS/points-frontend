@@ -11,7 +11,7 @@ import {
   useColorMode,
   Button
 } from '@chakra-ui/react';
-import { FiHome, FiTrendingUp, FiCalendar } from 'react-icons/fi';
+import { FiHome, FiTrendingUp, FiCalendar, FiAward } from 'react-icons/fi';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
 import { useQuery } from 'react-query';
 import axiosInstance from '../../api';
@@ -22,7 +22,8 @@ import Logo from '../Logo';
 const LinkItems: LinkItemProps[] = [
   { name: 'Home', icon: FiHome, to: '/' },
   { name: 'Points', icon: FiTrendingUp, to: '/points' },
-  { name: 'Events', icon: FiCalendar, to: '/events' }
+  { name: 'Events', icon: FiCalendar, to: '/events' },
+  { name: 'Leaderboard', icon: FiAward, to: '/leader-board' }
 ];
 
 const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {

@@ -1,11 +1,20 @@
-import React, { useState, BaseSyntheticEvent } from 'react';
-import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
+import React, { /* useMemo, */ useState, BaseSyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import {
+  VStack,
+  Heading,
+  Text,
+  Button,
+  Input,
+  Box,
+  useQuery
+} from '@chakra-ui/react';
 
 import axiosInstance from '../../api';
 import { toastError, toastSuccess } from '../../utils/toast';
-import { useQuery } from 'react-query';
 import { Profile } from '../../types/profile';
+// import { isError } from 'react-query';
 
 const CheckIn = (): React.ReactElement => {
   const [eventKey, setEventKey] = useState('');
@@ -71,7 +80,7 @@ const CheckIn = (): React.ReactElement => {
       }
     },
     {
-      retry: (failureCount, error: any) => {
+      retry: (failureCount: number, error: any) => {
         if (
           error.response &&
           (error.response.status === 401 || error.response.status === 403)
@@ -96,37 +105,49 @@ const CheckIn = (): React.ReactElement => {
     }
   };
 
+  // Look into this!
+  // if (isError) {
+  //   console.log(isError);
+  //   return (
+  //     <Box>
+  //       <Heading size="lg">Temporary Error</Heading>
+  //     </Box>
+  //   );
+  // }
+
   return (
     <Box>
-      <Heading size="lg" pb="25px">
-        Check-in
-      </Heading>
-      <VStack
-        align="unset"
-        spacing="5"
-        p="5"
-        borderRadius="10"
-        border="1px"
-        borderColor="gray.100"
-      >
-        <Text fontSize="lg" fontWeight="medium">
-          Event Key
-        </Text>
-        <Input
-          isInvalid={eventKeyError}
-          placeholder="Enter the event key..."
-          value={eventKey}
-          onChange={handleChangeKey}
-        />
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            handleSubmit().catch(console.error);
-          }}
-        >
+      <Box>
+        <Heading size="lg" pb="25px">
           Check-in
-        </Button>
-      </VStack>
+        </Heading>
+        <VStack
+          align="unset"
+          spacing="5"
+          bg="white"
+          p="5"
+          borderRadius="10"
+          border="1px"
+          borderColor="gray.100"
+        >
+          <Text fontSize="lg" fontWeight="medium">
+            Event Key
+          </Text>
+          <Input
+            isInvalid={eventKeyError}
+            placeholder="Enter the event key..."
+            value={eventKey}
+            onChange={handleChangeKey}
+          />
+          <Button
+            onClick={() => {
+              void handleSubmit();
+            }}
+          >
+            Check-in
+          </Button>
+        </VStack>
+      </Box>
     </Box>
   );
 };
