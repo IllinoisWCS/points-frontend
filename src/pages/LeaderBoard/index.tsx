@@ -2,7 +2,7 @@ import React from 'react';
 import { Heading, VStack } from '@chakra-ui/react';
 import ReTable from '../../components/Leaderboard';
 
-const LeaderBoard = (): React.ReactElement => {
+const Leaderboard = (): React.ReactElement => {
   // this was previously uncommented for the leaderboard in checkin
   // const cols = useMemo<ColumnDef<Profile>[]>(
   //   () => [
@@ -42,7 +42,7 @@ const LeaderBoard = (): React.ReactElement => {
         borderColor="gray.100"
       >
         <Heading size="lg" pb="25px">
-          LeaderBoard
+          Leaderboard
         </Heading>
         <ReTable />
       </VStack>
@@ -50,4 +50,4 @@ const LeaderBoard = (): React.ReactElement => {
   );
 };
 
-export default LeaderBoard;
+export default Leaderboard;
