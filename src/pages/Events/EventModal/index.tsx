@@ -386,7 +386,11 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
             </HStack>
             <FormControl>
               <HStack>
-                <Checkbox onChange={handleSameDayChange} isChecked={sameDay} />
+                <Checkbox
+                  onChange={handleSameDayChange}
+                  isChecked={sameDay}
+                  iconColor="pink"
+                />
                 <FormLabel>Same day</FormLabel>
               </HStack>
             </FormControl>

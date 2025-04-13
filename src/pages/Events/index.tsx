@@ -120,46 +120,47 @@ const Events = (): React.ReactElement => {
           borderRadius="10"
         >
           {eventData?.map((event, idx) => (
-            <Box key={idx} p="5" position="relative">
-              <Box>
-                <Flex alignItems="center" gap="5">
-                  <Text fontSize="lg" fontWeight="medium">
-                    {event.name}
+            <Box key={idx} p="5">
+              <Flex
+                direction={{ base: 'column', md: 'row' }}
+                justify="space-between"
+                align={{ base: 'flex-start', md: 'center' }}
+                gap={2}
+              >
+                <Box>
+                  <Flex align="center" gap="2">
+                    <Text fontSize="lg" fontWeight="medium">
+                      {event.name}
+                    </Text>
+                    {profileData?.role === 'officer' && (
+                      <IconButton
+                        aria-label="Edit event"
+                        icon={<FiEdit2 />}
+                        onClick={() => {
+                          handleEditModal(event);
+                        }}
+                        size="sm"
+                        variant="ghost"
+                      />
+                    )}
+                  </Flex>
+                  <Text className="muted">{getEventDate(event)}</Text>
+                  <Text className="muted" fontSize="sm">
+                    {event.key ?? ' '}
                   </Text>
-                  {profileData?.role === 'officer' && (
-                    <IconButton
-                      aria-label="Edit event"
-                      icon={<FiEdit2 />}
-                      onClick={() => {
-                        handleEditModal(event);
-                      }}
-                      size="sm"
-                      variant="ghost"
-                    />
-                  )}
-                </Flex>
-                <Text className="muted">{getEventDate(event)}</Text>
-                <Text className="muted" fontSize="sm">
-                  {event.key ?? ' '}
-                </Text>
-              </Box>
-              {event.key && (
-                <Box
-                  position="absolute"
-                  top="50%"
-                  right="5"
-                  transform="translateY(-50%)"
-                >
+                </Box>
+
+                {event.key && (
                   <Button
                     onClick={() => {
                       handleToggleQR(event);
                     }}
-                    mb="5"
+                    size="sm"
                   >
                     Show QR Code
                   </Button>
-                </Box>
-              )}
+                )}
+              </Flex>
             </Box>
           ))}
         </Stack>
