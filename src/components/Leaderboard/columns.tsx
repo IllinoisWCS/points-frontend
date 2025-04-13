@@ -10,9 +10,5 @@ export const COLUMNS = [
   {
     Header: 'Points',
     accessor: 'points'
-  },
-  {
-    Header: 'Events Attended',
-    accessor: 'events'
   }
 ];
