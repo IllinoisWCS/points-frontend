@@ -155,7 +155,6 @@ const Events = (): React.ReactElement => {
                     onClick={() => {
                       handleToggleQR(event);
                     }}
-                    size="sm"
                   >
                     Show QR Code
                   </Button>
