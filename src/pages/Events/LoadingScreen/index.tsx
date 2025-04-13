@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import axiosInstance from '../../api';
 import { useQuery } from 'react-query';
+import { toastError, toastSuccess } from '../../utils/toast';
+import { Profile } from '../../types/profile';
 import { Heading, Box, VStack, Progress, Link } from '@chakra-ui/react';
-import { Profile } from '../../../types/profile';
-import { toastError, toastSuccess } from '../../../utils/toast';
-import axiosInstance from '../../../api';
 
 const LoadingScreen = (): JSX.Element => {
   const [state, setState] = useState('auth');
