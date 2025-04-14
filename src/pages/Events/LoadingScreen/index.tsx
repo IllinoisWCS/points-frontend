@@ -3,7 +3,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Heading, Box, VStack, Progress, Link } from '@chakra-ui/react';
 import { Profile } from '../../../types/profile';
-import { toastError } from '../../../utils/toast';
+import { toastError, toastSuccess } from '../../../utils/toast';
 import axiosInstance from '../../../api';
 
 const LoadingScreen = (): JSX.Element => {
