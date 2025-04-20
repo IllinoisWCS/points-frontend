@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   ModalCloseButton,
@@ -24,6 +24,27 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
   const clearAndToggle = (): void => {
     toggleModal();
   };
+
+  const useWindowDimensions = (): { /* height: number; */ width: number; } => {
+    const [dimensions, setDimensions] = useState({
+      width: window.innerWidth
+      // height: window.innerHeight,
+    });
+
+    useEffect(() => {
+      const handleResize = (): void => {
+        setDimensions({
+          width: window.innerWidth /* height: window.innerHeight */
+        });
+      };
+      window.addEventListener('resize', handleResize);
+      return () => { window.removeEventListener('resize', handleResize); };
+    }, []);
+
+    return dimensions;
+  };
+
+  const { /* height, */ width } = useWindowDimensions();
 
   return (
     <Modal isOpen={open} onClose={clearAndToggle} isCentered>
@@ -55,7 +76,7 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
             <Box>
               <EventQRCode
                 eventKey={event?.key}
-                size={320}
+                size={width < 448 ? width - 128 : 320}
                 color={isToggled ? '#d4696a' : '#000000'}
               />
             </Box>

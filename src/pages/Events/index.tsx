@@ -136,7 +136,9 @@ const Events = (): React.ReactElement => {
                       <IconButton
                         aria-label="Edit event"
                         icon={<FiEdit2 />}
-                        onClick={() => { handleEditModal(event); }}
+                        onClick={() => {
+                          handleEditModal(event);
+                        }}
                         size="sm"
                         variant="ghost"
                       />
@@ -149,7 +151,11 @@ const Events = (): React.ReactElement => {
                 </Box>
 
                 {event.key && (
-                  <Button onClick={() => { handleToggleQR(event); }} size="sm">
+                  <Button
+                    onClick={() => {
+                      handleToggleQR(event);
+                    }}
+                  >
                     Show QR Code
                   </Button>
                 )}

@@ -86,10 +86,10 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
       await axiosInstance.post('/auth/logout', {});
       window.location.href = '/';
     } else {
-      // user clicked login
+      // user clicked login - use default flow
       window.location.href = `${String(
         axiosInstance.defaults.baseURL
-      )}/auth/login`;
+      )}/auth/login?redirectTo=default`;
     }
   };
 
