@@ -53,6 +53,8 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   const [msg, setMsg] = useState('');
   const [eventKey, setEventKey] = useState<string | null>(null);
 
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   const handleNameChange = (props: StringFieldProps): void => {
     setName(props.target.value);
   };
@@ -151,6 +153,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   };
 
   const clearAndToggle = (): void => {
+    setHasSubmitted(false);
     if (pointsErr) setPointsErr(false);
     if (startDateErr) setStartDateErr(false);
     if (endDateErr) setEndDateErr(false);
@@ -289,7 +292,14 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
         private: visibility === 'private'
       };
 
-      !event?._id ? createEvent.mutate(cEvent) : editEvent.mutate(eEvent);
+      if (!event?._id) {
+        if (!hasSubmitted) {
+          setHasSubmitted(true);
+          createEvent.mutate(cEvent);
+        }
+      } else {
+        editEvent.mutate(eEvent);
+      }
     }
   };
 
@@ -417,7 +427,11 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <Button type="submit" onClick={validateEvent}>
+          <Button
+            type="submit"
+            onClick={validateEvent}
+            isDisabled={!event?._id && hasSubmitted}
+          >
             Submit
           </Button>
         </ModalFooter>
