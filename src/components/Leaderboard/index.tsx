@@ -27,29 +27,15 @@ export interface LeaderboardProfile extends Profile {
   rank: number;
 }
 
-// const columnHelper = createColumn<LeaderboardProfile>();
-
-// const columns = [
-//   columnHelper.accessor('rank', {
-//     header: () => 'Rank',
-//     cell: (props) => props.getValue()
-//   }),
-//   columnHelper.accessor('name', {
-//     header: () => 'Name',
-//     cell: (info) => info.getValue()
-//   }),
-//   columnHelper.accessor('points', {
-//     header: () => 'Points',
-//     cell: (info) => info.renderValue()
-//   })
-// ];
-
 const ReTable = (): React.ReactElement => {
   const { isLoading, isError, error, data } = useQuery<
     LeaderboardProfile[],
     Error
   >(['get-users'], async () => {
     const res = await axiosInstance.get('/users');
+
+    console.log('data length', res.data?.length);
+    console.log('data', res.data);
     return res.data;
   });
 
@@ -62,43 +48,67 @@ const ReTable = (): React.ReactElement => {
     );
   }
 
+  // pagination
   const [currentPage, setCurrentPage] = React.useState(1);
   const [startIdx, setStartIdx] = React.useState(0);
   const [endIdx, setEndIdx] = React.useState(20);
+
   const [searchQuery, setSearchQuery] = React.useState('');
 
-  const filteredData = data?.filter((profile) => profile.role !== 'officer');
-
-  const tableData = filteredData?.map((profile, index) =>
-    profile.name
-      ? {
-          rank: index + 1,
-          name:
-            profile.name.split(' ')[0] +
-              ' ' +
-              String(profile?.name?.split(' ').at(-1)?.[0]) ?? '',
-          events: profile.events,
-          points: profile.points,
-          role: profile.role
-        }
-      : null
+  const filteredData = data?.filter(
+    (profile) => profile.name && profile.role !== 'officer'
   );
+
+  console.log('fltered data length', filteredData?.length);
+  const tableData = filteredData?.map((profile, index) => ({
+    rank: index + 1,
+    name:
+      profile.name.split(' ')[0] +
+        ' ' +
+        String(profile?.name?.split(' ').at(-1)?.[0]) ?? '',
+    events: profile.events,
+    points: profile.points,
+    role: profile.role
+  }));
+
+  console.log('table data length', tableData?.length);
+  console.log(tableData);
 
   const [numPages, setNumPages] = React.useState(
     Math.trunc(
       tableData
         ? tableData?.length / 20 + (tableData?.length % 20 !== 0 ? 1 : 0)
-        : 7
+        : 1
     )
   );
 
+  // fix num pages on reset
+  if (tableData?.length) {
+    if (
+      numPages !==
+        Math.trunc(
+          tableData?.length / 20 + (tableData?.length % 20 !== 0 ? 1 : 0)
+        ) &&
+      searchQuery === ''
+    ) {
+      setNumPages(
+        Math.trunc(
+          tableData?.length / 20 + (tableData?.length % 20 !== 0 ? 1 : 0)
+        )
+      );
+    }
+  }
+
+  // update search value and num pages when search value changed
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const updateSearch = (searchValue: string) => {
     console.log('Searching!', searchValue);
     setSearchQuery(searchValue);
-    const tableDataFiltered = tableData?.filter((profile) =>
-      profile?.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
+    const tableDataFiltered = searchValue
+      ? tableData?.filter((profile) =>
+          profile?.name.toLowerCase().includes(searchValue.toLowerCase())
+        )
+      : tableData;
     console.log('c', numPages, tableDataFiltered?.length);
     if (tableDataFiltered?.length === 0) {
       setNumPages(1);
@@ -108,19 +118,20 @@ const ReTable = (): React.ReactElement => {
           tableDataFiltered
             ? tableDataFiltered?.length / 20 +
                 (tableDataFiltered?.length % 20 !== 0 ? 1 : 0)
-            : 7
+            : 1
         )
       );
     }
     setCurrentPage(1);
     setStartIdx(0);
     setEndIdx(20);
-    
   };
+
+  // page updates
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onPressLeft = () => {
-    if (!(currentPage === 1)) {
+    if (!(currentPage <= 1)) {
       const cp = currentPage - 1;
       setCurrentPage(currentPage - 1);
       setStartIdx((cp - 1) * 20);
@@ -128,12 +139,11 @@ const ReTable = (): React.ReactElement => {
       console.log(currentPage);
       console.log(startIdx, endIdx);
     }
-    
   };
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onPressRight = () => {
-    if (!(currentPage + 1 > numPages)) {
+    if (!(currentPage >= numPages)) {
       const cp = currentPage + 1;
       setCurrentPage(currentPage + 1);
       setStartIdx((cp - 1) * 20);
@@ -141,7 +151,6 @@ const ReTable = (): React.ReactElement => {
       console.log(currentPage);
       console.log(startIdx, endIdx);
     }
-    
   };
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -151,7 +160,6 @@ const ReTable = (): React.ReactElement => {
     setEndIdx(numPages * 20);
     console.log(currentPage);
     console.log(startIdx, endIdx);
-    
   };
 
   return (
@@ -196,51 +204,42 @@ const ReTable = (): React.ReactElement => {
             </Tbody>
           </Table>
         </TableContainer>
-        {/* <Table
-          colorScheme="blue"
-          // Fallback component when list is empty
-          emptyData={{
-            text: 'No users found'
-          }}
-          totalRegisters={data?.length}
-          // page={page}
-          // Listen change page event and control the current page using state
-          // onPageChange={(page) => {
-          //   setPage(page);
-          // }}
-          columns={columns}
-          data={
-            tableData?.filter((profile) =>
-              profile?.name.toLowerCase().includes(searchQuery.toLowerCase())
-            ) ?? []
-          }
-        /> */}
       </Skeleton>
       <Flex justify="flex-end">
-        <HStack>
-          <Button onClick={onPressLeft}>
-            <LuChevronLeft />
-          </Button>
-          {currentPage !== numPages ? (
-            <Button>{currentPage}</Button>
-          ) : (
-            <div>
-              <br />
-            </div>
-          )}
-          {currentPage !== numPages - 1 ? (
-            <div>
-              <br />
-              <> ... </>
-            </div>
-          ) : (
-            <></>
-          )}
-          <Button onClick={onPressLast}>{numPages}</Button>
-          <Button onClick={onPressRight}>
-            <LuChevronRight />
-          </Button>
-        </HStack>
+        {numPages === 1 ? (
+          <HStack>
+            <Button onClick={onPressLast}>{numPages}</Button>
+          </HStack>
+        ) : (
+          <HStack>
+            {currentPage !== 1 && (
+              <Button onClick={onPressLeft}>
+                <LuChevronLeft />
+              </Button>
+            )}
+            {currentPage !== numPages ? (
+              <Button>{currentPage}</Button>
+            ) : (
+              <div>
+                <br />
+              </div>
+            )}
+            {currentPage !== numPages - 1 ? (
+              <div>
+                <br />
+                <> ... </>
+              </div>
+            ) : (
+              <></>
+            )}
+            <Button onClick={onPressLast}>{numPages}</Button>
+            {currentPage !== numPages && (
+              <Button onClick={onPressRight}>
+                <LuChevronRight />
+              </Button>
+            )}
+          </HStack>
+        )}
       </Flex>
     </Box>
   );
