@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { Button, HStack } from '@chakra-ui/react';
+import { Button, HStack, VStack } from '@chakra-ui/react';
 import { FiDownload } from 'react-icons/fi';
 
 interface EventQRCodeProps {
@@ -132,26 +132,28 @@ const EventQRCode: React.FC<EventQRCodeProps> = ({
             : {}
         }
       >
-        <QRCodeSVG
-          ref={qrRef}
-          value={loadingUrl}
-          size={size}
-          fgColor={color}
-          bgColor={inNotification ? '#d1fae5' : '#ffffff'}
-          level="H"
-          title={`QR code for event key ${eventKey}`}
-        />
+        <HStack ml="auto" spacing={4}>
+          <QRCodeSVG
+            ref={qrRef}
+            value={loadingUrl}
+            size={size}
+            fgColor={color}
+            bgColor={inNotification ? '#d1fae5' : '#ffffff'}
+            level="H"
+            title={`QR code for event key ${eventKey}`}
+          />
+          <VStack justifyContent={'space-between'} mt={8}>
+            <Button onClick={downloadPNG} size={{ base: 'sm', md: 'md' }}>
+              <FiDownload />
+              &nbsp;Save as PNG
+            </Button>
+            <Button onClick={downloadSVG} size={{ base: 'sm', md: 'md' }}>
+              <FiDownload />
+              &nbsp;Save as SVG
+            </Button>
+          </VStack>
+        </HStack>
       </div>
-      <HStack justifyContent={'space-between'} mt={8}>
-        <Button onClick={downloadPNG}>
-          <FiDownload />
-          &nbsp;Save as PNG
-        </Button>
-        <Button onClick={downloadSVG}>
-          <FiDownload />
-          &nbsp;Save as SVG
-        </Button>
-      </HStack>
     </div>
   );
 };
