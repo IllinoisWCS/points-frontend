@@ -18,7 +18,8 @@ import {
   Checkbox,
   Stack,
   Select,
-  Input
+  Input,
+  Box
 } from '@chakra-ui/react';
 import { useMutation } from 'react-query';
 
@@ -406,16 +407,20 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
             </FormControl>
             {success && (
               <Alert status="success" variant="left-accent">
-                <AlertIcon />
-                {msg}
-                {eventKey && (
-                  <EventQRCode
-                    eventKey={eventKey}
-                    size={64}
-                    color={'#d4696a'}
-                    inNotification={true}
-                  />
-                )}
+                <HStack w="100%" alignItems="center" spacing={4}>
+                  <AlertIcon />
+                  <Box>{msg}</Box>
+                  {eventKey && (
+                    <Box ml="auto">
+                      <EventQRCode
+                        eventKey={eventKey}
+                        size={84}
+                        color={'#d4696a'}
+                        inNotification={true}
+                      />
+                    </Box>
+                  )}
+                </HStack>
               </Alert>
             )}
             {error && (
