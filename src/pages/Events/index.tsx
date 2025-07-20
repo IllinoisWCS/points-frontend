@@ -3,7 +3,7 @@ import {
   Button,
   Box,
   Text,
-  StackDivider,
+  StackSeparator,
   Stack,
   Heading,
   Skeleton,
@@ -109,12 +109,14 @@ const Events = (): React.ReactElement => {
       )}
 
       <Skeleton
-        startColor="gray.100"
-        endColor="gray.200"
-        isLoaded={!eventIsLoading}
+      css={{
+        "--start-color": "gray.100",
+        "--end-color": "gray.200",
+        }}
+        loading={eventIsLoading}
       >
         <Stack
-          divider={<StackDivider />}
+          separator={<StackSeparator />}
           border="1px"
           borderColor="gray.100"
           borderRadius="10"
@@ -135,13 +137,12 @@ const Events = (): React.ReactElement => {
                     {profileData?.role === 'officer' && (
                       <IconButton
                         aria-label="Edit event"
-                        icon={<FiEdit2 />}
                         onClick={() => {
                           handleEditModal(event);
                         }}
                         size="sm"
                         variant="ghost"
-                      />
+                      ><FiEdit2 /></IconButton>
                     )}
                   </Flex>
                   <Text className="muted">{getEventDate(event)}</Text>

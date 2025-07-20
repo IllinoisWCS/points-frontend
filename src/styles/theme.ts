@@ -1,19 +1,36 @@
-import { extendTheme } from '@chakra-ui/theme-utils';
+import {
+  createSystem,
+  defaultConfig,
+  defineConfig,
+} from "@chakra-ui/react"
 
-const theme = extendTheme({
-  components: {
-    Heading: {
-      baseStyle: {}
-    }
+// const theme = extendTheme({
+//   components: {
+//     Heading: {
+//       baseStyle: {}
+//     }
+//   },
+//   colors: {
+//     pink: '#E46167',
+//     blue: '#64C7CC'
+//   },
+//   config: {
+//     initialColorMode: 'light',
+//     useSystemColorMode: true
+//   }
+// });
+
+const config = defineConfig({
+  theme: {
+    tokens: {
+      colors: {
+        pink: "#E46167",
+        blue: "#64C7CC"
+      },
+    },
   },
-  colors: {
-    pink: '#E46167',
-    blue: '#64C7CC'
-  },
-  config: {
-    initialColorMode: 'light',
-    useSystemColorMode: true
-  }
-});
+})
+
+const theme = createSystem(defaultConfig, config)
 
 export default theme;

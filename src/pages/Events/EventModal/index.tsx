@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  FormControl,
-  FormLabel,
+  Field,
   NumberInput,
-  NumberInputField,
   Alert,
-  AlertIcon,
   HStack,
   Button,
-  Modal,
-  ModalCloseButton,
-  ModalHeader,
-  ModalOverlay,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
+  Dialog,
   Checkbox,
   Stack,
   Select,
@@ -66,6 +57,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
 
   const handlePointsChange = (_: string, valueAsNumber: number): void => {
     setPoints(valueAsNumber);
+    console.log(points)
   };
 
   const handleStartDateChange = (props: StringFieldProps): void => {
@@ -315,100 +307,109 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   ];
 
   return (
-    <Modal isOpen={open} onClose={clearAndToggle} isCentered>
-      <ModalOverlay />
-      <ModalContent p="10" minW="50%">
-        <ModalHeader>
+    <Dialog.Root open={open} onClose={clearAndToggle} isCentered>
+      <Dialog.Trigger asChild>
+              <Button>
+                Create New Event
+              </Button>
+      </Dialog.Trigger>
+      <Dialog.Backdrop/>
+      <Dialog.Content p="10" minW="50%">
+        <Dialog.Header>
           {' '}
           {!event?._id ? 'Create a New Event' : 'Edit Event'}{' '}
-          <ModalCloseButton />
-        </ModalHeader>
-        <ModalBody>
-          <Stack spacing="3">
-            <FormControl isRequired width="100%">
-              <FormLabel>Name</FormLabel>
+          <Dialog.CloseTrigger />
+        </Dialog.Header>
+        <Dialog.Content>
+          <Stack gap="3px">
+            <Field.Root required width="100%">
+              <Field.Label>Name</Field.Label>
               <Input
                 placeholder="i.e. October General Meeting"
                 onChange={handleNameChange}
                 value={name}
               />
-            </FormControl>
+            </Field.Root>
             <HStack>
-              <FormControl isRequired>
-                <FormLabel>Category</FormLabel>
-                <Select onChange={handleCategoryChange} value={category}>
+              <Field.Root required>
+                <Field.Label>Category</Field.Label>
+                <Select.Root onChange={handleCategoryChange} value={category}>
+                  <Select.Content>
                   {categories.map((category, id) => (
-                    <option value={category.value} key={id}>
+                    <Select.Item value={category.value} key={id}>
                       {category.label}
-                    </option>
+                    </Select.Item>
                   ))}
-                </Select>
-              </FormControl>
-              <FormControl isRequired>
-                <FormLabel>Visibility</FormLabel>
-                <Select onChange={handleVisibilityChange} value={visibility}>
-                  <option value="public">Public</option>
-                  <option value="private">Private</option>
-                </Select>
-              </FormControl>
+                  </Select.Content>
+                </Select.Root>
+              </Field.Root >
+              <Field.Root required>
+                <Field.Label>Visibility</Field.Label>
+                <Select.Root onChange={handleVisibilityChange} value={visibility}>
+                  <Select.Content>
+                    <Select.Item value="public">Public</Select.Item>
+                    <Select.Item value="private">Private</Select.Item>
+                  </Select.Content>
+                </Select.Root>
+              </Field.Root >
             </HStack>
-            <FormControl isInvalid={pointsErr} isRequired>
-              <FormLabel>Points</FormLabel>
-              <NumberInput min={0.5} max={4} onChange={handlePointsChange}>
-                <NumberInputField />
-              </NumberInput>
-            </FormControl>
+            <Field.Root invalid={pointsErr} required>
+              <Field.Label>Points</Field.Label>
+              <NumberInput.Root min={0.5} max={4} value = {points} onValueChange={handlePointsChange}>
+                <NumberInput.Control />
+                <NumberInput.Input />
+              </NumberInput.Root>
+            </Field.Root >
             <HStack>
-              <FormControl isRequired isInvalid={startDateErr}>
-                <FormLabel>Start Date</FormLabel>
+              <Field.Root required invalid={startDateErr}>
+                <Field.Label>Start Date</Field.Label>
                 <Input
                   onChange={handleStartDateChange}
                   value={startDate}
                   type="date"
                 />
-              </FormControl>
-              <FormControl isRequired isInvalid={startTimeErr}>
-                <FormLabel>Start Time</FormLabel>
+              </Field.Root >
+              <Field.Root  required invalid={startTimeErr}>
+                <Field.Label>Start Time</Field.Label>
                 <Input
                   onChange={handleStartTimeChange}
                   value={startTime}
                   type="time"
                 />
-              </FormControl>
+              </Field.Root >
             </HStack>
             <HStack>
-              <FormControl isRequired={!sameDay} isInvalid={endDateErr}>
-                <FormLabel>End Date</FormLabel>
+              <Field.Root required={!sameDay} invalid={endDateErr}>
+                <Field.Label>End Date</Field.Label>
                 <Input
                   type="date"
                   onChange={handleEndDateChange}
                   value={sameDay ? startDate : endDate}
                   disabled={sameDay}
                 />
-              </FormControl>
-              <FormControl isRequired isInvalid={endTimeErr}>
-                <FormLabel>End Time</FormLabel>
+              </Field.Root >
+              <Field.Root required invalid={endTimeErr}>
+                <Field.Label>End Time</Field.Label>
                 <Input
                   type="time"
                   onChange={handleEndTimeChange}
                   value={endTime}
                 />
-              </FormControl>
+              </Field.Root >
             </HStack>
-            <FormControl>
-              <HStack>
-                <Checkbox
+            <Field.Root >
+                <Checkbox.Root
                   onChange={handleSameDayChange}
                   isChecked={sameDay}
                   iconColor="pink"
-                />
-                <FormLabel>Same day</FormLabel>
-              </HStack>
-            </FormControl>
+                >
+                <Checkbox.Label>Same day</Checkbox.Label>
+                </Checkbox.Root>
+            </Field.Root >
             {success && (
-              <Alert status="success" variant="left-accent">
-                <HStack w="100%" alignItems="center" spacing={4}>
-                  <AlertIcon />
+              <Alert.Root status="success">
+                <HStack w="100%" alignItems="center" gap="4px">
+                  <Alert.Indicator />
                   <Box>{msg}</Box>
                   {eventKey && (
                     <Box ml="auto">
@@ -421,27 +422,27 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
                     </Box>
                   )}
                 </HStack>
-              </Alert>
+              </Alert.Root>
             )}
             {error && (
-              <Alert status="error" variant="left-accent">
-                <AlertIcon />
+              <Alert.Root status="error">
+                <Alert.Indicator />
                 {msg}
-              </Alert>
+              </Alert.Root>
             )}
           </Stack>
-        </ModalBody>
-        <ModalFooter>
+        </Dialog.Content>
+        <Dialog.Footer>
           <Button
             type="submit"
             onClick={validateEvent}
-            isDisabled={!event?._id && hasSubmitted}
+            disabled={!event?._id && hasSubmitted}
           >
             Submit
           </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        </Dialog.Footer>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 };
 

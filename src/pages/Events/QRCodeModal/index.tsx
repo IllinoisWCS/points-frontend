@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Modal,
-  ModalCloseButton,
-  ModalHeader,
+  Dialog,
   HStack,
-  ModalOverlay,
-  ModalBody,
-  ModalContent,
   Box,
   Switch
 } from '@chakra-ui/react';
@@ -47,18 +42,18 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
   const { /* height, */ width } = useWindowDimensions();
 
   return (
-    <Modal isOpen={open} onClose={clearAndToggle} isCentered>
-      <ModalOverlay />
-      <ModalContent p="10">
-        <ModalCloseButton />
-        <ModalHeader>
+    <Dialog.Root open={open} onClose={clearAndToggle} isCentered>
+      <Dialog.Backdrop />
+      <Dialog.Content p="10">
+        <Dialog.CloseTrigger />
+        <Dialog.Header>
           <Box>{event?.name} QR Code</Box>
-        </ModalHeader>
-        <ModalBody>
+        </Dialog.Header>
+        <Dialog.Body>
           <HStack justifyContent="space-between" mb={4}>
             <Box>Event Key: {event?.key}</Box>
             <Box>
-              <Switch
+              <Switch.Root
                 size="md"
                 onChange={() => {
                   handleToggleColor();
@@ -83,9 +78,9 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
           ) : (
             'Event key not found'
           )}
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+        </Dialog.Body>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 };
 

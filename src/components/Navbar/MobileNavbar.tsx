@@ -1,9 +1,13 @@
 import React from 'react';
-import { IconButton, Flex, useColorModeValue, Stack } from '@chakra-ui/react';
+import { IconButton, Flex, Stack } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 
 import { MobileNavbarProps } from './types';
 import Logo from '../Logo';
+
+import {
+  useColorModeValue
+} from '../ui/color-mode';
 
 const MobileNavbar = ({
   onOpen,
@@ -26,8 +30,9 @@ const MobileNavbar = ({
         variant="outline"
         onClick={onOpen}
         aria-label="open menu"
-        icon={<FiMenu />}
-      />
+      >
+        <FiMenu />
+      </IconButton>
 
       <Stack maxH="100%" justify="center" overflow="hidden" maxW="60dvw">
         <Logo />

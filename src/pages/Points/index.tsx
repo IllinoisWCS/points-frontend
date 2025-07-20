@@ -3,7 +3,7 @@ import {
   Heading,
   Box,
   Text,
-  StackDivider,
+  StackSeparator,
   Center,
   Stack,
   VStack,
@@ -67,9 +67,12 @@ const Points = (): React.ReactElement => {
           }.`}
         </Text>
       </Center>
-      <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
+      <Skeleton css={{
+        "--start-color": "gray.100",
+        "--end-color": "gray.200",
+        }} loading={isLoading}>
         <Stack
-          divider={<StackDivider />}
+          separator={<StackSeparator />}
           borderRadius="10"
           border="1px"
           borderColor="gray.100"
