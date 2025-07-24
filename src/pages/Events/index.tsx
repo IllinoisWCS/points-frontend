@@ -85,33 +85,30 @@ const Events = (): React.ReactElement => {
 
   return (
     <Box>
-      <EventModal
-        open={eventModal}
-        event={event}
-        toggleModal={handleToggleEventModal}
-        reloadOnClose={handleReloadOnClose}
-      />
-
-      <QRModal
-        open={qRModal}
-        event={event}
-        toggleModal={() => {
-          handleToggleQR(event);
-        }}
-      />
-
       {profileData?.role === 'officer' ? (
-        <Button onClick={handleToggleEventModal} mb="5">
-          Create New Event
-        </Button>
+        <>
+          <EventModal
+            open={eventModal}
+            event={event}
+            toggleModal={handleToggleEventModal}
+            reloadOnClose={handleReloadOnClose}
+          />
+          <QRModal
+            open={qRModal}
+            event={event}
+            toggleModal={() => {
+              handleToggleQR(event);
+            }}
+          />
+        </>
       ) : (
         <div></div>
       )}
 
       <Skeleton
-      css={{
-        "--start-color": "gray.100",
-        "--end-color": "gray.200",
+        css={{
+          '--start-color': 'gray.100',
+          '--end-color': 'gray.200'
         }}
         loading={eventIsLoading}
       >
@@ -142,7 +139,9 @@ const Events = (): React.ReactElement => {
                         }}
                         size="sm"
                         variant="ghost"
-                      ><FiEdit2 /></IconButton>
+                      >
+                        <FiEdit2 />
+                      </IconButton>
                     )}
                   </Flex>
                   <Text className="muted">{getEventDate(event)}</Text>

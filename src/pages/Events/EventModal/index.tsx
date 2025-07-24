@@ -6,6 +6,7 @@ import {
   HStack,
   Button,
   Dialog,
+  Portal,
   Checkbox,
   Stack,
   Select,
@@ -307,10 +308,12 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   ];
 
   return (
-    <Dialog.Root open={open} onClose={clearAndToggle} isCentered>
-      <Dialog.Trigger>
+    // <Dialog.Root open={open} onClose={clearAndToggle} isCentered>
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
         <Button>Create New Event</Button>
       </Dialog.Trigger>
+      <Portal>
       <Dialog.Backdrop />
       <Dialog.Positioner>
         <Dialog.Content p="10" minW="50%">
@@ -406,9 +409,9 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
               </HStack>
               <Field.Root>
                 <Checkbox.Root
-                  onChange={handleSameDayChange}
-                  isChecked={sameDay}
-                  iconColor="pink"
+                  onCheckedChange={handleSameDayChange}
+                  checked={sameDay}
+                  colorPalette="pink"
                 >
                   <Checkbox.Label>Same day</Checkbox.Label>
                 </Checkbox.Root>
@@ -450,6 +453,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
           </Dialog.Footer>
         </Dialog.Content>
       </Dialog.Positioner>
+      </Portal>
     </Dialog.Root>
   );
 };

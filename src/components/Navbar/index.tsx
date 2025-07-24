@@ -9,7 +9,13 @@ import {
   Text,
   Button
 } from '@chakra-ui/react';
-import { useColorMode, useColorModeValue } from '../ui/color-mode';
+import {
+  ColorModeButton,
+  DarkMode,
+  LightMode,
+  useColorMode,
+  useColorModeValue,
+} from "../../components/ui/color-mode"
 import { FiHome, FiTrendingUp, FiCalendar } from 'react-icons/fi';
 import { DarkModeToggle } from 'react-dark-mode-toggle-2';
 import { useQuery } from 'react-query';
@@ -93,6 +99,11 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
     }
   };
 
+  const handleDarkModeToggle = (): void => {
+    toggleColorMode()
+    console.log(colorMode)
+  }
+
   if (isError) {
     console.log(error);
     return (
@@ -104,9 +115,9 @@ const Navbar = ({ onClose, ...rest }: NavbarProps): React.ReactElement => {
 
   return (
     <Box
-      bg={useColorModeValue('white', 'gray.800')}
-      borderRight="1px"
-      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+      // bg={useColorModeValue('white', 'gray.800')}
+      // borderRight="1px"
+      // borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
