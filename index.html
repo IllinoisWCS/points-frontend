@@ -5,19 +5,29 @@
     <link rel="icon" type="image/svg+xml" href="./src/assets/logo-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WCS Points</title>
+
+    <style>
+      [data-theme='dark'] {
+        color-scheme: dark;
+      }
+      [data-theme='light'] {
+        color-scheme: light;
+      }
+    </style>
+
     <script type="text/javascript">
-      // Thandles the redirect from 404.html
-      (function() {
+      // Handles the redirect from 404.html
+      (function () {
         var path = window.location.search.match(/path=([^&]*)/);
         if (path) {
           var originalPath = path[1];
           var search = window.location.search.replace(/path=[^&]*(&|$)/, '');
           search = search === '?' ? '' : search;
-          
-          window.history.replaceState(null, null, 
-            '/' + originalPath + 
-            (search || '') + 
-            (window.location.hash || '')
+
+          window.history.replaceState(
+            null,
+            null,
+            '/' + originalPath + (search || '') + (window.location.hash || '')
           );
         }
       })();

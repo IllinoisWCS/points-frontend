@@ -57,7 +57,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
 
   const handlePointsChange = (_: string, valueAsNumber: number): void => {
     setPoints(valueAsNumber);
-    console.log(points)
+    console.log(points);
   };
 
   const handleStartDateChange = (props: StringFieldProps): void => {
@@ -308,140 +308,148 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
 
   return (
     <Dialog.Root open={open} onClose={clearAndToggle} isCentered>
-      <Dialog.Trigger asChild>
-              <Button>
-                Create New Event
-              </Button>
+      <Dialog.Trigger>
+        <Button>Create New Event</Button>
       </Dialog.Trigger>
-      <Dialog.Backdrop/>
-      <Dialog.Content p="10" minW="50%">
-        <Dialog.Header>
-          {' '}
-          {!event?._id ? 'Create a New Event' : 'Edit Event'}{' '}
-          <Dialog.CloseTrigger />
-        </Dialog.Header>
-        <Dialog.Content>
-          <Stack gap="3px">
-            <Field.Root required width="100%">
-              <Field.Label>Name</Field.Label>
-              <Input
-                placeholder="i.e. October General Meeting"
-                onChange={handleNameChange}
-                value={name}
-              />
-            </Field.Root>
-            <HStack>
-              <Field.Root required>
-                <Field.Label>Category</Field.Label>
-                <Select.Root onChange={handleCategoryChange} value={category}>
-                  <Select.Content>
-                  {categories.map((category, id) => (
-                    <Select.Item value={category.value} key={id}>
-                      {category.label}
-                    </Select.Item>
-                  ))}
-                  </Select.Content>
-                </Select.Root>
-              </Field.Root >
-              <Field.Root required>
-                <Field.Label>Visibility</Field.Label>
-                <Select.Root onChange={handleVisibilityChange} value={visibility}>
-                  <Select.Content>
-                    <Select.Item value="public">Public</Select.Item>
-                    <Select.Item value="private">Private</Select.Item>
-                  </Select.Content>
-                </Select.Root>
-              </Field.Root >
-            </HStack>
-            <Field.Root invalid={pointsErr} required>
-              <Field.Label>Points</Field.Label>
-              <NumberInput.Root min={0.5} max={4} value = {points} onValueChange={handlePointsChange}>
-                <NumberInput.Control />
-                <NumberInput.Input />
-              </NumberInput.Root>
-            </Field.Root >
-            <HStack>
-              <Field.Root required invalid={startDateErr}>
-                <Field.Label>Start Date</Field.Label>
+      <Dialog.Backdrop />
+      <Dialog.Positioner>
+        <Dialog.Content p="10" minW="50%">
+          <Dialog.Header>
+            {' '}
+            {!event?._id ? 'Create a New Event' : 'Edit Event'}{' '}
+            <Dialog.CloseTrigger />
+          </Dialog.Header>
+          <Dialog.Body>
+            <Stack gap="3px">
+              <Field.Root required width="100%">
+                <Field.Label>Name</Field.Label>
                 <Input
-                  onChange={handleStartDateChange}
-                  value={startDate}
-                  type="date"
+                  placeholder="i.e. October General Meeting"
+                  onChange={handleNameChange}
+                  value={name}
                 />
-              </Field.Root >
-              <Field.Root  required invalid={startTimeErr}>
-                <Field.Label>Start Time</Field.Label>
-                <Input
-                  onChange={handleStartTimeChange}
-                  value={startTime}
-                  type="time"
-                />
-              </Field.Root >
-            </HStack>
-            <HStack>
-              <Field.Root required={!sameDay} invalid={endDateErr}>
-                <Field.Label>End Date</Field.Label>
-                <Input
-                  type="date"
-                  onChange={handleEndDateChange}
-                  value={sameDay ? startDate : endDate}
-                  disabled={sameDay}
-                />
-              </Field.Root >
-              <Field.Root required invalid={endTimeErr}>
-                <Field.Label>End Time</Field.Label>
-                <Input
-                  type="time"
-                  onChange={handleEndTimeChange}
-                  value={endTime}
-                />
-              </Field.Root >
-            </HStack>
-            <Field.Root >
+              </Field.Root>
+              <HStack>
+                <Field.Root required>
+                  <Field.Label>Category</Field.Label>
+                  <Select.Root onChange={handleCategoryChange} value={category}>
+                    <Select.Content>
+                      {categories.map((category, id) => (
+                        <Select.Item value={category.value} key={id}>
+                          {category.label}
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Root>
+                </Field.Root>
+                <Field.Root required>
+                  <Field.Label>Visibility</Field.Label>
+                  <Select.Root
+                    onChange={handleVisibilityChange}
+                    value={visibility}
+                  >
+                    <Select.Content>
+                      <Select.Item value="public">Public</Select.Item>
+                      <Select.Item value="private">Private</Select.Item>
+                    </Select.Content>
+                  </Select.Root>
+                </Field.Root>
+              </HStack>
+              <Field.Root invalid={pointsErr} required>
+                <Field.Label>Points</Field.Label>
+                <NumberInput.Root
+                  min={0.5}
+                  max={4}
+                  value={points}
+                  onValueChange={handlePointsChange}
+                >
+                  <NumberInput.Control />
+                  <NumberInput.Input />
+                </NumberInput.Root>
+              </Field.Root>
+              <HStack>
+                <Field.Root required invalid={startDateErr}>
+                  <Field.Label>Start Date</Field.Label>
+                  <Input
+                    onChange={handleStartDateChange}
+                    value={startDate}
+                    type="date"
+                  />
+                </Field.Root>
+                <Field.Root required invalid={startTimeErr}>
+                  <Field.Label>Start Time</Field.Label>
+                  <Input
+                    onChange={handleStartTimeChange}
+                    value={startTime}
+                    type="time"
+                  />
+                </Field.Root>
+              </HStack>
+              <HStack>
+                <Field.Root required={!sameDay} invalid={endDateErr}>
+                  <Field.Label>End Date</Field.Label>
+                  <Input
+                    type="date"
+                    onChange={handleEndDateChange}
+                    value={sameDay ? startDate : endDate}
+                    disabled={sameDay}
+                  />
+                </Field.Root>
+                <Field.Root required invalid={endTimeErr}>
+                  <Field.Label>End Time</Field.Label>
+                  <Input
+                    type="time"
+                    onChange={handleEndTimeChange}
+                    value={endTime}
+                  />
+                </Field.Root>
+              </HStack>
+              <Field.Root>
                 <Checkbox.Root
                   onChange={handleSameDayChange}
                   isChecked={sameDay}
                   iconColor="pink"
                 >
-                <Checkbox.Label>Same day</Checkbox.Label>
+                  <Checkbox.Label>Same day</Checkbox.Label>
                 </Checkbox.Root>
-            </Field.Root >
-            {success && (
-              <Alert.Root status="success">
-                <HStack w="100%" alignItems="center" gap="4px">
+              </Field.Root>
+              {success && (
+                <Alert.Root status="success">
+                  <HStack w="100%" alignItems="center" gap="4px">
+                    <Alert.Indicator />
+                    <Box>{msg}</Box>
+                    {eventKey && (
+                      <Box ml="auto">
+                        <EventQRCode
+                          eventKey={eventKey}
+                          size={84}
+                          color={'#d4696a'}
+                          inNotification={true}
+                        />
+                      </Box>
+                    )}
+                  </HStack>
+                </Alert.Root>
+              )}
+              {error && (
+                <Alert.Root status="error">
                   <Alert.Indicator />
-                  <Box>{msg}</Box>
-                  {eventKey && (
-                    <Box ml="auto">
-                      <EventQRCode
-                        eventKey={eventKey}
-                        size={84}
-                        color={'#d4696a'}
-                        inNotification={true}
-                      />
-                    </Box>
-                  )}
-                </HStack>
-              </Alert.Root>
-            )}
-            {error && (
-              <Alert.Root status="error">
-                <Alert.Indicator />
-                {msg}
-              </Alert.Root>
-            )}
-          </Stack>
+                  {msg}
+                </Alert.Root>
+              )}
+            </Stack>
+          </Dialog.Body>
+          <Dialog.Footer>
+            <Button
+              type="submit"
+              onClick={validateEvent}
+              disabled={!event?._id && hasSubmitted}
+            >
+              Submit
+            </Button>
+          </Dialog.Footer>
         </Dialog.Content>
-        <Dialog.Footer>
-          <Button
-            type="submit"
-            onClick={validateEvent}
-            disabled={!event?._id && hasSubmitted}
-          >
-            Submit
-          </Button>
-        </Dialog.Footer>
-      </Dialog.Content>
+      </Dialog.Positioner>
     </Dialog.Root>
   );
 };
