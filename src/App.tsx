@@ -10,9 +10,6 @@ import LoadingScreen from './pages/LoadingScreen';
 import NavbarLayout from './layouts/NavbarLayout';
 import SuccessPage from './pages/LoadingScreen/success';
 
-// import MerchRectangle
-// from './components/MerchDisplay/MerchRectangle/MerchRectangle';
-// import merch1 from './assets/merch1.svg';
 const App = (): React.ReactElement => {
   useEffect(() => {
     // Check URL parameters on page load
@@ -44,8 +41,6 @@ const App = (): React.ReactElement => {
     <HashRouter>
       <ToastContainer />
       <NavbarLayout>
-        {/* <MerchRectangle color="#D1EEEF" image={merch1}/> */}
-
         <Routes>
           <Route path="/" element={<CheckIn />} />
           <Route path="/points" element={<Points />} />
