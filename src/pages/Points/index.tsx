@@ -15,6 +15,7 @@ import { useQuery } from 'react-query';
 import axiosInstance from '../../api';
 import { getEventDate } from '../../utils/eventDate';
 import { Profile } from '../../types/profile';
+import PointBar from '../../components/PointBar';
 
 const Points = (): React.ReactElement => {
   const { isLoading, isError, error, data } = useQuery<Profile, Error>(
@@ -57,6 +58,9 @@ const Points = (): React.ReactElement => {
     );
   }
 
+  // const userPoints = data?.points ?? 0;
+  const userPoints = 20;
+
   return (
     <Box>
       <Heading size="lg">Points</Heading>
@@ -66,6 +70,9 @@ const Points = (): React.ReactElement => {
             data?.points === 1 ? 'point' : 'points'
           }.`}
         </Text>
+      </Center>
+      <Center mb="8">
+        <PointBar numPoints={userPoints} maxPoints={45} />
       </Center>
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
         <Stack
