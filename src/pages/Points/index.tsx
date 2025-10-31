@@ -59,7 +59,7 @@ const Points = (): React.ReactElement => {
   }
 
   // const userPoints = data?.points ?? 0;
-  const userPoints = 20;
+  const userPoints = 30;
 
   return (
     <Box>
