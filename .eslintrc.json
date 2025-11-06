@@ -8,19 +8,10 @@
     "standard-with-typescript",
     "prettier"
   ],
-  "plugins": [
-    "react",
-    "prettier"
-  ],
+  "plugins": ["react", "prettier"],
   "rules": {
-    "semi": [
-      1,
-      "always"
-    ],
-    "quotes": [
-      2,
-      "single"
-    ],
+    "semi": [1, "always"],
+    "quotes": [2, "single"],
     "max-len": ["error", { "code": 80 }],
     "no-unused-vars": 1,
     "multiline-ternary": 0,
@@ -45,10 +36,7 @@
   },
   "overrides": [
     {
-      "files": [
-        "vite.config.ts",
-        ".eslintrc.cjs"
-      ],
+      "files": ["vite.config.ts", ".eslintrc.cjs"],
       "parserOptions": {
         "parser": "@typescript-eslint/parser",
         "project": "./tsconfig.json"
