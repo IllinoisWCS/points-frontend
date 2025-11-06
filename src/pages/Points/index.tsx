@@ -58,12 +58,14 @@ const Points = (): React.ReactElement => {
     );
   }
 
-  // const userPoints = data?.points ?? 0;
-  const userPoints = 30;
-
+  const userPoints = data?.points ?? 0;
+  // const userPoints = 30;
+  const names = data?.name?.split(' ');
+  const name = names?.[0] ?? '';
   return (
     <Box>
-      <Heading size="lg">Points</Heading>
+      <Heading size="lg">{`${name}&apos;s Point Tracker`}</Heading>
+
       <Center mb="5">
         <Text fontSize="xl">
           {`You have ${data?.points ?? 0} ${
@@ -72,7 +74,7 @@ const Points = (): React.ReactElement => {
         </Text>
       </Center>
       <Center mb="8">
-        <PointBar numPoints={userPoints} maxPoints={45} />
+        <PointBar numPoints={userPoints} maxPoints={50} />
       </Center>
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
         <Stack
