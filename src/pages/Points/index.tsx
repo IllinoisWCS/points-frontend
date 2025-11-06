@@ -64,7 +64,7 @@ const Points = (): React.ReactElement => {
   const name = names?.[0] ?? '';
   return (
     <Box>
-      <Heading size="lg">{`${name}&apos;s Point Tracker`}</Heading>
+      <Heading size="lg">{`${name}'s Point Tracker`}</Heading>
 
       <Center mb="5">
         <Text fontSize="xl">
