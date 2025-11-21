@@ -10,6 +10,11 @@ import LoadingScreen from './pages/LoadingScreen';
 import NavbarLayout from './layouts/NavbarLayout';
 import SuccessPage from './pages/LoadingScreen/success';
 
+// import MerchRectangle from './components/MerchDisplay/MerchRectangle';
+// import MerchGrid from './components/MerchDisplay/MerchGrid';
+// import merch1 from './assets/merch1.svg';
+// import merch2 from './assets/merch2.svg';
+// import merch3 from './assets/merch3.svg';
 const App = (): React.ReactElement => {
   useEffect(() => {
     // Check URL parameters on page load
@@ -36,11 +41,24 @@ const App = (): React.ReactElement => {
       }, 100);
     }
   }, []);
-
+  //   const merchItems = [
+  //   { color: '#D1EEEF', image: merch1 },
+  //   { color: '#F6CBCE', image: merch2 },
+  //   { color: '#D1EEEF', image: merch3 },
+  //   { color: '#F6CBCE', image: merch3 },
+  //   { color: '#D1EEEF', image: merch3 },
+  //   { color: '#F6CBCE', image: merch3 },
+  //    { color: '#D1EEEF', image: merch3 },
+  //   { color: '#F6CBCE', image: merch3 },
+  //   { color: '#D1EEEF', image: merch3 },
+  //   { color: '#F6CBCE', image: merch3 },
+  // ];
   return (
     <HashRouter>
       <ToastContainer />
       <NavbarLayout>
+        {/* <MerchGrid items={merchItems} /> add grid here */}
+
         <Routes>
           <Route path="/" element={<CheckIn />} />
           <Route path="/points" element={<Points />} />

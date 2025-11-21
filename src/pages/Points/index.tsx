@@ -11,10 +11,12 @@ import {
   Skeleton
 } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
+import merchItems from '../../utils/merchItems';
 
 import axiosInstance from '../../api';
 import { getEventDate } from '../../utils/eventDate';
 import { Profile } from '../../types/profile';
+import MerchGrid from '../../components/MerchDisplay/MerchGrid';
 import PointBar from '../../components/PointBar';
 
 const Points = (): React.ReactElement => {
@@ -74,6 +76,7 @@ const Points = (): React.ReactElement => {
           }.`}
         </Text>
       </Center>
+      <MerchGrid items={merchItems} />
       <Center mb="8">
         {data && <PointBar numPoints={userPoints} maxPoints={50} />}
       </Center>
