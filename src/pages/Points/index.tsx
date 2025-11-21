@@ -17,6 +17,7 @@ import axiosInstance from '../../api';
 import { getEventDate } from '../../utils/eventDate';
 import { Profile } from '../../types/profile';
 import MerchGrid from '../../components/MerchDisplay/MerchGrid';
+import PointBar from '../../components/PointBar';
 
 const Points = (): React.ReactElement => {
   const { isLoading, isError, error, data } = useQuery<Profile, Error>(
@@ -59,9 +60,15 @@ const Points = (): React.ReactElement => {
     );
   }
 
+  const userPoints = data?.points ?? 0;
+  const names = data?.name?.split(' ');
+  const name = names?.[0] ?? '';
   return (
     <Box>
-      <Heading size="lg">Points</Heading>
+      <Heading size="lg">
+        {data ? `${name}'s Point Tracker` : 'Point Tracker'}
+      </Heading>
+
       <Center mb="5">
         <Text fontSize="xl">
           {`You have ${data?.points ?? 0} ${
@@ -70,6 +77,9 @@ const Points = (): React.ReactElement => {
         </Text>
       </Center>
       <MerchGrid items={merchItems} />
+      <Center mb="8">
+        {data && <PointBar numPoints={userPoints} maxPoints={50} />}
+      </Center>
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
         <Stack
           divider={<StackDivider />}
