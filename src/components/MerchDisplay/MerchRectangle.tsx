@@ -11,14 +11,12 @@ function MerchRectangle({
     <div
       style={{
         backgroundColor: color,
-        width: '200px',
-        height: '200px',
         borderRadius: '12px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-        overflow: 'hidden'
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+        gap: '10px',
+        justifyItems: 'center',
+        padding: '0px'
       }}
     >
       <img

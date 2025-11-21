@@ -11,10 +11,12 @@ import {
   Skeleton
 } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
+import merchItems from '../../utils/merchItems';
 
 import axiosInstance from '../../api';
 import { getEventDate } from '../../utils/eventDate';
 import { Profile } from '../../types/profile';
+import MerchGrid from '../../components/MerchDisplay/MerchGrid';
 
 const Points = (): React.ReactElement => {
   const { isLoading, isError, error, data } = useQuery<Profile, Error>(
@@ -67,6 +69,7 @@ const Points = (): React.ReactElement => {
           }.`}
         </Text>
       </Center>
+      <MerchGrid items={merchItems} />
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
         <Stack
           divider={<StackDivider />}
