@@ -13,9 +13,8 @@ function MerchRectangle({
         backgroundColor: color,
         borderRadius: '12px',
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
         gap: '10px',
-        justifyItems: 'center',
         padding: '0px'
       }}
     >

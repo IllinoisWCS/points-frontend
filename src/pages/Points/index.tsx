@@ -11,13 +11,12 @@ import {
   Skeleton
 } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
-import merchItems from '../../utils/merchItems';
 
 import axiosInstance from '../../api';
 import { getEventDate } from '../../utils/eventDate';
 import { Profile } from '../../types/profile';
-import MerchGrid from '../../components/MerchDisplay/MerchGrid';
 import PointBar from '../../components/PointBar';
+import MerchToggle from '../../components/MerchDisplay/MerchDisplayToggle';
 
 const Points = (): React.ReactElement => {
   const { isLoading, isError, error, data } = useQuery<Profile, Error>(
@@ -68,7 +67,6 @@ const Points = (): React.ReactElement => {
       <Heading size="lg">
         {data ? `${name}'s Point Tracker` : 'Point Tracker'}
       </Heading>
-
       <Center mb="5">
         <Text fontSize="xl">
           {`You have ${data?.points ?? 0} ${
@@ -76,10 +74,25 @@ const Points = (): React.ReactElement => {
           }.`}
         </Text>
       </Center>
-      <MerchGrid items={merchItems} />
-      <Center mb="8">
+      <Center mb="8s">
         {data && <PointBar numPoints={userPoints} maxPoints={50} />}
       </Center>
+      {data && (
+        <p
+          style={{
+            alignItems: 'center',
+            marginBottom: '20px',
+            marginLeft: '100px',
+            marginRight: '100px',
+            textAlign: 'center'
+          }}
+        >
+          For each point milestone you hit, you can get a piece of vintage
+          merchandise from our available inventory during open office (2pm-5pm
+          every weekday in Siebel CS 0211)!
+        </p>
+      )}
+      {data && <MerchToggle />}
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
         <Stack
           divider={<StackDivider />}

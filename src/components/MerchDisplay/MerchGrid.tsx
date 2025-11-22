@@ -16,7 +16,7 @@ function MerchGrid({ items }: MerchGridProps): React.ReactElement {
         gridTemplateColumns: 'repeat(5, 1fr)',
         gap: '10px',
         justifyItems: 'center',
-        padding: '0px'
+        padding: '20px'
       }}
     >
       {items.map((item, index) => (
