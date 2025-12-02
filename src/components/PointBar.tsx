@@ -55,13 +55,9 @@ const PointBar = ({
         {fillPercentage > 0 && (
           <Box
             position="absolute"
-            // left = "8px"
-            // top = "8px"
-            // right = "8px"
             top="8px"
             bottom="8px"
             left="8px"
-            // h = "28px"
             w={`calc(${fillPercentage}% - 16px)`}
             minW="30px"
             bg="#e07470"

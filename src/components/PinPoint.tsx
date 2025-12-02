@@ -1,77 +1,118 @@
 import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
 
-interface pinPointsProps {
+interface PinPointsProps {
   numLabel: number | string;
   threshholdPassed: boolean;
 }
 
+const PinPointStar: React.FC<{
+  size?: number;
+  fill?: string;
+  points?: number;
+}> = ({ size = 300, fill = '#FAEA58', points = 8 }) => {
+  const radiusOuter = size / 2;
+  const radiusInner = radiusOuter / 2.2;
+
+  // generate points for star path
+  const starPath =
+    Array.from({ length: points * 2 }, (_, i) => {
+      const angle = (Math.PI / points) * i;
+      const r = i % 2 === 0 ? radiusOuter : radiusInner;
+      const x = r * Math.sin(angle);
+      const y = -r * Math.cos(angle);
+      return `${i === 0 ? 'M' : 'L'}${x},${y}`;
+    }).join(' ') + ' Z';
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox={`${-size / 2} ${-size / 2} ${size} ${size}`}
+      style={{ position: 'absolute', inset: 0 }}
+    >
+      <path d={starPath} fill={fill} stroke="#FAEA58" strokeWidth={1} />
+    </svg>
+  );
+};
+
 const PinPoint = ({
   numLabel,
   threshholdPassed
-}: pinPointsProps): JSX.Element => {
-  // star
+}: PinPointsProps): JSX.Element => {
   if (threshholdPassed) {
     return (
-      <Box position="relative" textAlign={'center'}>
+      <Box
+        position="relative"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+      >
+        {/* Pin head (star) */}
         <Box
           width="70px"
           height="70px"
-          bg="yellow.400"
-          clipPath={`
-  polygon(
-    50% 0%, 60% 30%, 95% 30%, 68% 50%,
-    80% 80%, 50% 60%, 20% 80%, 32% 50%,
-    5% 30%, 40% 30%
-  )
-`}
+          position="relative"
           display="flex"
-          justifyContent={'center'}
+          justifyContent="center"
           alignItems="center"
         >
-          <Text fontWeight="bold" fontSize="md" color="white">
+          <PinPointStar size={70} />
+          <Text fontWeight="bold" fontSize="lg" color="white" zIndex={1}>
             {numLabel}
           </Text>
         </Box>
 
         {/* Pin tail */}
         <Box
-          width="12px"
+          position="absolute"
+          top="45px"
+          width="13px"
           height="40px"
-          bg="yellow.400"
+          bg="#FAEA58"
           clipPath="polygon(50% 100%, 0% 0%, 100% 0%)"
           mx="auto"
-          transform="translateY(-28px)"
         />
       </Box>
     );
   }
 
   return (
-    <Box position="relative" textAlign="center">
+    <Box
+      position="relative"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+    >
+      {/* Pin head (normal circle) */}
       <Box
-        width="48px"
-        height="48px"
-        bg="yellow.300"
+        width="45px"
+        height="45px"
+        bg="#FAEA58"
         borderRadius="full"
         display="flex"
         justifyContent="center"
         alignItems="center"
+        position="relative"
+        marginTop="8px"
       >
-        <Text fontWeight="bold" fontSize="md" color="white">
+        <Text fontWeight="bold" fontSize="lg" color="white">
           {numLabel}
         </Text>
       </Box>
 
+      {/* Pin tail */}
       <Box
-        width="10px"
-        height="22px"
-        bg="yellow.300"
+        position="absolute"
+        top="45px"
+        width="13px"
+        height="40px"
+        bg="#FAEA58"
         clipPath="polygon(50% 100%, 0% 0%, 100% 0%)"
         mx="auto"
-        transform="translateY(-2px)"
       />
     </Box>
   );
 };
+
 export default PinPoint;
