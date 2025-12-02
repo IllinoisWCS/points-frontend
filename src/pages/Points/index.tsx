@@ -58,10 +58,12 @@ const Points = (): React.ReactElement => {
       </Box>
     );
   }
-
+  // const data2 = { name: 'Aliya Ahmad', points: 50, events: [] };
   const userPoints = data?.points ?? 0;
+
   const names = data?.name?.split(' ');
   const name = names?.[0] ?? '';
+
   return (
     <Box>
       <Heading size="lg">
@@ -74,8 +76,14 @@ const Points = (): React.ReactElement => {
           }.`}
         </Text>
       </Center>
-      <Center mb="8s">
-        {data && <PointBar numPoints={userPoints} maxPoints={50} />}
+      <Center mb="8">
+        {data && (
+          <PointBar
+            numPoints={userPoints}
+            maxPoints={50}
+            milestones={[20, 25, 30, 35, 40, 70]}
+          />
+        )}
       </Center>
       {data && (
         <p
