@@ -1,16 +1,38 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
+import PinPoint from './PinPoint';
 
 interface PointBarProps {
   numPoints: number;
   maxPoints: number;
+  milestones: number[];
 }
 
-const PointBar = ({ numPoints, maxPoints }: PointBarProps): JSX.Element => {
+const PointBar = ({
+  numPoints,
+  maxPoints,
+  milestones
+}: PointBarProps): JSX.Element => {
   const fillPercentage = (numPoints / maxPoints) * 100;
 
   return (
-    <Box w="100%" p={4}>
+    <Box w="100%" position="relative" pt="80px" pb={4}>
+      {milestones.map((m, i) => {
+        const percentage = (m / maxPoints) * 100;
+        return (
+          <Box
+            key={i}
+            position="absolute"
+            top="25px"
+            left={`${Math.min(percentage, 99)}%`}
+            transform="translateX(-50%)"
+            zIndex={2}
+          >
+            <PinPoint numLabel={m} threshholdPassed={numPoints >= m} />
+          </Box>
+        );
+      })}
+
       <Box position="relative" w="100%" h="50px">
         <Box
           position="absolute"
@@ -40,7 +62,7 @@ const PointBar = ({ numPoints, maxPoints }: PointBarProps): JSX.Element => {
             bottom="8px"
             left="8px"
             // h = "28px"
-            w={`calc(${fillPercentage}%)`}
+            w={`calc(${fillPercentage}% - 16px)`}
             minW="30px"
             bg="#e07470"
             borderRadius="4px"
@@ -54,7 +76,7 @@ const PointBar = ({ numPoints, maxPoints }: PointBarProps): JSX.Element => {
             left="12px"
             top="12px"
             h="8px"
-            w={`calc(${fillPercentage}% - 10px)`}
+            w={`calc(${fillPercentage}% - 22px)`}
             minW="20px"
             bg="#f0b3b0"
             borderRadius="4px"
@@ -68,7 +90,7 @@ const PointBar = ({ numPoints, maxPoints }: PointBarProps): JSX.Element => {
             left="8px"
             bottom="8px"
             h="10px"
-            w={`calc(${fillPercentage}%)`}
+            w={`calc(${fillPercentage}% - 16px)`}
             minW="20px"
             bg="#d85d5a"
             borderRadius="3px"
