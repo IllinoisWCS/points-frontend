@@ -28,6 +28,7 @@ import EventQRCode from '../EventQRCode';
 import axiosInstance from '../../../api';
 import { EventCategoryType, NewEvent, Event } from '../../../types/event';
 import { EventModalProps, StringFieldProps, SameDayFieldProps } from './types';
+import ConfirmationModal from '../ConfirmationModal';
 
 const EventModal = (props: EventModalProps): React.ReactElement => {
   const { open, event, toggleModal, reloadOnClose } = props;
@@ -55,6 +56,9 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   const [eventKey, setEventKey] = useState<string | null>(null);
 
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [confirmationModalReloadOnClose, setConfirmationModalReloadOnClose] =
+    useState(false);
 
   const handleNameChange = (props: StringFieldProps): void => {
     setName(props.target.value);
@@ -163,6 +167,17 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     toggleModal();
   };
 
+  const handleToggleConfirmationModal = (): void => {
+    setShowConfirmationModal(!showConfirmationModal);
+    if (confirmationModalReloadOnClose) {
+      window.location.reload();
+    }
+  };
+
+  const handleReloadOnClose = (): void => {
+    setConfirmationModalReloadOnClose(!confirmationModalReloadOnClose);
+  };
+
   useEffect(() => {
     if (event) {
       const eventStart = new Date(event.start);
@@ -268,6 +283,11 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     }
   });
 
+  const handleEventDeletion = (): void => {
+    if (!event) return;
+    setShowConfirmationModal(true);
+  };
+
   const validateEvent = (): void => {
     if (validateFields()) {
       const start = new Date(`${startDate} ${startTime}`);
@@ -315,133 +335,150 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
   ];
 
   return (
-    <Modal isOpen={open} onClose={clearAndToggle} isCentered>
-      <ModalOverlay />
-      <ModalContent p="10" minW="50%">
-        <ModalHeader>
-          {' '}
-          {!event?._id ? 'Create a New Event' : 'Edit Event'}{' '}
-          <ModalCloseButton />
-        </ModalHeader>
-        <ModalBody>
-          <Stack spacing="3">
-            <FormControl isRequired width="100%">
-              <FormLabel>Name</FormLabel>
-              <Input
-                placeholder="i.e. October General Meeting"
-                onChange={handleNameChange}
-                value={name}
-              />
-            </FormControl>
-            <HStack>
-              <FormControl isRequired>
-                <FormLabel>Category</FormLabel>
-                <Select onChange={handleCategoryChange} value={category}>
-                  {categories.map((category, id) => (
-                    <option value={category.value} key={id}>
-                      {category.label}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl isRequired>
-                <FormLabel>Visibility</FormLabel>
-                <Select onChange={handleVisibilityChange} value={visibility}>
-                  <option value="public">Public</option>
-                  <option value="private">Private</option>
-                </Select>
-              </FormControl>
-            </HStack>
-            <FormControl isInvalid={pointsErr} isRequired>
-              <FormLabel>Points</FormLabel>
-              <NumberInput min={0.5} max={4} onChange={handlePointsChange}>
-                <NumberInputField />
-              </NumberInput>
-            </FormControl>
-            <HStack>
-              <FormControl isRequired isInvalid={startDateErr}>
-                <FormLabel>Start Date</FormLabel>
+    <>
+      <Modal isOpen={open} onClose={clearAndToggle} isCentered>
+        <ModalOverlay />
+        <ModalContent p="10" minW="50%">
+          <ModalHeader>
+            {' '}
+            {!event?._id ? 'Create a New Event' : 'Edit Event'}{' '}
+            <ModalCloseButton />
+          </ModalHeader>
+          <ModalBody>
+            <Stack spacing="3">
+              <FormControl isRequired width="100%">
+                <FormLabel>Name</FormLabel>
                 <Input
-                  onChange={handleStartDateChange}
-                  value={startDate}
-                  type="date"
+                  placeholder="i.e. October General Meeting"
+                  onChange={handleNameChange}
+                  value={name}
                 />
               </FormControl>
-              <FormControl isRequired isInvalid={startTimeErr}>
-                <FormLabel>Start Time</FormLabel>
-                <Input
-                  onChange={handleStartTimeChange}
-                  value={startTime}
-                  type="time"
-                />
-              </FormControl>
-            </HStack>
-            <HStack>
-              <FormControl isRequired={!sameDay} isInvalid={endDateErr}>
-                <FormLabel>End Date</FormLabel>
-                <Input
-                  type="date"
-                  onChange={handleEndDateChange}
-                  value={sameDay ? startDate : endDate}
-                  disabled={sameDay}
-                />
-              </FormControl>
-              <FormControl isRequired isInvalid={endTimeErr}>
-                <FormLabel>End Time</FormLabel>
-                <Input
-                  type="time"
-                  onChange={handleEndTimeChange}
-                  value={endTime}
-                />
-              </FormControl>
-            </HStack>
-            <FormControl>
               <HStack>
-                <Checkbox
-                  onChange={handleSameDayChange}
-                  isChecked={sameDay}
-                  iconColor="pink"
-                />
-                <FormLabel>Same day</FormLabel>
+                <FormControl isRequired>
+                  <FormLabel>Category</FormLabel>
+                  <Select onChange={handleCategoryChange} value={category}>
+                    {categories.map((category, id) => (
+                      <option value={category.value} key={id}>
+                        {category.label}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl isRequired>
+                  <FormLabel>Visibility</FormLabel>
+                  <Select onChange={handleVisibilityChange} value={visibility}>
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                  </Select>
+                </FormControl>
               </HStack>
-            </FormControl>
-            {success && (
-              <Alert status="success" variant="left-accent">
-                <HStack w="100%" alignItems="center" spacing={4}>
-                  <AlertIcon />
-                  <Box>{msg}</Box>
-                  {eventKey && (
-                    <Box ml="auto">
-                      <EventQRCode
-                        eventKey={eventKey}
-                        size={84}
-                        color={'#d4696a'}
-                        inNotification={true}
-                      />
-                    </Box>
-                  )}
+              <FormControl isInvalid={pointsErr} isRequired>
+                <FormLabel>Points</FormLabel>
+                <NumberInput min={0.5} max={4} onChange={handlePointsChange}>
+                  <NumberInputField />
+                </NumberInput>
+              </FormControl>
+              <HStack>
+                <FormControl isRequired isInvalid={startDateErr}>
+                  <FormLabel>Start Date</FormLabel>
+                  <Input
+                    onChange={handleStartDateChange}
+                    value={startDate}
+                    type="date"
+                  />
+                </FormControl>
+                <FormControl isRequired isInvalid={startTimeErr}>
+                  <FormLabel>Start Time</FormLabel>
+                  <Input
+                    onChange={handleStartTimeChange}
+                    value={startTime}
+                    type="time"
+                  />
+                </FormControl>
+              </HStack>
+              <HStack>
+                <FormControl isRequired={!sameDay} isInvalid={endDateErr}>
+                  <FormLabel>End Date</FormLabel>
+                  <Input
+                    type="date"
+                    onChange={handleEndDateChange}
+                    value={sameDay ? startDate : endDate}
+                    disabled={sameDay}
+                  />
+                </FormControl>
+                <FormControl isRequired isInvalid={endTimeErr}>
+                  <FormLabel>End Time</FormLabel>
+                  <Input
+                    type="time"
+                    onChange={handleEndTimeChange}
+                    value={endTime}
+                  />
+                </FormControl>
+              </HStack>
+              <FormControl>
+                <HStack>
+                  <Checkbox
+                    onChange={handleSameDayChange}
+                    isChecked={sameDay}
+                    iconColor="pink"
+                  />
+                  <FormLabel>Same day</FormLabel>
                 </HStack>
-              </Alert>
-            )}
-            {error && (
-              <Alert status="error" variant="left-accent">
-                <AlertIcon />
-                {msg}
-              </Alert>
-            )}
-          </Stack>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            type="submit"
-            onClick={validateEvent}
-            isDisabled={!event?._id && hasSubmitted}
-          >
-            Submit
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+              </FormControl>
+              {success && (
+                <Alert status="success" variant="left-accent">
+                  <HStack w="100%" alignItems="center" spacing={4}>
+                    <AlertIcon />
+                    <Box>{msg}</Box>
+                    {eventKey && (
+                      <Box ml="auto">
+                        <EventQRCode
+                          eventKey={eventKey}
+                          size={84}
+                          color={'#d4696a'}
+                          inNotification={true}
+                        />
+                      </Box>
+                    )}
+                  </HStack>
+                </Alert>
+              )}
+              {error && (
+                <Alert status="error" variant="left-accent">
+                  <AlertIcon />
+                  {msg}
+                </Alert>
+              )}
+            </Stack>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              type="delete"
+              onClick={handleEventDeletion}
+              isDisabled={!event?._id}
+              style={{ marginRight: '10px' }}
+            >
+              Delete
+            </Button>
+            <Button
+              type="submit"
+              onClick={validateEvent}
+              isDisabled={!event?._id && hasSubmitted}
+            >
+              Submit
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <ConfirmationModal
+        open={showConfirmationModal}
+        event={event}
+        toggleConfirmationModal={handleToggleConfirmationModal}
+        toggleEventModal={toggleModal}
+        reloadOnClose={handleReloadOnClose}
+      />
+    </>
   );
 };
 

@@ -31,7 +31,9 @@ const App = (): React.ReactElement => {
       window.location.href = `${newUrl}#/loading/${eventKey}`;
 
       // Force a reload to ensure the component loads fresh
-      setTimeout(() => { window.location.reload(); }, 100);
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     }
   }, []);
 
