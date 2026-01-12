@@ -454,7 +454,6 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
           </ModalBody>
           <ModalFooter>
             <Button
-              type="delete"
               onClick={handleEventDeletion}
               isDisabled={!event?._id}
               style={{ marginRight: '10px' }}
