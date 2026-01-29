@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import axiosInstance from '../../api';
+import axiosInstance from '../../api/api';
 import { useQuery } from 'react-query';
 import { toastError, toastSuccess } from '../../utils/toast';
 import { Profile } from '../../types/profile';

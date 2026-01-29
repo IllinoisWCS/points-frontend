@@ -12,11 +12,11 @@ import {
 } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 
-import axiosInstance from '../../api';
+import axiosInstance from '../../api/api';
 import { getEventDate } from '../../utils/eventDate';
 import { Profile } from '../../types/profile';
-import PointBar from '../../components/PointBar';
-import MerchToggle from '../../components/MerchDisplay/MerchDisplayToggle';
+import PointBar from '../../components/PointTracker/PointBar';
+import MerchToggle from '../../components/PointTracker/MerchDisplay/MerchDisplayToggle';
 
 const Points = (): React.ReactElement => {
   const { isLoading, isError, error, data } = useQuery<Profile, Error>(

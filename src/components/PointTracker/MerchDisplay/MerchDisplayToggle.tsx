@@ -1,7 +1,7 @@
 import React from 'react';
 import MerchGrid from './MerchGrid';
 import { Button, Center } from '@chakra-ui/react';
-import merchItems from '../../utils/merchItems';
+import merchItems from '../../../utils/merchItems';
 
 function MerchToggle(): React.ReactElement {
   const [isOpen, setIsOpen] = React.useState(false);

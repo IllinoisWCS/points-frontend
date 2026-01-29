@@ -25,7 +25,7 @@ import { useMutation } from 'react-query';
 
 import EventQRCode from '../EventQRCode';
 
-import axiosInstance from '../../../api';
+import axiosInstance from '../../../api/api';
 import { EventCategoryType, NewEvent, Event } from '../../../types/event';
 import { EventModalProps, StringFieldProps, SameDayFieldProps } from './types';
 
