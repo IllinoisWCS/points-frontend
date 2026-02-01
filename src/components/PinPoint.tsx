@@ -4,16 +4,23 @@ import { Box, Text } from '@chakra-ui/react';
 interface pinPointsProps {
   numLabel: number | string;
   threshholdPassed: boolean;
+  onClick?: () => void;
 }
 
 const PinPoint = ({
   numLabel,
-  threshholdPassed
+  threshholdPassed,
+  onClick
 }: pinPointsProps): JSX.Element => {
   // star
   if (threshholdPassed) {
     return (
-      <Box position="relative" textAlign={'center'}>
+      <Box
+        position="relative"
+        textAlign="center"
+        cursor="pointer"
+        onClick={onClick}
+      >
         <Box
           width="70px"
           height="70px"

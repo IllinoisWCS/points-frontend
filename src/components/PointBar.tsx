@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import PinPoint from './PinPoint';
+import PinPointModal from './PinPointModal';
+import logo from '../assets/logo.png';
 
 interface PointBarProps {
   numPoints: number;
@@ -13,11 +15,18 @@ const PointBar = ({
   maxPoints,
   milestones
 }: PointBarProps): JSX.Element => {
+  // const numPoints = 20;
   const fillPercentage = (numPoints / maxPoints) * 100;
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
 
+  const handleStarClick = (point: number): void => {
+    setSelectedPoint(point);
+    setModalOpen(true);
+  };
   return (
     <Box w="100%" position="relative" pt="80px" pb={4}>
-      {milestones.map((m, i) => {
+      {milestones.map((m, i): JSX.Element => {
         const percentage = (m / maxPoints) * 100;
         return (
           <Box
@@ -28,7 +37,14 @@ const PointBar = ({
             transform="translateX(-50%)"
             zIndex={2}
           >
-            <PinPoint numLabel={m} threshholdPassed={numPoints >= m} />
+            <PinPoint
+              numLabel={m}
+              threshholdPassed={numPoints >= m}
+              // threshholdPassed={numPoints >= m}
+              onClick={
+                numPoints >= m ? (): void => { handleStarClick(m); } : undefined
+              }
+            />
           </Box>
         );
       })}
@@ -41,7 +57,7 @@ const PointBar = ({
           bg="#4a9690"
           borderRadius="10px"
           overflow="hidden"
-          boxShadow="0 3px 6px rgba(0, 0, 0, 0.15)"
+          boxShadow={'0 3px 6px rgba(0, 0, 0, 0.15)'}
         />
 
         <Box
@@ -98,6 +114,18 @@ const PointBar = ({
           />
         )}
       </Box>
+
+      {selectedPoint !== null && (
+        <PinPointModal
+          isOpen={modalOpen}
+          onClose={() => { setModalOpen(false); }}
+          // image="/path/to/image.png"
+          image={logo}
+          message={
+            `${selectedPoint} points reached!` + 'Have officer scan to redeem.'
+          }
+        />
+      )}
     </Box>
   );
 };
