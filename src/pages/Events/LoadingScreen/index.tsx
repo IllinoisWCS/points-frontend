@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import { Heading, Box, VStack, Progress, Link } from '@chakra-ui/react';
 import { Profile } from '../../../types/profile';
 import { toastError, toastSuccess } from '../../../utils/toast';
-import axiosInstance from '../../../api';
+import axiosInstance from '../../../api/api';
 
 const LoadingScreen = (): JSX.Element => {
   const [state, setState] = useState('auth');

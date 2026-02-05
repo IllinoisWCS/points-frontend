@@ -2,7 +2,7 @@ import React, { useState, BaseSyntheticEvent } from 'react';
 import { VStack, Heading, Text, Button, Input, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
-import axiosInstance from '../../api';
+import axiosInstance from '../../api/api';
 import { toastError, toastSuccess } from '../../utils/toast';
 import { useQuery } from 'react-query';
 import { Profile } from '../../types/profile';

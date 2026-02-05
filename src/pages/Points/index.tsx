@@ -12,9 +12,11 @@ import {
 } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 
-import axiosInstance from '../../api';
+import axiosInstance from '../../api/api';
 import { getEventDate } from '../../utils/eventDate';
 import { Profile } from '../../types/profile';
+import PointBar from '../../components/PointTracker/PointBar';
+import MerchToggle from '../../components/PointTracker/MerchDisplay/MerchDisplayToggle';
 
 const Points = (): React.ReactElement => {
   const { isLoading, isError, error, data } = useQuery<Profile, Error>(
@@ -56,10 +58,17 @@ const Points = (): React.ReactElement => {
       </Box>
     );
   }
+  // const data2 = { name: 'Aliya Ahmad', points: 50, events: [] };
+  const userPoints = data?.points ?? 0;
+
+  const names = data?.name?.split(' ');
+  const name = names?.[0] ?? '';
 
   return (
     <Box>
-      <Heading size="lg">Points</Heading>
+      <Heading size="lg">
+        {data ? `${name}'s Point Tracker` : 'Point Tracker'}
+      </Heading>
       <Center mb="5">
         <Text fontSize="xl">
           {`You have ${data?.points ?? 0} ${
@@ -67,6 +76,31 @@ const Points = (): React.ReactElement => {
           }.`}
         </Text>
       </Center>
+      <Center mb="8">
+        {data && (
+          <PointBar
+            numPoints={userPoints}
+            maxPoints={50}
+            milestones={[20, 25, 30, 35, 40, 70]}
+          />
+        )}
+      </Center>
+      {data && (
+        <p
+          style={{
+            alignItems: 'center',
+            marginBottom: '20px',
+            marginLeft: '100px',
+            marginRight: '100px',
+            textAlign: 'center'
+          }}
+        >
+          For each point milestone you hit, you can get a piece of vintage
+          merchandise from our available inventory during open office (2pm-5pm
+          every weekday in Siebel CS 0211)!
+        </p>
+      )}
+      {data && <MerchToggle />}
       <Skeleton startColor="gray.100" endColor="gray.200" isLoaded={!isLoading}>
         <Stack
           divider={<StackDivider />}
