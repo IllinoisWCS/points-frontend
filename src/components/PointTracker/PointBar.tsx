@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import PinPoint from './PinPoint';
+import PinPointModal from './PinPointModal';
+// import logo from '../assets/logo.png';
 
 interface PointBarProps {
   numPoints: number;
@@ -9,12 +11,18 @@ interface PointBarProps {
 }
 
 const PointBar = ({
-  numPoints,
+  // numPoints,
   maxPoints,
   milestones
 }: PointBarProps): JSX.Element => {
+  const numPoints = 20;
   const fillPercentage = (numPoints / maxPoints) * 100;
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
+  const handleStarClick = (point: number): void => {
+    setSelectedPoint(point);
+    setModalOpen(true);
+  };
   return (
     <Box w="100%" position="relative" pt="80px" pb={4}>
       {milestones.map((m, i) => {
@@ -28,7 +36,17 @@ const PointBar = ({
             transform="translateX(-50%)"
             zIndex={2}
           >
-            <PinPoint numLabel={m} threshholdPassed={numPoints >= m} />
+            <PinPoint
+              numLabel={m}
+              threshholdPassed={numPoints >= m}
+              onClick={
+                numPoints >= m
+                  ? (): void => {
+                      handleStarClick(m);
+                    }
+                  : undefined
+              }
+            />
           </Box>
         );
       })}
@@ -94,6 +112,19 @@ const PointBar = ({
           />
         )}
       </Box>
+      {selectedPoint !== null && (
+        <PinPointModal
+          isOpen={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+          }}
+          // image="/path/to/image.png"
+          image="https://via.placeholder.com/150"
+          message={
+            `Reached ${selectedPoint} points! ` + 'Have officer scan to redeem.'
+          }
+        />
+      )}
     </Box>
   );
 };
