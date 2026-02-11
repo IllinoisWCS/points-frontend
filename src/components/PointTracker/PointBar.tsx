@@ -11,11 +11,11 @@ interface PointBarProps {
 }
 
 const PointBar = ({
-  // numPoints,
+  numPoints,
   maxPoints,
   milestones
 }: PointBarProps): JSX.Element => {
-  const numPoints = 20;
+  // const numPoints = 20;
   const fillPercentage = (numPoints / maxPoints) * 100;
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
