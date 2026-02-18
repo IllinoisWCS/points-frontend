@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
+import { useQuery } from 'react-query';
 import PinPoint from './PinPoint';
 import PinPointModal from './PinPointModal';
+import { getCheckpointCount } from '../../api/api';
 // import logo from '../assets/logo.png';
 
 interface PointBarProps {
@@ -18,9 +20,24 @@ const PointBar = ({
   const fillPercentage = (numPoints / maxPoints) * 100;
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
+
+  const { data: nCheckpoints = 0 } = useQuery(
+    ['get-checkpoint-count'],
+    getCheckpointCount
+  );
+
   const handleStarClick = (point: number): void => {
     setSelectedPoint(point);
     setModalOpen(true);
+  };
+
+  const numQRCodes = (
+    totalPoints: number
+  ): [numCheckpoints: number, numQRCodes: number] => {
+    const redeemed = nCheckpoints ?? 0;
+    const checkpointsEarned = milestones.filter((m) => m <= totalPoints).length;
+    const numQRCodesAvailable = checkpointsEarned - redeemed;
+    return [redeemed, numQRCodesAvailable];
   };
   return (
     <Box w="100%" position="relative" pt="80px" pb={4}>
@@ -111,6 +128,10 @@ const PointBar = ({
           />
         )}
       </Box>
+      <Text fontSize="sm" color="gray.600" mt={2}>
+        Redeemed: {numQRCodes(numPoints)[0]} | Available:{' '}
+        {numQRCodes(numPoints)[1]}
+      </Text>
       {selectedPoint !== null && (
         <PinPointModal
           isOpen={modalOpen}

@@ -1,15 +1,24 @@
 import axios from 'axios';
+import { Profile } from '../types/profile';
 
-const instance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL
-    ? import.meta.env.VITE_BASE_URL
-    : 'http://127.0.0.1:3000',
-  //  'https://points-api.illinoiswcs.org',
+const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:3000',
   withCredentials: true
 });
 
-instance.interceptors.response.use(undefined, async (err) => {
-  return await Promise.reject(err);
-});
+export const getCheckpointCount = async (): Promise<number | null> => {
+  try {
+    const response = await axiosInstance.get<Profile>('/profile');
+    return response.data?.n_checkpoints ?? null;
+  } catch (err: any) {
+    if (
+      err?.response &&
+      (err.response.status === 401 || err.response.status === 403)
+    ) {
+      return null;
+    }
+    throw err;
+  }
+};
 
-export default instance;
+export default axiosInstance;
