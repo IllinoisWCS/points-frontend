@@ -1,6 +1,27 @@
 import axiosInstance from './api';
 import { Profile } from '../types/profile';
 
+export interface CheckpointRedemption {
+  userId: string;
+}
+
+export interface CheckpointResponse {
+  success: boolean;
+  n_checkpoints: number;
+  timestamps: Date[];
+}
+
+export const redeemCheckpoint = async (
+  userId: string
+): Promise<CheckpointResponse> => {
+  const response = await axiosInstance.post<CheckpointResponse>(
+    '/checkpoints/redeem',
+    {
+      userId
+    }
+  );
+  return response.data;
+
 export const getCheckpointCount = async (): Promise<number | null> => {
   try {
     const response = await axiosInstance.get<Profile>('/profile');
