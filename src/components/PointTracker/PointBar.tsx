@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 import PinPoint from './PinPoint';
 import PinPointModal from './PinPointModal';
@@ -30,7 +30,6 @@ const PointBar = ({
     setSelectedPoint(point);
     setModalOpen(true);
   };
-
   const numQRCodes = (
     totalPoints: number
   ): [numCheckpoints: number, numQRCodes: number] => {
@@ -39,6 +38,7 @@ const PointBar = ({
     const numQRCodesAvailable = checkpointsEarned - redeemed;
     return [redeemed, numQRCodesAvailable];
   };
+  console.log(numQRCodes(numPoints));
   return (
     <Box w="100%" position="relative" pt="80px" pb={4}>
       {milestones.map((m, i) => {
@@ -128,10 +128,7 @@ const PointBar = ({
           />
         )}
       </Box>
-      <Text fontSize="sm" color="gray.600" mt={2}>
-        Redeemed: {numQRCodes(numPoints)[0]} | Available:{' '}
-        {numQRCodes(numPoints)[1]}
-      </Text>
+
       {selectedPoint !== null && (
         <PinPointModal
           isOpen={modalOpen}
