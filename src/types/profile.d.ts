@@ -5,4 +5,5 @@ export interface Profile {
   events: Event[];
   points: number;
   role: string;
+  n_checkpoints?: number;
 }
