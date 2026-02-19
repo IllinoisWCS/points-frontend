@@ -2,7 +2,6 @@ import axiosInstance from './api';
 
 export interface CheckpointRedemption {
   userId: string;
-  checkpointValue: number;
 }
 
 export interface CheckpointResponse {

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
-import { redeemCheckpoint } from '../../api/checkpoints';
 
 interface PinPointsProps {
   numLabel: number | string;
