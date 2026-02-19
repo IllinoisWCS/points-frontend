@@ -12,14 +12,12 @@ export interface CheckpointResponse {
 }
 
 export const redeemCheckpoint = async (
-  userId: string,
-  checkpointValue: number
+  userId: string
 ): Promise<CheckpointResponse> => {
   const response = await axiosInstance.post<CheckpointResponse>(
     '/checkpoints/redeem',
     {
-      userId,
-      checkpointValue
+      userId
     }
   );
   return response.data;
