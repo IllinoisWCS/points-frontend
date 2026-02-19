@@ -7,7 +7,7 @@ export interface CheckpointRedemption {
 
 export interface CheckpointResponse {
   success: boolean;
-  num_checkpoints: number;
+  n_checkpoints: number;
   timestamps: Date[];
 }
 
