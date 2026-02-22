@@ -9,6 +9,7 @@ import Events from './pages/Events';
 import LoadingScreen from './pages/LoadingScreen';
 import NavbarLayout from './layouts/NavbarLayout';
 import SuccessPage from './pages/LoadingScreen/success';
+import VintageSuccessPage from './components/PointTracker/SuccessPage';
 
 // import MerchRectangle from './components/MerchDisplay/MerchRectangle';
 // import MerchGrid from './components/MerchDisplay/MerchGrid';
@@ -65,6 +66,7 @@ const App = (): React.ReactElement => {
           <Route path="/events" element={<Events />} />
           <Route path="/loading/:eventKey" element={<LoadingScreen />} />
           <Route path="/success" element={<SuccessPage />} />
+          <Route path="/vintage-success" element={<VintageSuccessPage />} />
         </Routes>
       </NavbarLayout>
     </HashRouter>
