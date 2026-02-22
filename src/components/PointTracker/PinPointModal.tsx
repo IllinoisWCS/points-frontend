@@ -24,11 +24,11 @@ const PinPointModal = ({
   image,
   message
 }: PinPointModalProps): JSX.Element => {
-  // const navigate = useNavigate();
+  /* const navigate = useNavigate();
 
-  /* const handleImageClick = (): void => {  
+  const handleImageClick = (): void => {  
     onClose();
-    navigate('/vintage-success');
+    navigate('/not-authorized');
   }; */
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
