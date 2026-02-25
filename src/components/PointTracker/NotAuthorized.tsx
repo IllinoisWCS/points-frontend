@@ -9,7 +9,7 @@ const NotAuthorizedPage: React.FC = (): React.ReactElement => {
 
   useEffect(() => {
     if (!hasToasted.current) {
-      toastError('"Please find an officer to scan your redemption QR code');
+      toastError('Please find an officer to scan your redemption QR code');
       hasToasted.current = true;
     }
   }, []);
