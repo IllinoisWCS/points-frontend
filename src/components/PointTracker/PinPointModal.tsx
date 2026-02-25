@@ -8,6 +8,9 @@ import {
   Image,
   Text
 } from '@chakra-ui/react';
+// used for testing success-page
+// import { useNavigate } from 'react-router-dom';
+
 interface PinPointModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -21,13 +24,26 @@ const PinPointModal = ({
   image,
   message
 }: PinPointModalProps): JSX.Element => {
+  // const navigate = useNavigate();
+
+  /* const handleImageClick = (): void => {  
+    onClose();
+    navigate('/vintage-success');
+  }; */
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />
         <ModalBody textAlign="center" py={6}>
-          <Image src={image} alt="PinPoint" mx="auto" mb={4} />
+          <Image
+            src={image}
+            alt="PinPoint"
+            mx="auto"
+            mb={4}
+            // cursor="pointer"
+            // onClick={handleImageClick}
+          />
           <Text fontSize="md">{message}</Text>
         </ModalBody>
       </ModalContent>

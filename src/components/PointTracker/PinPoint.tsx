@@ -55,7 +55,7 @@ const PinPoint = ({
   }
 
   return (
-    <Box position="relative" textAlign="center" transform="translateY(14px)">
+    <Box position="relative" textAlign="center">
       <Box
         width="48px"
         height="48px"
@@ -64,20 +64,19 @@ const PinPoint = ({
         display="flex"
         justifyContent="center"
         alignItems="center"
-        transform="translateY(-5px)"
       >
-        <Text fontWeight="bold" fontSize="md" color="white" marginTop="4px">
+        <Text fontWeight="bold" fontSize="md" color="white">
           {numLabel}
         </Text>
       </Box>
 
       <Box
-        width="12px"
-        height="40px"
+        width="10px"
+        height="22px"
         bg="yellow.300"
         clipPath="polygon(50% 100%, 0% 0%, 100% 0%)"
         mx="auto"
-        transform="translateY(-20px)"
+        transform="translateY(-2px)"
       />
     </Box>
   );
