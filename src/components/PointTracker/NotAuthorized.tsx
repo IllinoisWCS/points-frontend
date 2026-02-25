@@ -1,18 +1,17 @@
-import React, { useEffect } from 'react';
-import { Box, Heading, Text, Button, VStack, useToast } from '@chakra-ui/react';
+import React, { useEffect, useRef } from 'react';
+import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { toastError } from '../../utils/toast';
 
 const NotAuthorizedPage: React.FC = (): React.ReactElement => {
   const navigate = useNavigate();
-  const toast = useToast();
+  const hasToasted = useRef(false);
 
   useEffect(() => {
-    toast({
-      title: 'Please find an officer to scan your redemption QR code',
-      status: 'error',
-      duration: 4000,
-      isClosable: true
-    });
+    if (!hasToasted.current) {
+      toastError('"Please find an officer to scan your redemption QR code');
+      hasToasted.current = true;
+    }
   }, []);
 
   return (
@@ -30,7 +29,12 @@ const NotAuthorizedPage: React.FC = (): React.ReactElement => {
         <Text fontSize="lg" color="gray.600">
           Only officers can verify and redeem vintage merchandise.
         </Text>
-        <Button colorScheme="pink" onClick={() => { navigate('/'); }}>
+        <Button
+          colorScheme="pink"
+          onClick={() => {
+            navigate('/');
+          }}
+        >
           Go to Home
         </Button>
       </VStack>
