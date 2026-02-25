@@ -8,7 +8,6 @@ import {
   Image,
   Text
 } from '@chakra-ui/react';
-// used for testing success-page
 import { useNavigate } from 'react-router-dom';
 
 interface PinPointModalProps {
