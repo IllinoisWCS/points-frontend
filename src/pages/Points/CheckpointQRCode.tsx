@@ -7,6 +7,7 @@ import { FiDownload } from 'react-icons/fi';
 
 interface CheckpointQRCodeProps {
   checkpointKey?: string;
+  netId?: string;
   size?: number;
   color?: string;
   inNotification?: boolean;
@@ -14,6 +15,7 @@ interface CheckpointQRCodeProps {
 
 const CheckpointQRCode: React.FC<CheckpointQRCodeProps> = ({
   checkpointKey = 'HARD_CODED_CHECKPOINT',
+  netId = '',
   size = 128,
   color = '#d4696a', // does this set a default color
   inNotification = false
@@ -30,7 +32,10 @@ const CheckpointQRCode: React.FC<CheckpointQRCodeProps> = ({
   // const loadingUrl = `${baseUrl}/#/loading/${checkpointKey}`;
 
   const loadingUrl =
-    `${baseUrl}?action=checkin&eventKey=${checkpointKey}` + `&t=${Date.now()}`;
+    `${baseUrl}?action=vintage-redeem` +
+    `&netId=${netId}` +
+    `&checkpointKey=${checkpointKey}` +
+    `&t=${Date.now()}`;
 
   // download as svg
   const downloadSVG = (): void => {

@@ -3,17 +3,20 @@ import { Box } from '@chakra-ui/react';
 import PinPoint from './PinPoint';
 import PinPointModal from './PinPointModal';
 // import logo from '../assets/logo.png';
+// import qrcode from '../../pages/Points/CheckpointQRCode'
 
 interface PointBarProps {
   numPoints: number;
   maxPoints: number;
   milestones: number[];
+  netId?: string;
 }
 
 const PointBar = ({
   numPoints,
   maxPoints,
-  milestones
+  milestones,
+  netId
 }: PointBarProps): JSX.Element => {
   const fillPercentage = (numPoints / maxPoints) * 100;
   const [modalOpen, setModalOpen] = useState(false);
@@ -117,11 +120,13 @@ const PointBar = ({
           onClose={() => {
             setModalOpen(false);
           }}
-          // image="/path/to/image.png"
-          image="https://via.placeholder.com/150"
+          // image="https://via.placeholder.com/150"
+          // image = qrcode={}
           message={
             `Reached ${selectedPoint} points! ` + 'Have officer scan to redeem.'
           }
+          netId={netId}
+          checkpointKey="VINTAGE"
         />
       )}
     </Box>

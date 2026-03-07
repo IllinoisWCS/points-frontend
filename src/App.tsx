@@ -11,6 +11,7 @@ import NavbarLayout from './layouts/NavbarLayout';
 import SuccessPage from './pages/LoadingScreen/success';
 import VintageSuccessPage from './components/PointTracker/SuccessPage';
 import NotAuthorized from './components/PointTracker/NotAuthorized';
+import VintageLoadingScreen from './pages/VintageLoadingScreen';
 
 // import MerchRectangle from './components/MerchDisplay/MerchRectangle';
 // import MerchGrid from './components/MerchDisplay/MerchGrid';
@@ -23,6 +24,7 @@ const App = (): React.ReactElement => {
     const urlParams = new URLSearchParams(window.location.search);
     const action = urlParams.get('action');
     const eventKey = urlParams.get('eventKey');
+    const netId = urlParams.get('netId');
 
     // If this is a check-in action, redirect to the loading route
     if (action === 'checkin' && eventKey) {
@@ -38,6 +40,19 @@ const App = (): React.ReactElement => {
       window.location.href = `${newUrl}#/loading/${eventKey}`;
 
       // Force a reload to ensure the component loads fresh
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    }
+
+    if (action === 'vintage-redeem' && netId) {
+      window.history.replaceState(
+        {},
+        '',
+        `${window.location.origin}${window.location.pathname}`
+      );
+      const newUrl = `${window.location.origin}${window.location.pathname}`;
+      window.location.href = `${newUrl}#/vintage-loading/${netId}`;
       setTimeout(() => {
         window.location.reload();
       }, 100);
@@ -67,6 +82,11 @@ const App = (): React.ReactElement => {
           <Route path="/events" element={<Events />} />
           <Route path="/loading/:eventKey" element={<LoadingScreen />} />
           <Route path="/success" element={<SuccessPage />} />
+
+          <Route
+            path="/vintage-loading/:netId"
+            element={<VintageLoadingScreen />}
+          />
           <Route path="/vintage-success" element={<VintageSuccessPage />} />
           <Route path="/not-authorized" element={<NotAuthorized />} />
         </Routes>
