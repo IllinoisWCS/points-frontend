@@ -10,8 +10,10 @@ import {
   IconButton,
   Flex
 } from '@chakra-ui/react';
+import { useMutation } from 'react-query';
 
-import { Event } from '../../types/event';
+import axiosInstance from '../../api';
+import { Event, NewEvent } from '../../types/event';
 import EventModal from './EventModal';
 import QRModal from './QRCodeModal';
 import { getEventDate } from '../../utils/eventDate';
@@ -24,6 +26,11 @@ const Events = (): React.ReactElement => {
   const [eventModal, setEventModal] = useState(false);
   const [qRModal, setQRModal] = useState(false);
   const [reloadOnClose, setReloadOnClose] = useState(false);
+  const createOfficeHourEvent = useMutation({
+    mutationFn: async (event: NewEvent): Promise<void> => {
+      await axiosInstance.post('/events', event);
+    }
+  });
 
   const {
     data: eventData,
@@ -61,6 +68,31 @@ const Events = (): React.ReactElement => {
     if (reloadOnClose) {
       window.location.reload();
     }
+  };
+
+  const handleCreateOfficeHourEvent = async (): Promise<void> => {
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    // Name: "M/D Open Office" (e.g. "4/3 Open Office")
+    const displayMonth = now.getMonth() + 1;
+    const displayDay = now.getDate();
+    const name = `${displayMonth}/${displayDay} Open Office`;
+
+    const start = new Date(`${year}-${month}-${day}T14:00:00`);
+    const end = new Date(`${year}-${month}-${day}T17:30:00`);
+    const officeHourEvent: NewEvent = {
+      name,
+      category: 'other',
+      points: 0.5,
+      start,
+      end,
+      private: false
+    };
+    await createOfficeHourEvent.mutateAsync(officeHourEvent);
+    window.location.reload();
   };
 
   const handleEditModal = (event: Event): void => {
@@ -101,9 +133,19 @@ const Events = (): React.ReactElement => {
       />
 
       {profileData?.role === 'officer' ? (
-        <Button onClick={handleToggleEventModal} mb="5">
-          Create New Event
-        </Button>
+        <>
+          <Button onClick={handleToggleEventModal} mb="5" mr="2">
+            Create New Event
+          </Button>
+          <Button
+            onClick={() => {
+              void handleCreateOfficeHourEvent();
+            }}
+            mb="5"
+          >
+            Create Office Hours Event
+          </Button>
+        </>
       ) : (
         <div></div>
       )}
