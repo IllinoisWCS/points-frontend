@@ -21,6 +21,7 @@ export const redeemCheckpoint = async (
     }
   );
   return response.data;
+};
 
 export const getCheckpointCount = async (): Promise<number | null> => {
   try {
