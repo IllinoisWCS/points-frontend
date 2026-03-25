@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import PinPoint from './PinPoint';
 import PinPointModal from './PinPointModal';
+import { getCheckpointCount } from '../../api/checkpoints';
+import { useQuery } from 'react-query';
 // import logo from '../assets/logo.png';
 // import qrcode from '../../pages/Points/CheckpointQRCode'
 
@@ -21,10 +23,23 @@ const PointBar = ({
   const fillPercentage = (numPoints / maxPoints) * 100;
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
+  const { data: nCheckpoints = 0 } = useQuery(
+    ['get-checkpoint-count'],
+    getCheckpointCount
+  );
   const handleStarClick = (point: number): void => {
     setSelectedPoint(point);
     setModalOpen(true);
   };
+  const numQRCodes = (
+    totalPoints: number
+  ): [numCheckpoints: number, numQRCodes: number] => {
+    const redeemed = nCheckpoints ?? 0;
+    const checkpointsEarned = milestones.filter((m) => m <= totalPoints).length;
+    const numQRCodesAvailable = checkpointsEarned - redeemed;
+    return [redeemed, numQRCodesAvailable];
+  };
+  console.log(numQRCodes(numPoints));
   return (
     <Box w="100%" position="relative" pt="80px" pb={4}>
       {milestones.map((m, i) => {
