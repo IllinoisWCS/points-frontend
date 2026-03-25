@@ -7,7 +7,6 @@ import {
   ModalCloseButton,
   Text
 } from '@chakra-ui/react';
-// import { useNavigate } from 'react-router-dom';
 import CheckpointQRCode from '../../pages/Points/CheckpointQRCode';
 
 interface PinPointModalProps {
@@ -23,15 +22,8 @@ const PinPointModal = ({
   isOpen,
   onClose,
   message,
-  netId,
-  checkpointKey
+  netId
 }: PinPointModalProps): JSX.Element => {
-  // const navigate = useNavigate();
-
-  /* const handleImageClick = (): void => {
-    onClose();
-    navigate('/not-authorized');
-  }; */
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
@@ -40,12 +32,7 @@ const PinPointModal = ({
         <ModalBody textAlign="center" py={6}>
           <Text fontSize="md">{message}</Text>
           {netId && (
-            <CheckpointQRCode
-              netId={netId}
-              checkpointKey={checkpointKey}
-              size={160}
-              inNotification={true}
-            />
+            <CheckpointQRCode netId={netId} size={160} inNotification={true} />
           )}
         </ModalBody>
       </ModalContent>

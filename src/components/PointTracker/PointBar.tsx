@@ -4,8 +4,6 @@ import PinPoint from './PinPoint';
 import PinPointModal from './PinPointModal';
 import { getCheckpointCount } from '../../api/checkpoints';
 import { useQuery } from 'react-query';
-// import logo from '../assets/logo.png';
-// import qrcode from '../../pages/Points/CheckpointQRCode'
 
 interface PointBarProps {
   numPoints: number;
@@ -135,13 +133,11 @@ const PointBar = ({
           onClose={() => {
             setModalOpen(false);
           }}
-          // image="https://via.placeholder.com/150"
-          // image = qrcode={}
           message={
             `Reached ${selectedPoint} points! ` + 'Have officer scan to redeem.'
           }
           netId={netId}
-          checkpointKey="VINTAGE"
+          image={''}
         />
       )}
     </Box>
