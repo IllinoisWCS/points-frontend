@@ -143,7 +143,7 @@ const Events = (): React.ReactElement => {
             }}
             mb="5"
           >
-            Create Office Hours Event
+            Create Open Office Event
           </Button>
         </>
       ) : (
