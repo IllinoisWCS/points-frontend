@@ -37,3 +37,18 @@ export const getCheckpointCount = async (): Promise<number | null> => {
     throw err;
   }
 };
+
+export const isOfficer = async (): Promise<boolean> => {
+  try {
+    const response = await axiosInstance.get<Profile>('/profile');
+    return response.data?.role === 'officer';
+  } catch (err: any) {
+    if (
+      err?.response &&
+      (err.response.status === 401 || err.response.status === 403)
+    ) {
+      return false;
+    }
+    throw err;
+  }
+};
