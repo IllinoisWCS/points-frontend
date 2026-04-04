@@ -9,6 +9,7 @@ import Events from './pages/Events';
 import LoadingScreen from './pages/LoadingScreen';
 import NavbarLayout from './layouts/NavbarLayout';
 import SuccessPage from './pages/LoadingScreen/success';
+import QAForumSuccessPage from './pages/QA Forum/success';
 
 const App = (): React.ReactElement => {
   useEffect(() => {
@@ -47,6 +48,7 @@ const App = (): React.ReactElement => {
           <Route path="/events" element={<Events />} />
           <Route path="/loading/:eventKey" element={<LoadingScreen />} />
           <Route path="/success" element={<SuccessPage />} />
+          <Route path="/qa-forum-success" element={<QAForumSuccessPage />} />
         </Routes>
       </NavbarLayout>
     </HashRouter>
