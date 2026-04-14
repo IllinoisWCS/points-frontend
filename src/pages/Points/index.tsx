@@ -82,7 +82,7 @@ const Points = (): React.ReactElement => {
           <PointBar
             numPoints={userPoints}
             maxPoints={50}
-            milestones={[20, 25, 30, 35, 40, 70]}
+            milestones={[10, 20, 30, 40, 50]}
             netId={data?.netId}
           />
         )}

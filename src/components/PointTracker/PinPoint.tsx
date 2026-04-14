@@ -4,14 +4,18 @@ import { Box, Text } from '@chakra-ui/react';
 interface PinPointsProps {
   numLabel: number | string;
   threshholdPassed: boolean;
+  isRedeemed?: boolean;
   onClick?: () => void;
 }
 
 const PinPoint = ({
   numLabel,
   threshholdPassed,
+  isRedeemed,
   onClick
 }: PinPointsProps): JSX.Element => {
+  const color = 'yellow.400';
+
   // star
   if (threshholdPassed) {
     return (
@@ -24,7 +28,7 @@ const PinPoint = ({
         <Box
           width="70px"
           height="70px"
-          bg="yellow.400"
+          bg={color}
           clipPath={`
   polygon(
     50% 0%, 60% 30%, 95% 30%, 68% 50%,
@@ -45,7 +49,7 @@ const PinPoint = ({
         <Box
           width="12px"
           height="40px"
-          bg="yellow.400"
+          bg={color}
           clipPath="polygon(50% 100%, 0% 0%, 100% 0%)"
           mx="auto"
           transform="translateY(-28px)"
@@ -55,11 +59,11 @@ const PinPoint = ({
   }
 
   return (
-    <Box position="relative" textAlign="center">
+    <Box position="relative" textAlign="center" pt="11px">
       <Box
         width="48px"
         height="48px"
-        bg="yellow.300"
+        bg={color}
         borderRadius="full"
         display="flex"
         justifyContent="center"
@@ -72,11 +76,11 @@ const PinPoint = ({
 
       <Box
         width="10px"
-        height="22px"
-        bg="yellow.300"
+        height="26px"
+        bg={color}
         clipPath="polygon(50% 100%, 0% 0%, 100% 0%)"
         mx="auto"
-        transform="translateY(-2px)"
+        transform="translateY(-3px)"
       />
     </Box>
   );

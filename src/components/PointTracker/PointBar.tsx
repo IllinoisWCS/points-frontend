@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import PinPoint from './PinPoint';
 import PinPointModal from './PinPointModal';
@@ -21,27 +21,37 @@ const PointBar = ({
   const fillPercentage = (numPoints / maxPoints) * 100;
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
+  const [selectedRedeemed, setSelectedRedeemed] = useState(false);
   const { data: nCheckpoints = 0 } = useQuery(
     ['get-checkpoint-count'],
-    getCheckpointCount
+    getCheckpointCount,
+    { refetchInterval: 3000 }
   );
-  const handleStarClick = (point: number): void => {
+
+  const redeemed = nCheckpoints ?? 0;
+  const passedMilestones = milestones.filter((m) => m <= numPoints);
+  const redeemedSet = new Set(passedMilestones.slice(0, redeemed));
+
+  const handleStarClick = (point: number, isRedeemed: boolean): void => {
     setSelectedPoint(point);
+    setSelectedRedeemed(isRedeemed);
     setModalOpen(true);
   };
-  const numQRCodes = (
-    totalPoints: number
-  ): [numCheckpoints: number, numQRCodes: number] => {
-    const redeemed = nCheckpoints ?? 0;
-    const checkpointsEarned = milestones.filter((m) => m <= totalPoints).length;
-    const numQRCodesAvailable = checkpointsEarned - redeemed;
-    return [redeemed, numQRCodesAvailable];
-  };
-  console.log(numQRCodes(numPoints));
+
+  useEffect(() => {
+    if (!modalOpen || selectedPoint === null) return;
+    if (redeemedSet.has(selectedPoint)) {
+      setModalOpen(false);
+    }
+  }, [nCheckpoints]);
+
   return (
     <Box w="100%" position="relative" pt="80px" pb={4}>
       {milestones.map((m, i) => {
         const percentage = (m / maxPoints) * 100;
+        const isPassed = numPoints >= m;
+        const isRedeemed = redeemedSet.has(m);
+
         return (
           <Box
             key={i}
@@ -53,11 +63,12 @@ const PointBar = ({
           >
             <PinPoint
               numLabel={m}
-              threshholdPassed={numPoints >= m}
+              threshholdPassed={isPassed}
+              isRedeemed={isRedeemed}
               onClick={
-                numPoints >= m
-                  ? (): void => {
-                      handleStarClick(m);
+                isPassed
+                  ? () => {
+                      handleStarClick(m, isRedeemed);
                     }
                   : undefined
               }
@@ -76,7 +87,6 @@ const PointBar = ({
           overflow="hidden"
           boxShadow="0 3px 6px rgba(0, 0, 0, 0.15)"
         />
-
         <Box
           position="absolute"
           inset="0"
@@ -98,7 +108,6 @@ const PointBar = ({
             transition="width 0.5s ease"
           />
         )}
-
         {fillPercentage > 0 && (
           <Box
             position="absolute"
@@ -112,7 +121,6 @@ const PointBar = ({
             transition="width 0.5s ease"
           />
         )}
-
         {fillPercentage > 0 && (
           <Box
             position="absolute"
@@ -127,6 +135,7 @@ const PointBar = ({
           />
         )}
       </Box>
+
       {selectedPoint !== null && (
         <PinPointModal
           isOpen={modalOpen}
@@ -134,13 +143,17 @@ const PointBar = ({
             setModalOpen(false);
           }}
           message={
-            `Reached ${selectedPoint} points! ` + 'Have officer scan to redeem.'
+            `Reached ${selectedPoint} points! ` +
+            (selectedRedeemed
+              ? 'Already redeemed.'
+              : 'Have officer scan to redeem.')
           }
-          netId={netId}
+          netId={selectedRedeemed ? undefined : netId}
           image={''}
         />
       )}
     </Box>
   );
 };
+
 export default PointBar;
