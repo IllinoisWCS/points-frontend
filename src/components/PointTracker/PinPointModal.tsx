@@ -8,6 +8,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import CheckpointQRCode from '../../pages/Points/CheckpointQRCode';
+import checkmark from '../../assets/checkmark.png';
 
 interface PinPointModalProps {
   isOpen: boolean;
@@ -30,9 +31,17 @@ const PinPointModal = ({
       <ModalContent>
         <ModalCloseButton />
         <ModalBody textAlign="center" py={6}>
-          <Text fontSize="md">{message}</Text>
-          {netId && (
+          <Text fontSize="md" mb={4}>
+            {message}
+          </Text>
+          {netId ? (
             <CheckpointQRCode netId={netId} size={160} inNotification={true} />
+          ) : (
+            <img
+              src={checkmark}
+              alt="Redeemed"
+              style={{ width: '100px', margin: '0 auto' }}
+            />
           )}
         </ModalBody>
       </ModalContent>
