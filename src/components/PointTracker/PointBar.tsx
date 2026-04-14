@@ -4,18 +4,19 @@ import PinPoint from './PinPoint';
 import PinPointModal from './PinPointModal';
 import { getCheckpointCount } from '../../api/checkpoints';
 import { useQuery } from 'react-query';
-// import logo from '../assets/logo.png';
 
 interface PointBarProps {
   numPoints: number;
   maxPoints: number;
   milestones: number[];
+  netId?: string;
 }
 
 const PointBar = ({
   numPoints,
   maxPoints,
-  milestones
+  milestones,
+  netId
 }: PointBarProps): JSX.Element => {
   const fillPercentage = (numPoints / maxPoints) * 100;
   const [modalOpen, setModalOpen] = useState(false);
@@ -132,11 +133,11 @@ const PointBar = ({
           onClose={() => {
             setModalOpen(false);
           }}
-          // image="/path/to/image.png"
-          image="https://via.placeholder.com/150"
           message={
             `Reached ${selectedPoint} points! ` + 'Have officer scan to redeem.'
           }
+          netId={netId}
+          image={''}
         />
       )}
     </Box>

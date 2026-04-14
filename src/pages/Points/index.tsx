@@ -16,6 +16,7 @@ import axiosInstance from '../../api/api';
 import { getEventDate } from '../../utils/eventDate';
 import { Profile } from '../../types/profile';
 import PointBar from '../../components/PointTracker/PointBar';
+// eslint-disable-next-line max-len
 import MerchToggle from '../../components/PointTracker/MerchDisplay/MerchDisplayToggle';
 
 const Points = (): React.ReactElement => {
@@ -82,6 +83,7 @@ const Points = (): React.ReactElement => {
             numPoints={userPoints}
             maxPoints={50}
             milestones={[20, 25, 30, 35, 40, 70]}
+            netId={data?.netId}
           />
         )}
       </Center>
