@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 200px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #f7fafc;
+}
+
+.container:hover {
+  background-color: #edf2f7;
+}
+
+.image {
+  max-width: 80px;
+  max-height: 80px;
+}
