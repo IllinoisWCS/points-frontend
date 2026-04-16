@@ -10,7 +10,7 @@ const LoadingScreen = (): JSX.Element => {
   const [state, setState] = useState('auth');
 
   const [isError, setIsError] = useState(false);
-  const { eventKey } = useParams();
+  const { eventKey, token } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -73,6 +73,36 @@ const LoadingScreen = (): JSX.Element => {
     }
   };
 
+  const handleQAPoints = async (): Promise<void> => {
+    if (!token) return;
+
+    try {
+      setIsProcessing(true);
+
+      console.log('Logging 0.5 points for token:', token);
+
+      const response = await axiosInstance.patch('/profile/submitQA');
+
+      toastSuccess(response.data.message);
+
+      // redirect after success
+      navigate('/success', { replace: true });
+
+    } catch (error: any) {
+      setIsError(true);
+      console.error('Error logging QA points:', error);
+
+      const errorMessage =
+        error.response?.data?.message ||
+        'Failed to log points';
+
+      toastError(errorMessage);
+    } finally {
+      setIsProcessing(false);
+      setHasAttemptedLogging(true);
+    }
+  };
+
   useEffect(() => {
     if (!isLoading && !isProcessing && !hasAttemptedLogging) {
       if (!data) {
@@ -91,8 +121,20 @@ const LoadingScreen = (): JSX.Element => {
 
       // If we have data and eventKey, proceed with logging points
       // regardless of isPostAuth (since user might already be authenticated)
-      if (data && eventKey) {
-        void logPointsAndRedirect();
+      if (data) {
+        // QA submitAnswer flow
+        if (token && !hasAttemptedLogging) {
+          console.log('Processing QA token flow');
+          void handleQAPoints();
+          return;
+        }
+
+        // Event check-in flow
+        if (eventKey && !hasAttemptedLogging) {
+          console.log('Processing event check-in flow');
+          void logPointsAndRedirect();
+          return;
+        }
       } else {
         console.log('Missing required conditions:', {
           hasData: !!data,
