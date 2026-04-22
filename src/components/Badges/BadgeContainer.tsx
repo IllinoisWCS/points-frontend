@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../../styles/Components/BadgeContainer.module.css';
+import styles from '../../styles/Components/BadgeContainer.module.css';
 
 interface BadgeContainerProps {
   badgeId: string;
