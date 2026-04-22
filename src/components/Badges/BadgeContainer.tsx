@@ -16,7 +16,11 @@ const BadgeContainer = ({
 }: BadgeContainerProps): React.ReactElement => {
   return (
     <div className={`${styles.container}`} onClick={onClick}>
-      <img src={image} alt={`badge-${badgeId}`} className={styles.image} />
+      <img
+        src={image}
+        alt={`badge-${badgeId}`}
+        className={`${styles.image} ${!isEarned ? styles.unearned : ''}`}
+      />
     </div>
   );
 };
