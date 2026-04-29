@@ -28,7 +28,8 @@ const App = (): React.ReactElement => {
       //window.location.href = `https://points-api.illinoiswcs.org/submitAnswer/token=${token}`;
       //window.location.hash = `/submitAnswer/token=${token}`;
       //window.location.href = `https://points.illinoiswcs.org/#/submitAnswer/${token}`;
-      window.location.href = `https://points.illinoiswcs.org/#/loading/${token}`;
+      const base = window.location.origin + window.location.pathname;
+      window.location.href = `${base}#/submitAnswer/${token}`;
       return;
     }
 

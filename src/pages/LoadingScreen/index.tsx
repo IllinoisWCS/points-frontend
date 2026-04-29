@@ -42,10 +42,14 @@ const LoadingScreen = (): JSX.Element => {
     };
   }, []);
 
-  const { data, isLoading } = useQuery<Profile>(['get-profile'], async () => {
-    const res = await axiosInstance.get('/profile');
-    return res.data;
-  });
+  const { data, isLoading } = useQuery<Profile>(
+    ['get-profile'],
+    async () => {
+      const res = await axiosInstance.get('/profile');
+      return res.data;
+    },
+    { enabled: true }
+  );
 
   const logPointsAndRedirect = async (): Promise<void> => {
     if (!eventKey) {
@@ -78,24 +82,15 @@ const LoadingScreen = (): JSX.Element => {
 
     try {
       setIsProcessing(true);
-
-      console.log('Logging 0.5 points for token:', token);
-
-      const response = await axiosInstance.patch('/profile/submitQA');
-
+      const response = await axiosInstance.patch('/profile/submitQA', {
+        token
+      });
       toastSuccess(response.data.message);
-
-      // redirect after success
       navigate('/success', { replace: true });
-
     } catch (error: any) {
       setIsError(true);
-      console.error('Error logging QA points:', error);
-
       const errorMessage =
-        error.response?.data?.message ||
-        'Failed to log points';
-
+        error.response?.data?.message || 'Failed to log points';
       toastError(errorMessage);
     } finally {
       setIsProcessing(false);
@@ -113,23 +108,22 @@ const LoadingScreen = (): JSX.Element => {
 
         loginUrl.searchParams.set('fromQR', 'true');
         loginUrl.searchParams.set('eventKey', String(eventKey ?? ''));
-        loginUrl.searchParams.set('returnTo', `/#/loading/${eventKey ?? ''}`);
+        const returnTo = token
+          ? `/#/submitAnswer/${token}`
+          : `/#/loading/${eventKey ?? ''}`;
+        loginUrl.searchParams.set('returnTo', returnTo);
 
         window.location.href = loginUrl.toString();
         return;
       }
 
-      // If we have data and eventKey, proceed with logging points
-      // regardless of isPostAuth (since user might already be authenticated)
       if (data) {
-        // QA submitAnswer flow
         if (token && !hasAttemptedLogging) {
           console.log('Processing QA token flow');
           void handleQAPoints();
           return;
         }
 
-        // Event check-in flow
         if (eventKey && !hasAttemptedLogging) {
           console.log('Processing event check-in flow');
           void logPointsAndRedirect();
@@ -160,12 +154,6 @@ const LoadingScreen = (): JSX.Element => {
           <Box className="text-sm text-gray-500" fontSize="2xl" mb="10px">
             Please try manually logging your points here:
           </Box>
-          {/* <Link href='http://127.0.0.1:8080' 
-           fontSize="2xl" 
-           color="pink"
-          >
-            http://127.0.0.1:8080
-          </Link> */}
           <Link
             href="https://points.illinoiswcs.org"
             fontSize="2xl"
