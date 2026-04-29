@@ -13,25 +13,44 @@ import QAForumSuccessPage from './pages/QA Forum/success';
 
 const App = (): React.ReactElement => {
   useEffect(() => {
-    // Check URL parameters on page load
     const urlParams = new URLSearchParams(window.location.search);
-    const action = urlParams.get('action');
-    const eventKey = urlParams.get('eventKey');
+    const submitAnswer = urlParams.get('submitAnswer');
+    const token = urlParams.get('token');
 
-    // If this is a check-in action, redirect to the loading route
-    if (action === 'checkin' && eventKey) {
-      // Clear the URL parameters
+    // submitted answer logic
+    if (submitAnswer === 'true' && token) {
+      // Clear URL parameters so JWT isn't lingering in the browser
       window.history.replaceState(
         {},
         '',
         `${window.location.origin}${window.location.pathname}`
       );
 
-      // Force navigation to the loading route
+      //window.location.href = `https://points-api.illinoiswcs.org/submitAnswer/token=${token}`;
+      //window.location.hash = `/submitAnswer/token=${token}`;
+      //window.location.href = `https://points.illinoiswcs.org/#/submitAnswer/${token}`;
+      const base = window.location.origin + window.location.pathname;
+      window.location.href = `${base}#/submitAnswer/${token}`;
+      return;
+    }
+
+    // check-in logic
+    const action = urlParams.get('action');
+    const eventKey = urlParams.get('eventKey');
+
+    if (action === 'checkin' && eventKey) {
+      // Clear URL parameters
+      window.history.replaceState(
+        {},
+        '',
+        `${window.location.origin}${window.location.pathname}`
+      );
+
+      // Navigate to loading route
       const newUrl = `${window.location.origin}${window.location.pathname}`;
       window.location.href = `${newUrl}#/loading/${eventKey}`;
 
-      // Force a reload to ensure the component loads fresh
+      // Force reload to ensure component loads fresh
       setTimeout(() => {
         window.location.reload();
       }, 100);
@@ -47,6 +66,7 @@ const App = (): React.ReactElement => {
           <Route path="/points" element={<Points />} />
           <Route path="/events" element={<Events />} />
           <Route path="/loading/:eventKey" element={<LoadingScreen />} />
+          <Route path="/submitAnswer/:token" element={<LoadingScreen />} />
           <Route path="/success" element={<SuccessPage />} />
           <Route path="/qa-forum-success" element={<QAForumSuccessPage />} />
         </Routes>

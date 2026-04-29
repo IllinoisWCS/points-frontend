@@ -10,12 +10,14 @@ const LoadingScreen = (): JSX.Element => {
   const [state, setState] = useState('auth');
 
   const [isError, setIsError] = useState(false);
-  const { eventKey } = useParams();
+  const { eventKey, token } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [hasAttemptedLogging, setHasAttemptedLogging] = useState(false);
+
+  const isSubmitAnswerFlow = location.pathname.startsWith('/submitAnswer');
 
   useEffect(() => {
     // Store the current event key and visit ID
@@ -98,6 +100,35 @@ const LoadingScreen = (): JSX.Element => {
     }
   };
 
+  const submitAnswerAndRedirect = async (): Promise<void> => {
+    if (!token) {
+      toastError('Missing token.');
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      const res = await fetch(
+        `https://points-api.illinoiswcs.org/submitAnswer/token=${token}`
+      );
+
+      if (!res.ok) {
+        throw new Error('Failed to submit answer');
+      }
+
+      toastSuccess('Answer submitted successfully!');
+      // Redirect to points site success page
+      window.location.href = `https://points.illinoiswcs.org/#/success`;
+      setHasAttemptedLogging(true);
+    } catch (err) {
+      console.error(err);
+      setIsError(true);
+      toastError('Failed to submit answer.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   useEffect(() => {
     if (!isLoading && !isProcessing && !hasAttemptedLogging) {
       if (!data) {
@@ -106,9 +137,18 @@ const LoadingScreen = (): JSX.Element => {
           `${String(axiosInstance.defaults.baseURL)}/auth/login`
         );
 
-        loginUrl.searchParams.set('fromQR', 'true');
-        loginUrl.searchParams.set('eventKey', String(eventKey ?? ''));
-        loginUrl.searchParams.set('returnTo', `/#/loading/${eventKey ?? ''}`);
+        // loginUrl.searchParams.set('fromQR', 'true');
+        // loginUrl.searchParams.set('eventKey', String(eventKey ?? ''));
+        // loginUrl.searchParams.set('returnTo', `/#/loading/${eventKey ?? ''}`);
+        if (isSubmitAnswerFlow) {
+          loginUrl.searchParams.set(
+            'returnTo',
+            `/#/submitAnswer/${token ?? ''}`
+          );
+        } else {
+          loginUrl.searchParams.set('eventKey', String(eventKey ?? ''));
+          loginUrl.searchParams.set('returnTo', `/#/loading/${eventKey ?? ''}`);
+        }
 
         window.location.href = loginUrl.toString();
         return;
@@ -116,7 +156,9 @@ const LoadingScreen = (): JSX.Element => {
 
       // If we have data and eventKey, proceed with logging points
       // regardless of isPostAuth (since user might already be authenticated)
-      if (data && eventKey) {
+      if (isSubmitAnswerFlow && token) {
+        void submitAnswerAndRedirect();
+      } else if (data && eventKey) {
         void logPointsAndRedirect();
       } else {
         console.log('Missing required conditions:', {
