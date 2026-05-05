@@ -25,7 +25,6 @@ const QAForumSuccessPage: React.FC = (): React.ReactElement => {
     return () => {
       clearTimeout(timer);
     };
-    // toast is stable; [] avoids extra runs that stacked duplicate toasts
   }, []);
 
   return (

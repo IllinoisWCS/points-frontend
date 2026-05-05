@@ -17,12 +17,13 @@ export interface NewEvent {
 }
 
 export interface Event {
+  isSystem?: boolean;
   _id: string;
   key: string;
   name: string;
   category: EventCategoryType;
   points: number;
-  start: Date;
-  end: Date;
+  start?: Date;
+  end?: Date;
   private: boolean;
 }

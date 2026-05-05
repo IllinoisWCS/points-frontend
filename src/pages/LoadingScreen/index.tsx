@@ -82,7 +82,7 @@ const LoadingScreen = (): JSX.Element => {
 
     try {
       setIsProcessing(true);
-      const response = await axiosInstance.patch('/profile/submitQA', {
+      const response = await axiosInstance.patch('/profile/submitForumAnswer', {
         token
       });
       toastSuccess(response.data.message);
@@ -118,16 +118,17 @@ const LoadingScreen = (): JSX.Element => {
       }
 
       if (data) {
+        // QA forum answer flow - token comes from main website redirect url
         if (token && !hasAttemptedLogging) {
           console.log('Processing QA token flow');
           void handleQAPoints();
           return;
         }
 
+        // Event check-in flow - eventKey comes from QR code scan
         if (eventKey && !hasAttemptedLogging) {
           console.log('Processing event check-in flow');
           void logPointsAndRedirect();
-          return;
         }
       } else {
         console.log('Missing required conditions:', {

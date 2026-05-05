@@ -9,48 +9,26 @@ import Events from './pages/Events';
 import LoadingScreen from './pages/LoadingScreen';
 import NavbarLayout from './layouts/NavbarLayout';
 import SuccessPage from './pages/LoadingScreen/success';
-import QAForumSuccessPage from './pages/QA Forum/success';
+import QAForumSuccessPage from './pages/LoadingScreen/qa-forum-success';
 
 const App = (): React.ReactElement => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const submitAnswer = urlParams.get('submitAnswer');
-    const token = urlParams.get('token');
-
-    // submitted answer logic
-    if (submitAnswer === 'true' && token) {
-      // Clear URL parameters so JWT isn't lingering in the browser
-      window.history.replaceState(
-        {},
-        '',
-        `${window.location.origin}${window.location.pathname}`
-      );
-
-      //window.location.href = `https://points-api.illinoiswcs.org/submitAnswer/token=${token}`;
-      //window.location.hash = `/submitAnswer/token=${token}`;
-      //window.location.href = `https://points.illinoiswcs.org/#/submitAnswer/${token}`;
-      const base = window.location.origin + window.location.pathname;
-      window.location.href = `${base}#/submitAnswer/${token}`;
-      return;
-    }
 
     // check-in logic
     const action = urlParams.get('action');
     const eventKey = urlParams.get('eventKey');
 
     if (action === 'checkin' && eventKey) {
-      // Clear URL parameters
       window.history.replaceState(
         {},
         '',
         `${window.location.origin}${window.location.pathname}`
       );
 
-      // Navigate to loading route
       const newUrl = `${window.location.origin}${window.location.pathname}`;
       window.location.href = `${newUrl}#/loading/${eventKey}`;
 
-      // Force reload to ensure component loads fresh
       setTimeout(() => {
         window.location.reload();
       }, 100);
