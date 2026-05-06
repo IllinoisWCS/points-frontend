@@ -85,7 +85,7 @@ const LoadingScreen = (): JSX.Element => {
       toastSuccess(response.data.message);
       window.location.href = `${String(
         import.meta.env.VITE_QA_URL
-      )}/q&a?postAnswer=true&token=${token}`;
+      )}/qa?postAnswer=true&token=${token}`;
     } catch (error: any) {
       setIsError(true);
       const errorMessage =
