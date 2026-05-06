@@ -1,16 +1,17 @@
 import React from 'react';
-import { useQuery } from 'react-query';
+
 import BadgeContainer from '../../components/Badges/BadgeContainer';
 import BadgeModal from '../../components/Badges/BadgeModal';
 import allrounder from '../../assets/badges/all_rounder.png';
-import axiosInstance from '../../api';
-import { Heading, Box, Center } from '@chakra-ui/react';
+import { Heading, Box, Center, Text } from '@chakra-ui/react';
 import { Profile } from '../../types/profile';
+import axiosInstance from '../../api';
+import { useQuery } from 'react-query';
 
 const Badges = (): React.ReactElement => {
   const [modalOpen, setModalOpen] = React.useState(false);
 
-  const { isError, error, data } = useQuery<Profile | null, Error>(
+  const { isError, error, data } = useQuery<Profile, Error>(
     ['get-profile'],
     async () => {
       try {
@@ -51,23 +52,42 @@ const Badges = (): React.ReactElement => {
   }
 
   const names = data?.name?.split(' ');
-  const firstName = names?.[0] ?? '';
+  const name = String(names?.[0] ?? '');
+
+  const handleClick = async (): Promise<void> => {
+    // user clicked login
+    window.location.href = `${String(
+      axiosInstance.defaults.baseURL
+    )}/auth/login`;
+  };
 
   return (
-    <>
-      <Center>
-        <Heading size="xl" pb="25px">
-          {firstName ? `${firstName}'s Badge Display` : 'Badge Display'}
-        </Heading>
+    <Box>
+      <Heading size="lg">{data ? `${name}'s Badges` : 'Badges'}</Heading>
+      <Center mb="5">
+        <Text fontSize="xl">
+          {data ? (
+            'Attend WCS Events to Collect ‘Em All!'
+          ) : (
+            <>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  void handleClick();
+                }}
+                style={{
+                  color: '#E46167',
+                  textDecoration: 'underline'
+                }}
+              >
+                Login
+              </a>
+              {' to Collect ‘Em All!'}
+            </>
+          )}
+        </Text>
       </Center>
-      <Center>
-        <Heading size="med" pb="25px">
-          {firstName
-            ? 'Attend WCS Events to Collect \'Em All!'
-            : 'Login to Collect \'Em All!'}
-        </Heading>
-      </Center>
-
       <BadgeContainer
         badgeId={''}
         image={''}
@@ -85,7 +105,7 @@ const Badges = (): React.ReactElement => {
         image={allrounder}
         descriptionText={'This is a template badge description.'}
       />
-    </>
+    </Box>
   );
 };
 
