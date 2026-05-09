@@ -12,25 +12,22 @@ import SuccessPage from './pages/LoadingScreen/success';
 
 const App = (): React.ReactElement => {
   useEffect(() => {
-    // Check URL parameters on page load
     const urlParams = new URLSearchParams(window.location.search);
+
+    // check-in logic
     const action = urlParams.get('action');
     const eventKey = urlParams.get('eventKey');
 
-    // If this is a check-in action, redirect to the loading route
     if (action === 'checkin' && eventKey) {
-      // Clear the URL parameters
       window.history.replaceState(
         {},
         '',
         `${window.location.origin}${window.location.pathname}`
       );
 
-      // Force navigation to the loading route
       const newUrl = `${window.location.origin}${window.location.pathname}`;
       window.location.href = `${newUrl}#/loading/${eventKey}`;
 
-      // Force a reload to ensure the component loads fresh
       setTimeout(() => {
         window.location.reload();
       }, 100);
@@ -46,6 +43,7 @@ const App = (): React.ReactElement => {
           <Route path="/points" element={<Points />} />
           <Route path="/events" element={<Events />} />
           <Route path="/loading/:eventKey" element={<LoadingScreen />} />
+          <Route path="/submitAnswer/:token" element={<LoadingScreen />} />
           <Route path="/success" element={<SuccessPage />} />
         </Routes>
       </NavbarLayout>
