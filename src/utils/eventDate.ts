@@ -6,6 +6,7 @@ export const getEventDate = (event: Event): string => {
   if (!event.start || !event.end) {
     return 'None';
   }
+
   const start = new Date(event.start).toLocaleDateString('en-US');
   const end = new Date(event.end).toLocaleDateString('en-US');
 
