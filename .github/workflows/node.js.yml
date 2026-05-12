@@ -38,6 +38,12 @@ jobs:
           # Upload dist folder
           path: './dist'
 
+      - name: Create env file
+        run: |
+          touch .env
+          echo API_KEY=${{ secrets.ENV_FILE }} > .env
+          cat .env
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
