@@ -21,6 +21,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: 'Create env file'
+        run: |
+          echo "JWT_SECRETTS_URL=${{ secrets.JWT_SECRET }}" >> .env
+          echo "VITE_QA_URL=${{ secrets.VITE_QA_URL }}" >> .env
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -37,12 +42,6 @@ jobs:
         with:
           # Upload dist folder
           path: './dist'
-
-      - name: Create env file
-        run: |
-          touch .env
-          echo "${{ secrets.ENV_FILE }}" > .env
-          cat .env
 
       - name: Deploy to GitHub Pages
         id: deployment
