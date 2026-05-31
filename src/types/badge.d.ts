@@ -3,6 +3,7 @@ declare global {
     _id: string;
     name: string;
     description: string;
+    unearnedDescription: string;
     tier?: 1 | 2 | 3;
     shape: 'circle' | 'diamond' | 'hexagon' | 'shield';
     image: string;

@@ -19,7 +19,7 @@ const BadgeContainer = ({
       <img
         src={image}
         alt={`badge-${badgeId}`}
-        className={`${styles.image} ${!isEarned ? styles.unearned : ''}`}
+        className={`${styles.image} ${isEarned ? styles.earned : ''}`}
       />
     </div>
   );

@@ -17,6 +17,7 @@ interface BadgeModalProps {
   titleText: string;
   image: string;
   descriptionText: string;
+  isEarned: boolean;
 }
 
 const BadgeModal = ({
@@ -24,7 +25,8 @@ const BadgeModal = ({
   onClose,
   titleText,
   image,
-  descriptionText
+  descriptionText,
+  isEarned
 }: BadgeModalProps): JSX.Element => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -87,7 +89,9 @@ const BadgeModal = ({
               textAlign="center"
               fontFamily="'Courier New', Courier, monospace"
             >
-              Share your accomplishment with friends!
+              {isEarned
+                ? 'Share your accomplishment with friends!'
+                : 'Keep attending events to unlock this badge!'}
             </Text>
           </VStack>
         </ModalBody>
