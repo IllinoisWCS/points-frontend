@@ -28,7 +28,6 @@ const QRCodeModal = (props: QRCodeModalProps): React.ReactElement => {
   const useWindowDimensions = (): { width: number; } => {
     const [dimensions, setDimensions] = useState({
       width: window.innerWidth
-      // height: window.innerHeight,
     });
 
     useEffect(() => {
