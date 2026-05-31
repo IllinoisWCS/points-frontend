@@ -102,7 +102,14 @@ const Badges = (): React.ReactElement => {
           </Text>
         </Center>
       </Box>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '16px',
+          justifyContent: 'center'
+        }}
+      >
         {badgeCatalog.map(
           (badge): React.ReactElement => (
             <BadgeContainer
