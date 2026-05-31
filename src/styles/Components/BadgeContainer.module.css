@@ -15,6 +15,10 @@
 }
 
 .image {
-  max-width: 80px;
-  max-height: 80px;
+  max-width: 120px;
+  max-height: 120px;
+}
+
+.earned {
+  mix-blend-mode: multiply;
 }
