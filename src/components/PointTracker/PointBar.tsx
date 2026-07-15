@@ -18,7 +18,6 @@ const PointBar = ({
   milestones,
   netId
 }: PointBarProps): JSX.Element => {
-  const fillPercentage = (numPoints / maxPoints) * 100;
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
   const [selectedRedeemed, setSelectedRedeemed] = useState(false);
@@ -31,6 +30,12 @@ const PointBar = ({
   const redeemed = nCheckpoints ?? 0;
   const passedMilestones = milestones.filter((m) => m <= numPoints);
   const redeemedSet = new Set(passedMilestones.slice(0, redeemed));
+  const lastMilestone = milestones[milestones.length - 1];
+  const maxFillPercentage = (lastMilestone / maxPoints) * 100;
+  const fillPercentage = Math.min(
+    (numPoints / maxPoints) * 100,
+    maxFillPercentage
+  );
 
   const handleStarClick = (point: number, isRedeemed: boolean): void => {
     setSelectedPoint(point);
