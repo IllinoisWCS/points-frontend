@@ -180,39 +180,51 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
 
   useEffect(() => {
     if (event) {
-      const eventStart = new Date(event.start);
-      const eventEnd = new Date(event.end);
-      const eventStartYear = eventStart.getFullYear();
-      // eslint-disable-next-line max-len
-      const eventStartMonth = String(eventStart.getMonth() + 1).padStart(
-        2,
-        '0'
-      );
-      const eventStartDay = String(eventStart.getDate()).padStart(2, '0');
-      const eventStartHour = String(eventStart.getHours()).padStart(2, '0');
-      const eventStartMinute = String(eventStart.getMinutes()).padStart(2, '0');
-
-      const eventEndYear = eventEnd.getFullYear();
-      const eventEndMonth = String(eventEnd.getMonth() + 1).padStart(2, '0');
-      const eventEndDay = String(eventEnd.getDate()).padStart(2, '0');
-      const eventEndHour = String(eventEnd.getHours()).padStart(2, '0');
-      const eventEndMinute = String(eventEnd.getMinutes()).padStart(2, '0');
-
       setId(event._id);
       setKey(event._id);
       setName(event.name);
       setCategory(event.category);
       setPoints(event.points);
-      setStartDate(`${eventStartYear}-${eventStartMonth}-${eventStartDay}`);
-      setEndDate(`${eventEndYear}-${eventEndMonth}-${eventEndDay}`);
-      setSameDay(
-        eventStartYear === eventEndYear &&
-          eventStartMonth === eventEndMonth &&
-          eventStartDay === eventEndDay
-      );
-      setStartTime(`${eventStartHour}:${eventStartMinute}`);
-      setEndTime(`${eventEndHour}:${eventEndMinute}`);
       setVisibility(event.private ? 'private' : 'public');
+
+      if (event.start && event.end) {
+        const eventStart = new Date(event.start);
+        const eventEnd = new Date(event.end);
+        const eventStartYear = eventStart.getFullYear();
+        // eslint-disable-next-line max-len
+        const eventStartMonth = String(eventStart.getMonth() + 1).padStart(
+          2,
+          '0'
+        );
+        const eventStartDay = String(eventStart.getDate()).padStart(2, '0');
+        const eventStartHour = String(eventStart.getHours()).padStart(2, '0');
+        const eventStartMinute = String(eventStart.getMinutes()).padStart(
+          2,
+          '0'
+        );
+
+        const eventEndYear = eventEnd.getFullYear();
+        const eventEndMonth = String(eventEnd.getMonth() + 1).padStart(2, '0');
+        const eventEndDay = String(eventEnd.getDate()).padStart(2, '0');
+        const eventEndHour = String(eventEnd.getHours()).padStart(2, '0');
+        const eventEndMinute = String(eventEnd.getMinutes()).padStart(2, '0');
+
+        setStartDate(`${eventStartYear}-${eventStartMonth}-${eventStartDay}`);
+        setEndDate(`${eventEndYear}-${eventEndMonth}-${eventEndDay}`);
+        setSameDay(
+          eventStartYear === eventEndYear &&
+            eventStartMonth === eventEndMonth &&
+            eventStartDay === eventEndDay
+        );
+        setStartTime(`${eventStartHour}:${eventStartMinute}`);
+        setEndTime(`${eventEndHour}:${eventEndMinute}`);
+      } else {
+        setStartDate('');
+        setEndDate('');
+        setSameDay(false);
+        setStartTime('');
+        setEndTime('');
+      }
     } else {
       setId('');
       setKey('');

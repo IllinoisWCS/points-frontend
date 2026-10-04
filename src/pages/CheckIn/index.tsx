@@ -44,7 +44,9 @@ const CheckIn = (): React.ReactElement => {
       .patch('/profile', { eventKey })
       .then((res) => {
         toastSuccess(res.data.message);
-        navigate('/success');
+        navigate('/success', {
+          state: { newBadges: res.data.newBadges ?? [] }
+        });
       })
       .catch((err) => {
         toastError(err.response?.data?.message || 'An error occurred');
