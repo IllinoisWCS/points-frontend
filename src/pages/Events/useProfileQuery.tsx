@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import axiosInstance from '../../api';
+import axiosInstance from '../../api/api';
 import { Profile } from '../../types/profile';
 
 export const useProfileQuery = (): {

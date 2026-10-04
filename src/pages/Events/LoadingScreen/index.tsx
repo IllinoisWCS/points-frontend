@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import { Heading, Box, VStack, Progress, Link } from '@chakra-ui/react';
 import { Profile } from '../../../types/profile';
 import { toastError, toastSuccess } from '../../../utils/toast';
-import axiosInstance from '../../../api';
+import axiosInstance from '../../../api/api';
 
 const LoadingScreen = (): JSX.Element => {
   const [state, setState] = useState('auth');
@@ -118,7 +118,7 @@ const LoadingScreen = (): JSX.Element => {
 
       toastSuccess('Answer submitted successfully!');
       // Redirect to points site success page
-      window.location.href = `https://points.illinoiswcs.org/#/success`;
+      window.location.href = 'https://points.illinoiswcs.org/#/success';
       setHasAttemptedLogging(true);
     } catch (err) {
       console.error(err);
@@ -139,6 +139,7 @@ const LoadingScreen = (): JSX.Element => {
 
         // loginUrl.searchParams.set('fromQR', 'true');
         // loginUrl.searchParams.set('eventKey', String(eventKey ?? ''));
+        // eslint-disable-next-line max-len
         // loginUrl.searchParams.set('returnTo', `/#/loading/${eventKey ?? ''}`);
         if (isSubmitAnswerFlow) {
           loginUrl.searchParams.set(

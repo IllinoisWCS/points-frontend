@@ -2,7 +2,7 @@ import React from 'react';
 import BadgeContainer from '../../components/Badges/BadgeContainer';
 import BadgeModal from '../../components/Badges/BadgeModal';
 import { badgeImageMap } from '../../utils/badgeImageMap';
-import axiosInstance from '../../api';
+import axiosInstance from '../../api/api';
 import { Box, Heading, Center, Text } from '@chakra-ui/react';
 import { Profile } from '../../types/profile';
 import { useQuery } from 'react-query';

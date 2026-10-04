@@ -10,6 +10,9 @@ import Badges from './pages/Badges';
 import LoadingScreen from './pages/LoadingScreen';
 import NavbarLayout from './layouts/NavbarLayout';
 import SuccessPage from './pages/LoadingScreen/success';
+import VintageSuccessPage from './components/PointTracker/SuccessPage';
+import NotAuthorized from './components/PointTracker/NotAuthorized';
+import VintageLoadingScreen from './pages/VintageLoadingScreen';
 
 const App = (): React.ReactElement => {
   useEffect(() => {
@@ -18,6 +21,7 @@ const App = (): React.ReactElement => {
     // check-in logic
     const action = urlParams.get('action');
     const eventKey = urlParams.get('eventKey');
+    const netId = urlParams.get('netId');
 
     if (action === 'checkin' && eventKey) {
       window.history.replaceState(
@@ -29,6 +33,19 @@ const App = (): React.ReactElement => {
       const newUrl = `${window.location.origin}${window.location.pathname}`;
       window.location.href = `${newUrl}#/loading/${eventKey}`;
 
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    }
+
+    if (action === 'vintage-redeem' && netId) {
+      window.history.replaceState(
+        {},
+        '',
+        `${window.location.origin}${window.location.pathname}`
+      );
+      const newUrl = `${window.location.origin}${window.location.pathname}`;
+      window.location.href = `${newUrl}#/vintage-loading/${netId}`;
       setTimeout(() => {
         window.location.reload();
       }, 100);
@@ -47,6 +64,13 @@ const App = (): React.ReactElement => {
           <Route path="/loading/:eventKey" element={<LoadingScreen />} />
           <Route path="/submitAnswer/:token" element={<LoadingScreen />} />
           <Route path="/success" element={<SuccessPage />} />
+
+          <Route
+            path="/vintage-loading/:netId"
+            element={<VintageLoadingScreen />}
+          />
+          <Route path="/vintage-success" element={<VintageSuccessPage />} />
+          <Route path="/not-authorized" element={<NotAuthorized />} />
         </Routes>
       </NavbarLayout>
     </HashRouter>

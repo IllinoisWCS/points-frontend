@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useMutation } from 'react-query';
 
-import axiosInstance from '../../api';
+import axiosInstance from '../../api/api';
 import { Event, NewEvent } from '../../types/event';
 import EventModal from './EventModal';
 import QRModal from './QRCodeModal';

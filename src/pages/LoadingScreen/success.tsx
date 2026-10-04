@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import BadgeModal from '../../components/Badges/BadgeModal';
-import axiosInstance from '../../api';
+import axiosInstance from '../../api/api';
 import { badgeImageMap } from '../../utils/badgeImageMap';
 
 const SuccessPage: React.FC = (): React.ReactElement => {

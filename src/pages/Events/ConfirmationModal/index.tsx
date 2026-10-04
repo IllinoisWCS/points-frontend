@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { ConfirmationModalProps } from './types';
 import { useMutation } from 'react-query';
-import axiosInstance from '../../../api';
+import axiosInstance from '../../../api/api';
 import { Event } from '../../../types/event';
 
 const ConfirmationModal = (
