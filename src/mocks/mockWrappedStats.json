@@ -1,0 +1,36 @@
+{
+  "period": {
+    "label": "2025–2026",
+    "startDate": "2025-08-25",
+    "endDate": "2026-05-15"
+  },
+  "displayName": "Ashra",
+  "totalEvents": 14,
+  "totalHours": 21.5,
+  "totalPoints": 16,
+  "eventCountsByType": {
+    "corporate": 3,
+    "social": 4,
+    "outreach": 1,
+    "mentoring": 3,
+    "explorations": 2,
+    "generalMeeting": 1,
+    "other": 0
+  },
+  "mostAttendedType": {
+    "type": "social",
+    "count": 4
+  },
+  "busiestMonth": {
+    "month": "2025-10",
+    "count": 4
+  },
+  "featuredBadge": {
+    "name": "Social Butterfly",
+    "description": "Attended 4 WCS social events. Flutter flutter!!",
+    "image": "butterfly.png",
+    "shape": "hexagon",
+    "tier": 2
+  },
+  "badgesEarned": 9
+}
