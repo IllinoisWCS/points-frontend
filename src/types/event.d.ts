@@ -5,6 +5,7 @@ export type EventCategoryType =
   | 'mentoring'
   | 'explorations'
   | 'generalMeeting'
+  | 'openOffice'
   | 'other';
 
 export interface NewEvent {

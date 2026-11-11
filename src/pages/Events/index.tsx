@@ -85,7 +85,7 @@ const Events = (): React.ReactElement => {
     const end = new Date(`${year}-${month}-${day}T17:30:00`);
     const officeHourEvent: NewEvent = {
       name,
-      category: 'other',
+      category: 'openOffice',
       points: 0.5,
       start,
       end,

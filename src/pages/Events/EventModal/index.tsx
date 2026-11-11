@@ -343,6 +343,7 @@ const EventModal = (props: EventModalProps): React.ReactElement => {
     { value: 'mentoring', label: 'Mentoring' },
     { value: 'explorations', label: 'Explorations' },
     { value: 'generalMeeting', label: 'General Meeting' },
+    { value: 'openOffice', label: 'Open Office' },
     { value: 'other', label: 'Other' }
   ];
 
